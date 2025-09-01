@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "asuaddons",
+	"version": "${version}",
+	"name": "AsuAddons",
+	"description": "Mod for features I want that nothing else has (or is shit anywhere else).",
+	"authors": [
+		"asumji"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/asuaddons/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"me.asumji.AsuAddons"
+		]
+	},
+	"mixins": [
+		"asuaddons.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21.5",
+		"java": ">=21",
+		"fabric-api": "*",
+        "fabric-language-kotlin": "*"
+    },
+	"suggests": {
+	}
+}
