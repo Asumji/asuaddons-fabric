@@ -30,6 +30,8 @@ public class LividTimer {
         drawContext.getMatrices().scale(ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,1);
         if (Constants.TickTimers.get("LividTimer") == null) return;
         int ticksLeft = Constants.TickTimers.get("LividTimer");
+        drawContext.getMatrices().push();
+        drawContext.getMatrices().scale(ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,1);
         drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.of(df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.lividTimerHudX, ConfigManager.getConfig().dungeonCategory.lividTimerHudY, 0xFFFFFF);
         if (ticksLeft == 0 && !timerDone) {
             timerDone = true;
