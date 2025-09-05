@@ -26,8 +26,6 @@ public class LividTimer {
 
     private static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
         if (Constants.TickTimers.get("LividTimer") == null) return;
-        drawContext.getMatrices().push();
-        drawContext.getMatrices().scale(ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,1);
         int ticksLeft = Constants.TickTimers.get("LividTimer");
         drawContext.getMatrices().push();
         drawContext.getMatrices().scale(ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,1);
