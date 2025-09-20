@@ -1,10 +1,9 @@
 package me.asumji.features;
 
 import com.google.gson.*;
-import me.asumji.gui.config.ConfigGUI;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Compression;
-import me.asumji.util.Constants;
+import me.asumji.util.Variables;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
@@ -91,11 +90,11 @@ public class DPU {
                     for (JsonElement petElement : profile.getAsJsonObject("members").getAsJsonObject(uuid).getAsJsonObject("pets_data").getAsJsonArray("pets")) {
                         JsonObject pet = petElement.getAsJsonObject();
                         if (pet.get("active").getAsBoolean()) {
-                            pets[0] = "§7[Lvl " + getPetLvl(pet.get("exp").getAsBigDecimal(), pet.get("type").getAsString(), pet.get("tier").getAsString()) + "] " + Constants.rarities.get(pet.get("tier").getAsString()) + pet.get("type").getAsString().replaceAll("_"," ");
+                            pets[0] = "§7[Lvl " + getPetLvl(pet.get("exp").getAsBigDecimal(), pet.get("type").getAsString(), pet.get("tier").getAsString()) + "] " + Variables.rarities.get(pet.get("tier").getAsString()) + pet.get("type").getAsString().replaceAll("_"," ");
                         }
                         if (pet.get("type").getAsString().equals("SPIRIT") && pet.get("tier").getAsString().equals("LEGENDARY")) pets[1] = "§aYes";
                         if (pet.get("type").getAsString().equals("ENDER_DRAGON")) {
-                            pets[2] = "§7[Lvl " + getPetLvl(pet.get("exp").getAsBigDecimal(), pet.get("type").getAsString(), pet.get("tier").getAsString()) + "] " + Constants.rarities.get(pet.get("tier").getAsString()) + pet.get("type").getAsString().replaceAll("_"," ");
+                            pets[2] = "§7[Lvl " + getPetLvl(pet.get("exp").getAsBigDecimal(), pet.get("type").getAsString(), pet.get("tier").getAsString()) + "] " + Variables.rarities.get(pet.get("tier").getAsString()) + pet.get("type").getAsString().replaceAll("_"," ");
                         }
                     }
 

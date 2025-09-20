@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Constants {
+public class Variables {
+    public static String[] scoreboard = {};
     public static Map<String, String> rarities = new HashMap<>();
     //See ClientConnectionMixin for Timer Logic
     public static Map<String, Integer> TickTimers = new ConcurrentHashMap<>();

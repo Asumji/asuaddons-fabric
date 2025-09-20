@@ -6,15 +6,11 @@ import com.google.gson.JsonObject;
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigGUI;
 import me.asumji.gui.config.ConfigManager;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
-import java.awt.event.MouseEvent;
 import java.io.*;
-import java.lang.reflect.Type;
 
 public class MoveGUI extends Screen {
     private static final ConfigGUI moulConfig = ConfigManager.getConfig();
@@ -80,6 +76,7 @@ public class MoveGUI extends Screen {
 
     @Override
     public void close() {
+        ConfigManager.saveConfig("MoveGUI");
         config.getAsJsonObject(category).addProperty(xProperty,(int) x);
         config.getAsJsonObject(category).addProperty(yProperty,(int) y);
         config.getAsJsonObject(category).addProperty(scaleProperty,scale);

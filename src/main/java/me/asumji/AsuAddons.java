@@ -2,7 +2,7 @@ package me.asumji;
 
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.features.*;
-import me.asumji.util.Constants;
+import me.asumji.util.Variables;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class AsuAddons implements ModInitializer {
         DPU.init();
         AUCommand.init();
         SimulateCommand.init();
-        Constants.init();
+        Variables.init();
         Autopet.init();
         LividTimer.init();
 	}
