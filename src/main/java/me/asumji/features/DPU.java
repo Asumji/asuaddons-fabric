@@ -30,7 +30,7 @@ public class DPU {
     }
 
     private static boolean onChatMessage(Text text, boolean bool) {
-        if (!text.getString().startsWith("Party Finder >") && !ConfigManager.getConfig().dungeonCategory.DPU) return true;
+        if (!text.getString().startsWith("Party Finder >") || !ConfigManager.getConfig().dungeonCategory.DPU) return true;
         Matcher matcher = Pattern.compile("(\\S*) joined the dungeon group!").matcher(text.getString());
         if (!matcher.find()) return true;
         GetRequest("https://api.mojang.com/users/profiles/minecraft/"+matcher.group(1)).thenAcceptAsync(mojangData -> {
@@ -117,7 +117,7 @@ public class DPU {
                     String finalPb = pb.trim();
 
                     Shortcuts.sendClientMessage(Text.literal(
-                        "§cName:§b " + MinecraftClient.getInstance().getSession().getUsername() +
+                        "§cName:§b " + matcher.group(1) +
                         "\n§6Cata: §a" + cata +
                         "\n§6Secrets: §c" + secrets +
                         "\n§6MP: §c" + mp +
