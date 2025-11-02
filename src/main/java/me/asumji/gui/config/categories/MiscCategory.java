@@ -15,4 +15,9 @@ public class MiscCategory {
     @ConfigOption(name = "Autopet Ticks", desc = "Defines the ticks how long the title should stay for")
     @ConfigEditorSlider(minValue = 1, maxValue = 20, minStep = 1)
     public int AutopetTicks = 8;
+
+    @Expose
+    @ConfigOption(name = "Clear Tick Timer", desc = "Renders a Timer counting down from 20 during clear.")
+    @ConfigEditorBoolean
+    public boolean ClearTickTimer = false;
 }
