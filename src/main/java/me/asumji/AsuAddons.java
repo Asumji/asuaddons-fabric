@@ -24,5 +24,6 @@ public class AsuAddons implements ModInitializer {
         Variables.init();
         Autopet.init();
         LividTimer.init();
+        ClearTickTimer.init();
 	}
 }

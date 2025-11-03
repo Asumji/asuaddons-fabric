@@ -2,8 +2,11 @@ package me.asumji.gui.config.categories;
 
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorButton;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorSlider;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
+import me.asumji.gui.MoveGUI;
+import net.minecraft.client.MinecraftClient;
 
 public class MiscCategory {
     @Expose
@@ -17,7 +20,21 @@ public class MiscCategory {
     public int AutopetTicks = 8;
 
     @Expose
+    public int clearTickTimerHudX = 50;
+
+    @Expose
+    public int clearTickTimerHudY = 50;
+
+    @Expose
+    public float clearTickTimerHudScale = 2;
+
+    @Expose
     @ConfigOption(name = "Clear Tick Timer", desc = "Renders a Timer counting down from 20 during clear.")
     @ConfigEditorBoolean
-    public boolean ClearTickTimer = false;
+    public boolean clearTickTimer = false;
+
+    @ConfigOption(name = "Move Clear Tick Timer HUD", desc = "Allows you to move the Timer HUD")
+    @ConfigEditorButton(buttonText = "Click")
+    public Runnable moveClearTickTimerHud = () ->
+            MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI("§a20", "miscCategory","clearTickTimerHudX", "clearTickTimerHudY", "clearTickTimerHudScale")));
 }
