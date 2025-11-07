@@ -29,7 +29,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation("org.notenoughupdates.moulconfig:${project.moulconfig_flavour}:${project.moulconfig_version}")
-    include "org.notenoughupdates.moulconfig:modern-1.21.5:${project.moulconfig_version}"
+    include "org.notenoughupdates.moulconfig:${project.moulconfig_flavour}:${project.moulconfig_version}"
     modImplementation("net.fabricmc:fabric-language-kotlin:${project.flk_version}")
 	
 }

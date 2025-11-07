@@ -13,8 +13,6 @@ import net.minecraft.text.Text;
 import java.io.*;
 
 public class MoveGUI extends Screen {
-    private static final ConfigGUI moulConfig = ConfigManager.getConfig();
-
     private final String placeholder;
     private final String category;
     private final String xProperty;
@@ -54,10 +52,10 @@ public class MoveGUI extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        context.getMatrices().push();
-        context.getMatrices().scale(scale,scale,1);
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(scale,scale);
         context.drawCenteredTextWithShadow(this.textRenderer, placeholder, (int) x, (int) y, 0xFFFFFFFF);
-        context.getMatrices().pop();
+        context.getMatrices().popMatrix();
     }
 
     @Override

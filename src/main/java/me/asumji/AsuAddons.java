@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class AsuAddons implements ModInitializer {
 	public static final String MOD_ID = "asuaddons";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final String modVersion = "1.0.0";
+    public static final String modVersion = "1.1.0";
     public static final String NAMESPACE = "au";
     public static final String APIPROXY = "http://asumji.duckdns.org/";
 

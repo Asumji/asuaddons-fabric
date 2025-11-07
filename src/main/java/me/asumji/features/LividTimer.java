@@ -1,14 +1,18 @@
 package me.asumji.features;
 
+import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Variables;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import org.joml.Matrix3x2fStack;
 
 import java.text.DecimalFormat;
 
@@ -18,21 +22,23 @@ public class LividTimer {
     private static boolean timerDone = false;
     public static void init() {
         ClientReceiveMessageEvents.ALLOW_GAME.register(LividTimer::onChatMessage);
-        HudRenderCallback.EVENT.register(LividTimer::renderHud);
+        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.of(AsuAddons.MOD_ID, "lividhud"), LividTimer::renderHud);
     }
 
     private static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
         if (Variables.TickTimers.get("LividTimer") == null) return;
         int ticksLeft = Variables.TickTimers.get("LividTimer");
-        drawContext.getMatrices().push();
-        drawContext.getMatrices().scale(ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,1);
+        Matrix3x2fStack matrices = drawContext.getMatrices();
+        matrices.pushMatrix();
+        matrices.scale(ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.lividTimerHudScale);
         drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.of(df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.lividTimerHudX, ConfigManager.getConfig().dungeonCategory.lividTimerHudY, 0xFFFFFF);
+        matrices.popMatrix();
         if (ticksLeft == 0 && !timerDone) {
             timerDone = true;
-            Shortcuts.displayTitle(Text.literal("§cLivid is vulnerable"),Text.literal(""),0,20,0);
-            if (!ConfigManager.getConfig().dungeonCategory.lividTimerMessage.isEmpty()) MinecraftClient.getInstance().player.networkHandler.sendChatCommand("pc "+ConfigManager.getConfig().dungeonCategory.lividTimerMessage);
+            Shortcuts.displayTitle(Text.literal("§cLivid is vulnerable"), Text.literal(""), 0, 20, 0);
+            if (!ConfigManager.getConfig().dungeonCategory.lividTimerMessage.isEmpty())
+                MinecraftClient.getInstance().player.networkHandler.sendChatCommand("pc " + ConfigManager.getConfig().dungeonCategory.lividTimerMessage);
         }
-        drawContext.getMatrices().pop();
     }
 
     private static boolean onChatMessage(Text text, boolean bool) {
