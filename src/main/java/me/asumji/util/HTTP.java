@@ -14,7 +14,7 @@ public class HTTP {
     public static CompletableFuture<HttpResponse<String>> GetRequest(String url) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("User-Agent", "AsuAddons v" + AsuAddons.modVersion + " | "+ MinecraftClient.getInstance().getSession().getUsername())
+                .header("User-Agent", "AsuAddons v" + AsuAddons.MOD_VERSION + " | "+ MinecraftClient.getInstance().getSession().getUsername())
                 .GET()
                 .timeout(Duration.ofSeconds(10))
                 .build();

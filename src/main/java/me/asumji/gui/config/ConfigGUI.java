@@ -11,7 +11,7 @@ import me.asumji.gui.config.categories.MiscCategory;
 public class ConfigGUI extends Config {
     @Override
     public StructuredText getTitle() {
-        return StructuredText.of("§6§lAsuAddons v"+AsuAddons.modVersion+" §7- §5MoulConfig §bby Moulberry & nea89o");
+        return StructuredText.of("§6§lAsuAddons v"+AsuAddons.MOD_VERSION +" §7- §5MoulConfig §bby Moulberry & nea89o");
     }
 
     @Expose

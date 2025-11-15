@@ -42,4 +42,9 @@ public class DungeonCategory {
     @ConfigEditorButton(buttonText = "Click")
     public Runnable moveLividHud = () ->
         MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI("0.00s", "dungeonCategory","lividTimerHudX", "lividTimerHudY", "lividTimerHudScale")));
+
+    @Expose
+    @ConfigOption(name = "Diamante Alert", desc = "Chat Alert when a Diamante giant is detected.")
+    @ConfigEditorBoolean
+    public boolean diamanteAlert = false;
 }

@@ -2,7 +2,6 @@ package me.asumji.features;
 
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
-import me.asumji.util.Shortcuts;
 import me.asumji.util.Variables;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;

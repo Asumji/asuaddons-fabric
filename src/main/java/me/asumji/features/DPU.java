@@ -6,7 +6,6 @@ import me.asumji.util.Compression;
 import me.asumji.util.Variables;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.text.ClickEvent;
@@ -35,7 +34,8 @@ public class DPU {
         if (!matcher.find()) return true;
         GetRequest("https://api.mojang.com/users/profiles/minecraft/"+matcher.group(1)).thenAcceptAsync(mojangData -> {
             String uuid = GSON.fromJson(mojangData.body(), JsonObject.class).get("id").getAsString();
-            GetRequest(AsuAddons.APIPROXY+"v2/skyblock/profiles?uuid="+uuid).thenAcceptAsync(HypixelData -> {
+            AsuAddons.LOGGER.info(uuid);
+            GetRequest(AsuAddons.API_PROXY +"v2/skyblock/profiles?uuid="+uuid).thenAcceptAsync(HypixelData -> {
                 JsonObject JSON = GSON.fromJson(HypixelData.body(), JsonObject.class);
                 for (JsonElement jsonElement : JSON.getAsJsonArray("profiles")) {
                     JsonObject profile = jsonElement.getAsJsonObject();
