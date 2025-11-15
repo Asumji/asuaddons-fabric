@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class AsuAddons implements ModInitializer {
 	public static final String MOD_ID = "asuaddons";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final String MOD_VERSION = "1.1.0";
+    public static final String MOD_VERSION = "1.2.0";
     public static final String NAMESPACE = "au";
     public static final String API_PROXY = "http://asumji.duckdns.org/";
     public static final String MOD_PREFIX = "§6AU > §r";
@@ -27,5 +27,7 @@ public class AsuAddons implements ModInitializer {
         LividTimer.init();
         ClearTickTimer.init();
         BloodGiant.init();
+        MelodyDisplay.init();
+        PurplePadTimer.init();
 	}
 }

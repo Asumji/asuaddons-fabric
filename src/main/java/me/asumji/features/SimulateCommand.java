@@ -22,7 +22,7 @@ public class SimulateCommand {
             .then(ClientCommandManager.literal("simulate")
             .then(ClientCommandManager.argument("message", StringArgumentType.greedyString())
             .executes(context -> {
-                MinecraftClient.getInstance().getMessageHandler().onGameMessage(Text.of(getString(context, "message").replaceAll("&(.)", "§$1")), false);
+                MinecraftClient.getInstance().getMessageHandler().onGameMessage(Text.literal(getString(context, "message").replaceAll("&(.)", "§$1")), false);
                 return 1;
             }))));
     }

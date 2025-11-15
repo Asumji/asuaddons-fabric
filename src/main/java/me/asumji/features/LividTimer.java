@@ -28,11 +28,10 @@ public class LividTimer {
     private static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
         if (Variables.TickTimers.get("LividTimer") == null) return;
         int ticksLeft = Variables.TickTimers.get("LividTimer");
-        AsuAddons.LOGGER.info(String.valueOf(ticksLeft));
         Matrix3x2fStack matrices = drawContext.getMatrices();
         matrices.pushMatrix();
         matrices.scale(ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.lividTimerHudScale);
-        drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.of(df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.lividTimerHudX, ConfigManager.getConfig().dungeonCategory.lividTimerHudY, 0xFFFFFFFF);
+        drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal(df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.lividTimerHudX, ConfigManager.getConfig().dungeonCategory.lividTimerHudY, 0xFFFFFFFF);
         matrices.popMatrix();
         if (ticksLeft == 0 && !timerDone) {
             timerDone = true;

@@ -31,7 +31,7 @@ public class ClearTickTimer {
         Matrix3x2fStack matrices = drawContext.getMatrices();
         matrices.pushMatrix();
         matrices.scale(ConfigManager.getConfig().miscCategory.clearTickTimerHudScale,ConfigManager.getConfig().miscCategory.clearTickTimerHudScale);
-        drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.of(ticksLeft > 10 ? "§a"+ticksLeft : ticksLeft > 5 ? "§6"+ticksLeft : "§c"+ticksLeft), ConfigManager.getConfig().miscCategory.clearTickTimerHudX, ConfigManager.getConfig().miscCategory.clearTickTimerHudY, 0xFFFFFFFF);
+        drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal(ticksLeft > 10 ? "§a"+ticksLeft : ticksLeft > 5 ? "§6"+ticksLeft : "§c"+ticksLeft), ConfigManager.getConfig().miscCategory.clearTickTimerHudX, ConfigManager.getConfig().miscCategory.clearTickTimerHudY, 0xFFFFFFFF);
         matrices.popMatrix();
     }
 

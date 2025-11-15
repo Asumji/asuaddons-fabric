@@ -47,4 +47,42 @@ public class DungeonCategory {
     @ConfigOption(name = "Diamante Alert", desc = "Chat Alert when a Diamante giant is detected.")
     @ConfigEditorBoolean
     public boolean diamanteAlert = false;
+
+    @Expose
+    @ConfigOption(name = "Melody Display", desc = "Displays melody progress on hud.")
+    @ConfigEditorBoolean
+    public boolean melodyDisplay = false;
+
+    @Expose
+    public int melodyHudX = 50;
+
+    @Expose
+    public int melodyHudY = 50;
+
+    @Expose
+    public float melodyHudScale = 2;
+
+    @ConfigOption(name = "Move Melody HUD", desc = "Allows you to move the Melody HUD")
+    @ConfigEditorButton(buttonText = "Click")
+    public Runnable moveMelodyHud = () ->
+            MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI("§eweeklies 3/4", "dungeonCategory","melodyHudX", "melodyHudY", "melodyHudScale")));
+
+    @Expose
+    @ConfigOption(name = "Purple Pad Timer", desc = "Displays timer when to crush purple.")
+    @ConfigEditorBoolean
+    public boolean purplePadTimer = false;
+
+    @Expose
+    public int purplePadTimerHudX = 50;
+
+    @Expose
+    public int purplePadTimerHudY = 50;
+
+    @Expose
+    public float purplePadTimerHudScale = 2;
+
+    @ConfigOption(name = "Move Purple Pad Timer HUD", desc = "Allows you to move the Purple Pad Timer HUD")
+    @ConfigEditorButton(buttonText = "Click")
+    public Runnable movePurplePadTimerHud = () ->
+            MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI("§55.00", "dungeonCategory","purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale")));
 }
