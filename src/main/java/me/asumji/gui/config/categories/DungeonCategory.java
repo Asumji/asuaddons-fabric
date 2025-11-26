@@ -1,12 +1,12 @@
 package me.asumji.gui.config.categories;
 
 import com.google.gson.annotations.Expose;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorButton;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorText;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
+import io.github.notenoughupdates.moulconfig.ChromaColour;
+import io.github.notenoughupdates.moulconfig.annotations.*;
 import me.asumji.gui.MoveGUI;
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.client.MinecraftClient;
+import org.joml.Vector4f;
 
 public class DungeonCategory {
     @Expose
@@ -85,4 +85,14 @@ public class DungeonCategory {
     @ConfigEditorButton(buttonText = "Click")
     public Runnable movePurplePadTimerHud = () ->
             MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI("§55.00", "dungeonCategory","purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale")));
+
+    @Expose
+    @ConfigOption(name = "Wither Hitbox", desc = "Renders the wither's hitbox in f7.")
+    @ConfigEditorBoolean
+    public boolean witherHitbox = false;
+
+    @Expose
+    @ConfigOption(name = "Wither Hitbox Color", desc = "The color of the hitbox.")
+    @ConfigEditorColour
+    public ChromaColour witherHitboxColor = ChromaColour.fromRGB(0, 255, 0, 0, 1);
 }
