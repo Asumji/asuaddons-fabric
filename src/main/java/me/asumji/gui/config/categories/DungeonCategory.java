@@ -3,6 +3,7 @@ package me.asumji.gui.config.categories;
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.ChromaColour;
 import io.github.notenoughupdates.moulconfig.annotations.*;
+import io.github.notenoughupdates.moulconfig.observer.Property;
 import me.asumji.gui.MoveGUI;
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.client.MinecraftClient;
@@ -94,5 +95,5 @@ public class DungeonCategory {
     @Expose
     @ConfigOption(name = "Wither Hitbox Color", desc = "The color of the hitbox.")
     @ConfigEditorColour
-    public ChromaColour witherHitboxColor = ChromaColour.fromRGB(0, 255, 0, 0, 1);
+    public String witherHitboxColor = ChromaColour.special(0,255,255,0,0);
 }
