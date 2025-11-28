@@ -26,19 +26,16 @@ public class WitherHitbox {
     public static void init() {
         WorldRenderEvents.AFTER_TRANSLUCENT.register(WitherHitbox::extractAndDrawWaypoint);
         ClientEntityEvents.ENTITY_LOAD.register(WitherHitbox::loadEntity);
-        //ClientEntityEvents.ENTITY_UNLOAD.register(WitherHitbox::unloadEntity);
+        ClientEntityEvents.ENTITY_UNLOAD.register(WitherHitbox::unloadEntity);
     }
 
-    //private static void unloadEntity(Entity entity, ClientWorld clientWorld) {
-        //witherEntity = null;
-    //}
+    private static void unloadEntity(Entity entity, ClientWorld clientWorld) {
+        witherEntity = null;
+    }
 
     private static void loadEntity(Entity entity, ClientWorld clientWorld) {
         Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-            if (entity.getCustomName().getString().matches("(﴾ ☠♃ Maxor ﴿|﴾ ☠♃ Storm ﴿|﴾ ☠♃ Goldor ﴿|﴾ ☠♃ Necron ﴿)")) {
-                Shortcuts.sendClientMessage(Text.literal(entity.getType().toString()));
-                witherEntity = entity;
-            }
+            if (entity.getCustomName().getString().matches("(﴾ ☠♃ Maxor ﴿|﴾ ☠♃ Storm ﴿|﴾ ☠♃ Goldor ﴿|﴾ ☠♃ Necron ﴿)")) witherEntity = entity;
         }, 100, TimeUnit.MILLISECONDS);
     }
 
