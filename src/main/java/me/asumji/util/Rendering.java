@@ -37,6 +37,7 @@ public class Rendering {
     private static final BufferAllocator allocator = new BufferAllocator(RenderLayer.CUTOUT_BUFFER_SIZE);
     private static BufferBuilder buffer;
     private static MappableRingBuffer vertexBuffer;
+    static Vector4f waypointColor = new Vector4f(0,0,0,1);
 
     public static void renderWaypoint(WorldRenderContext context, @SuppressWarnings("SameParameterValue") RenderPipeline pipeline, float x1, float y1, float z1, float x2, float y2, float z2, int color, float alpha) {
         float r = ((color >> 16) & 0xFF) / 255f;
@@ -63,7 +64,8 @@ public class Rendering {
         VertexFormat format = drawParameters.format();
 
         GpuBuffer vertices = upload(drawParameters, format, builtBuffer);
-        draw(MinecraftClient.getInstance(), pipeline, builtBuffer, drawParameters, vertices, new Vector4f(r,g,b,alpha));
+        waypointColor.set(r,g,b,alpha);
+        draw(MinecraftClient.getInstance(), pipeline, builtBuffer, drawParameters, vertices, waypointColor);
 
         vertexBuffer.rotate();
         buffer = null;

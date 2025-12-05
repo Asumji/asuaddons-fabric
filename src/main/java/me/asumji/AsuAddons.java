@@ -25,10 +25,9 @@ public class AsuAddons implements ModInitializer {
         Variables.init();
         Autopet.init();
         LividTimer.init();
-        ClearTickTimer.init();
         BloodGiant.init();
         MelodyDisplay.init();
         PurplePadTimer.init();
-        //WitherHitbox.init();
+        WitherHitbox.init();
 	}
 }
