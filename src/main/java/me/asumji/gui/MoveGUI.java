@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -65,10 +66,11 @@ public class MoveGUI extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        x = (int) mouseX/scale;
-        y = (int) mouseY/scale;
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
+        AsuAddons.LOGGER.info(String.valueOf(offsetX));
+        x = (int) click.x()/scale;
+        y = (int) click.y()/scale;
+        return super.mouseDragged(click, offsetX, offsetY);
     }
 
     @Override

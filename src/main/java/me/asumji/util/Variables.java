@@ -6,6 +6,7 @@ import net.minecraft.scoreboard.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Variables {
@@ -29,7 +30,8 @@ public class Variables {
     public static ObjectArrayList<String> getScoreboard(MinecraftClient minecraftClient) {
         if (minecraftClient.player == null) return new ObjectArrayList<>();
         ObjectArrayList<String> stringLines = new ObjectArrayList<>();
-        Scoreboard scoreboard = minecraftClient.player.getScoreboard();
+
+        Scoreboard scoreboard = Objects.requireNonNull(minecraftClient.getNetworkHandler()).getScoreboard();
         ScoreboardObjective objective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.FROM_ID.apply(1));
         for (ScoreHolder scoreHolder : scoreboard.getKnownScoreHolders()) {
             if (scoreboard.getScoreHolderObjectives(scoreHolder).containsKey(objective)) {

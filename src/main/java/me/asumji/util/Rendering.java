@@ -9,9 +9,7 @@ import com.mojang.blaze3d.systems.RenderPass;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import me.asumji.AsuAddons;
-import me.asumji.features.WitherHitbox;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.MappableRingBuffer;
 import net.minecraft.client.gl.RenderPipelines;
@@ -20,6 +18,7 @@ import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.system.MemoryUtil;
 
@@ -44,8 +43,8 @@ public class Rendering {
         float g = ((color >> 8) & 0xFF) / 255f;
         float b = (color & 0xFF) / 255f;
 
-        MatrixStack matrices = context.matrixStack();
-        Vec3d camera = context.camera().getPos();
+        MatrixStack matrices = context.matrices();
+        Vec3d camera = context.worldState().cameraRenderState.pos;
 
         assert matrices != null;
         matrices.push();
@@ -101,7 +100,7 @@ public class Rendering {
         }
 
         GpuBufferSlice dynamicTransforms = RenderSystem.getDynamicUniforms()
-                .write(RenderSystem.getModelViewMatrix(), color, RenderSystem.getModelOffset(), RenderSystem.getTextureMatrix(), 1f);
+                .write(RenderSystem.getModelViewMatrix(), color, new Vector3f(), RenderSystem.getTextureMatrix(), 1f);
         try (RenderPass renderPass = RenderSystem.getDevice()
                 .createCommandEncoder()
                 .createRenderPass(() -> AsuAddons.MOD_ID + " waypointRenderPipeline", client.getFramebuffer().getColorAttachmentView(), OptionalInt.empty(), client.getFramebuffer().getDepthAttachmentView(), OptionalDouble.empty())) {

@@ -4,8 +4,8 @@ import io.github.notenoughupdates.moulconfig.ChromaColour;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
@@ -20,7 +20,7 @@ public class WitherHitbox {
     public static Entity witherEntity;
 
     public static void init() {
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(WitherHitbox::extractAndDrawWaypoint);
+        WorldRenderEvents.BEFORE_TRANSLUCENT.register(WitherHitbox::extractAndDrawWaypoint);
         ClientEntityEvents.ENTITY_LOAD.register(WitherHitbox::loadEntity);
     }
 

@@ -29,6 +29,6 @@ public class AsuAddons implements ModInitializer {
         BloodGiant.init();
         MelodyDisplay.init();
         PurplePadTimer.init();
-        WitherHitbox.init();
+        //WitherHitbox.init();
 	}
 }
