@@ -12,6 +12,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
@@ -37,14 +39,14 @@ public class WitherHitbox {
     }
 
     private static void loadEntity(Entity entity, ClientWorld clientWorld) {
+        if (!(entity instanceof ArmorStandEntity stand)) return;
         Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-            if (entity instanceof ArmorStandEntity && Objects.requireNonNull(entity.getCustomName()).getString().matches("(﴾ ☠♃ Maxor ﴿|﴾ ☠♃ Storm ﴿|﴾ ☠♃ Goldor ﴿|﴾ ☠♃ Necron ﴿)")) witherEntity = entity;
-        }, 100, TimeUnit.MILLISECONDS);
+            if (Objects.requireNonNull(entity.getCustomName()).getString().matches("(﴾ ☠♃ Maxor ﴿|﴾ ☠♃ Storm ﴿|﴾ ☠♃ Goldor ﴿|﴾ ☠♃ Necron ﴿)")) witherEntity = stand;
+        }, 1, TimeUnit.MILLISECONDS);
     }
 
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
         if (witherEntity == null || !ConfigManager.getConfig().dungeonCategory.witherHitbox) return;
-        AsuAddons.LOGGER.info(String.valueOf(witherEntity.isAlive()));
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.witherHitboxColor).getEffectiveColour();
         renderWaypoint(context, FILLED, (float) (witherEntity.getX()-0.5), (float) (witherEntity.getY()-3.5), (float) (witherEntity.getZ()-0.5), (float) (witherEntity.getX()+0.5), (float) (witherEntity.getY()), (float) (witherEntity.getZ()+0.5), effectiveColor.getRGB(), (float) effectiveColor.getAlpha() / 255);
     }
