@@ -16,6 +16,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Arm;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
@@ -30,7 +31,6 @@ public class WitherHitbox {
 
     public static void init() {
         WorldRenderEvents.BEFORE_TRANSLUCENT.register(WitherHitbox::extractAndDrawWaypoint);
-        ClientEntityEvents.ENTITY_LOAD.register(WitherHitbox::loadEntity);
         ClientTickEvents.START_CLIENT_TICK.register(WitherHitbox::tick);
     }
 
@@ -38,16 +38,15 @@ public class WitherHitbox {
         if (witherEntity != null && !witherEntity.isAlive()) witherEntity = null;
     }
 
-    private static void loadEntity(Entity entity, ClientWorld clientWorld) {
-        if (!(entity instanceof ArmorStandEntity stand)) return;
-        Executors.newSingleThreadScheduledExecutor().schedule(() -> {
-            if (Objects.requireNonNull(entity.getCustomName()).getString().matches("(﴾ ☠♃ Maxor ﴿|﴾ ☠♃ Storm ﴿|﴾ ☠♃ Goldor ﴿|﴾ ☠♃ Necron ﴿)")) witherEntity = stand;
-        }, 1, TimeUnit.MILLISECONDS);
-    }
-
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
         if (witherEntity == null || !ConfigManager.getConfig().dungeonCategory.witherHitbox) return;
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.witherHitboxColor).getEffectiveColour();
         renderWaypoint(context, FILLED, (float) (witherEntity.getX()-0.5), (float) (witherEntity.getY()-3.5), (float) (witherEntity.getZ()-0.5), (float) (witherEntity.getX()+0.5), (float) (witherEntity.getY()), (float) (witherEntity.getZ()+0.5), effectiveColor.getRGB(), (float) effectiveColor.getAlpha() / 255);
+    }
+
+    public static void loadEntity(ArmorStandEntity stand) {
+        if (!stand.hasCustomName() || !stand.isInvisible() || !stand.isCustomNameVisible()) return;
+        if (!stand.getCustomName().getString().matches("(﴾ ☠♃ Maxor ﴿|﴾ ☠♃ Storm ﴿|﴾ ☠♃ Goldor ﴿|﴾ ☠♃ Necron ﴿)")) return;
+        witherEntity = stand;
     }
 }

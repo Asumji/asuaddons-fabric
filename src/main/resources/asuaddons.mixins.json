@@ -2,10 +2,6 @@
   "required": true,
   "package": "me.asumji.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "ClientConnectionMixin",
-    "PlayerManagerMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   },
@@ -13,6 +9,9 @@
     "requireAnnotations": true
   },
   "client": [
-    "GameRendererMixin"
+    "ClientPlayNetworkHandlerMixin",
+    "GameRendererMixin",
+    "ClientConnectionMixin",
+    "PlayerManagerMixin"
   ]
 }
