@@ -1,28 +1,15 @@
 package me.asumji.features;
 
 import io.github.notenoughupdates.moulconfig.ChromaColour;
-import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
-import me.asumji.util.Rendering;
-import me.asumji.util.Shortcuts;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Arm;
-import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
-import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static me.asumji.util.Rendering.*;
 

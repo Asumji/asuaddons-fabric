@@ -2,13 +2,16 @@ package me.asumji.gui.config.categories;
 
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorButton;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorSlider;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
-import me.asumji.gui.MoveGUI;
-import net.minecraft.client.MinecraftClient;
 
 public class MiscCategory {
+    @Expose
+    public boolean firstLaunch = true;
+
+    @Expose
+    public String webhookUrl = "";
+
     @Expose
     @ConfigOption(name = "Autopet Notif", desc = "Displays a title when an Autopet rule is procced.")
     @ConfigEditorBoolean

@@ -8,16 +8,19 @@
 		"asumji"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "http://asumji.duckdns.org/",
+		"sources": "https://github.com/Asumji/asuaddons-fabric"
 	},
 	"license": "GNU",
 	"icon": "assets/asuaddons/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"main": [
 			"me.asumji.AsuAddons"
-		]
+		],
+        "modmenu": [
+          "me.asumji.gui.ModMenuEntry"
+        ]
 	},
 	"mixins": [
 		"asuaddons.mixins.json"
@@ -28,7 +31,5 @@
 		"java": ">=21",
 		"fabric-api": "*",
         "fabric-language-kotlin": "*"
-    },
-	"suggests": {
-	}
+    }
 }

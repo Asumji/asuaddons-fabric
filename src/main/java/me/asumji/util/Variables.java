@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Variables {
     public static String[] scoreboard = {};
     public static Map<String, String> rarities = new HashMap<>();
-    //See ClientConnectionMixin for Timer Logic
     public static Map<String, Integer> TickTimers = new ConcurrentHashMap<>();
 
     public static void init() {
@@ -27,7 +26,8 @@ public class Variables {
         rarities.put("VERY SPECIAL","§4");
     }
 
-    public static ObjectArrayList<String> getScoreboard(MinecraftClient minecraftClient) {
+    //I will need this once I finally am fucked enough to make a location variable
+    /*public static ObjectArrayList<String> getScoreboard(MinecraftClient minecraftClient) {
         if (minecraftClient.player == null) return new ObjectArrayList<>();
         ObjectArrayList<String> stringLines = new ObjectArrayList<>();
 
@@ -43,5 +43,5 @@ public class Variables {
             }
         }
         return stringLines;
-    }
+    }*/
 }

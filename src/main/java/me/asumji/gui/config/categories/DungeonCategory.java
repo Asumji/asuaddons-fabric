@@ -3,11 +3,8 @@ package me.asumji.gui.config.categories;
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.ChromaColour;
 import io.github.notenoughupdates.moulconfig.annotations.*;
-import io.github.notenoughupdates.moulconfig.observer.Property;
 import me.asumji.gui.MoveGUI;
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.client.MinecraftClient;
-import org.joml.Vector4f;
 
 public class DungeonCategory {
     @Expose

@@ -22,7 +22,6 @@ import static me.asumji.util.HTTP.GetRequest;
 import static me.asumji.util.Number.*;
 
 public class DPU {
-    private static final Gson GSON = new GsonBuilder().create();
 
     public static void init() {
         ClientReceiveMessageEvents.ALLOW_GAME.register(DPU::onChatMessage);
@@ -33,10 +32,9 @@ public class DPU {
         Matcher matcher = Pattern.compile("(\\S*) joined the dungeon group!").matcher(text.getString());
         if (!matcher.find()) return true;
         GetRequest("https://api.mojang.com/users/profiles/minecraft/"+matcher.group(1)).thenAcceptAsync(mojangData -> {
-            String uuid = GSON.fromJson(mojangData.body(), JsonObject.class).get("id").getAsString();
-            AsuAddons.LOGGER.info(uuid);
+            String uuid = AsuAddons.GSON.fromJson(mojangData.body(), JsonObject.class).get("id").getAsString();
             GetRequest(AsuAddons.API_PROXY +"v2/skyblock/profiles?uuid="+uuid).thenAcceptAsync(HypixelData -> {
-                JsonObject JSON = GSON.fromJson(HypixelData.body(), JsonObject.class);
+                JsonObject JSON = AsuAddons.GSON.fromJson(HypixelData.body(), JsonObject.class);
                 for (JsonElement jsonElement : JSON.getAsJsonArray("profiles")) {
                     JsonObject profile = jsonElement.getAsJsonObject();
                     if (!profile.get("selected").getAsBoolean()) continue;
@@ -116,7 +114,7 @@ public class DPU {
                     }
                     String finalPb = pb.trim();
 
-                    Shortcuts.sendClientMessage(Text.literal(
+                    Shortcuts.queueClientMessage(Text.literal(
                         "§cName:§b " + matcher.group(1) +
                         "\n§6Cata: §a" + cata +
                         "\n§6Secrets: §c" + secrets +

@@ -13,11 +13,22 @@ import java.util.concurrent.CompletableFuture;
 public class HTTP {
     public static CompletableFuture<HttpResponse<String>> GetRequest(String url) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("User-Agent", "AsuAddons v" + AsuAddons.MOD_VERSION + " | "+ MinecraftClient.getInstance().getSession().getUsername())
-                .GET()
-                .timeout(Duration.ofSeconds(10))
-                .build();
+            .uri(URI.create(url))
+            .header("User-Agent", "AsuAddons v" + AsuAddons.MOD_VERSION + " | "+ MinecraftClient.getInstance().getSession().getUsername())
+            .GET()
+            .timeout(Duration.ofSeconds(10))
+            .build();
         return HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public static void sendWebhookMessage(String webhookData, String url) {
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .header("User-Agent", "AsuAddons v" + AsuAddons.MOD_VERSION + " | "+ MinecraftClient.getInstance().getSession().getUsername())
+            .header("Content-type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(webhookData))
+            .timeout(Duration.ofSeconds(10))
+            .build();
+        HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString());
     }
 }

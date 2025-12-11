@@ -18,6 +18,11 @@ repositories {
             includeGroup "org.notenoughupdates.moulconfig"
         }
     }
+
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+    }
 }
 
 dependencies {
@@ -31,6 +36,7 @@ dependencies {
     modImplementation("org.notenoughupdates.moulconfig:${project.moulconfig_flavour}:${project.moulconfig_version}")
     include "org.notenoughupdates.moulconfig:${project.moulconfig_flavour}:${project.moulconfig_version}"
     modImplementation("net.fabricmc:fabric-language-kotlin:${project.flk_version}")
+    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 	
 }
 
