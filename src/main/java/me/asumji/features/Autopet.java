@@ -15,7 +15,7 @@ public class Autopet {
     }
 
     private static boolean onChatMessage(Text text, boolean bool) {
-        if (!text.getString().matches("§.Autopet §.equipped your §.\\[Lvl \\d+] (§.)([A-z ]+)(?:§. ✦)?§.! §.§.VIEW RULE") && !ConfigManager.getConfig().miscCategory.AutopetNotif) return true;
+        if (!text.getString().matches("§.Autopet §.equipped your §.\\[Lvl \\d+] (§.)([A-z ]+)(?:§. ✦)?§.! §.§.VIEW RULE") || !ConfigManager.getConfig().miscCategory.AutopetNotif) return true;
         Matcher matcher = Pattern.compile("§.Autopet §.equipped your §.\\[Lvl \\d+] (§.)([A-z ]+)(?:§. ✦)?§.! §.§.VIEW RULE").matcher(text.getString());
         if (!matcher.find()) return true;
         Shortcuts.displayTitle(Text.literal(matcher.group(1)+matcher.group(2)),Text.literal("§cAutopet"),0,ConfigManager.getConfig().miscCategory.AutopetTicks,0);

@@ -67,7 +67,6 @@ public class MoveGUI extends Screen {
 
     @Override
     public boolean mouseDragged(Click click, double offsetX, double offsetY) {
-        AsuAddons.LOGGER.info(String.valueOf(offsetX));
         x = (int) click.x()/scale;
         y = (int) click.y()/scale;
         return super.mouseDragged(click, offsetX, offsetY);
