@@ -1,0 +1,119 @@
+package me.asumji.features;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import me.asumji.AsuAddons;
+import me.asumji.gui.config.ConfigManager;
+import me.asumji.util.HTTP;
+import me.asumji.util.Shortcuts;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.text.Text;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URL;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import static me.asumji.AsuAddons.GSON;
+
+//I hate this code so much but I'll probably come back to this at some point (I won't except it breaks (which it will)).
+public class AutoUpdater {
+
+    //Credit: https://www.digitalocean.com/community/tutorials/java-unzip-file-example
+    private static void unzip(String zipFilePath, String destDir) {
+        File dir = new File(destDir);
+        if (!dir.exists()) dir.mkdirs();
+        byte[] buffer = new byte[1024];
+        try (FileInputStream fis = new FileInputStream(zipFilePath);
+             ZipInputStream zis = new ZipInputStream(fis)) {
+            ZipEntry ze = zis.getNextEntry();
+            while (ze != null) {
+                String fileName = ze.getName();
+                File newFile = new File(destDir + File.separator + fileName);
+                if (ze.isDirectory()) {
+                    new File(newFile.getParent()).mkdirs();
+                } else {
+                    new File(newFile.getParent()).mkdirs();
+                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                        int len;
+                        while ((len = zis.read(buffer)) > 0) {
+                            fos.write(buffer, 0, len);
+                        }
+                    }
+                }
+                zis.closeEntry();
+                ze = zis.getNextEntry();
+            }
+            zis.closeEntry();
+        } catch (IOException e) {
+            AsuAddons.LOGGER.info(e.toString());
+        }
+    }
+
+    public static void init() {
+        if (!ConfigManager.getConfig().mainCategory.autoUpdates || ConfigManager.getConfig().mainCategory.firstLaunch) return;
+        HTTP.GetRequest("https://api.github.com/repos/Asumji/asuaddons-fabric/actions/artifacts").thenAcceptAsync(res -> {
+            JsonArray artifacts = GSON.fromJson(res.body(), JsonObject.class).getAsJsonObject().getAsJsonArray("artifacts");
+            if (artifacts.get(0).getAsJsonObject().get("id").getAsString().equals(ConfigManager.getConfig().mainCategory.lastestAction)) return;
+            Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aA new release has been found. Automatic Update has been started."));
+            ConfigManager.getConfig().mainCategory.lastestAction = artifacts.get(0).getAsJsonObject().get("id").getAsString();
+            String artifactId = artifacts.get(0).getAsJsonObject().get("id").getAsString();
+            try {
+                //You don't get my key my raspberry pi is too cool for that.
+                URL url = new URL(AsuAddons.API_PROXY+"action?id="+artifactId);
+                BufferedInputStream bis = new BufferedInputStream(url.openStream());
+                FileOutputStream fis = new FileOutputStream(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/dwnld.zip");
+                byte[] buffer = new byte[1024];
+                int count=0;
+                while((count = bis.read(buffer,0,1024)) != -1)
+                {
+                    fis.write(buffer, 0, count);
+                }
+                fis.close();
+                bis.close();
+            } catch (Exception e) {
+                AsuAddons.LOGGER.info(e.toString());
+            }
+            File zipFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/dwnld.zip");
+            if (zipFile.exists()) {
+                unzip(zipFile.getPath(), FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons");
+                File jarFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+".jar");
+                if (jarFile.exists()) {
+                    try {
+                        List<Path> result;
+                        try (Stream<Path> pathStream = Files.find(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"),
+                                Integer.MAX_VALUE,
+                                (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-\\d\\.\\d\\.\\d\\.jar"))
+                        ) {
+                            result = pathStream.toList();
+                        }
+                        for (Path filePath : result) {
+                            Files.deleteIfExists(filePath.toAbsolutePath());
+                        }
+                        Files.copy(jarFile.toPath(), Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/asuaddons-"+AsuAddons.MOD_VERSION+".jar"), StandardCopyOption.REPLACE_EXISTING);
+                        Files.deleteIfExists(zipFile.toPath());
+                        Files.deleteIfExists(jarFile.toPath());
+                        Files.deleteIfExists(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+"-sources.jar"));
+                        Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aSuccessfully downloaded the newest version. Changes will apply on next restart."));
+                    } catch (IOException e) {
+                        AsuAddons.LOGGER.info(e.toString());
+                        Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cFailed organizing files. Retrying on next restart."));
+                    }
+                } else {
+                    Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cUnzipping failed. Retrying on next restart."));
+                }
+            } else {
+                Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cThe download failed. Retrying on next restart."));
+            }
+        });
+    }
+}

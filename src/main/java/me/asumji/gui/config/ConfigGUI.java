@@ -6,6 +6,7 @@ import io.github.notenoughupdates.moulconfig.annotations.*;
 import io.github.notenoughupdates.moulconfig.common.text.StructuredText;
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.categories.DungeonCategory;
+import me.asumji.gui.config.categories.MainCategory;
 import me.asumji.gui.config.categories.MiscCategory;
 
 public class ConfigGUI extends Config {
@@ -13,6 +14,10 @@ public class ConfigGUI extends Config {
     public StructuredText getTitle() {
         return StructuredText.of("§6§lAsuAddons v"+AsuAddons.MOD_VERSION +" §7- §5MoulConfig §bby Moulberry & nea89o");
     }
+
+    @Expose
+    @Category(name = "Main", desc = "General Mod Settings.")
+    public MainCategory mainCategory = new MainCategory();
 
     @Expose
     @Category(name = "Dungeons", desc = "All features around dungeons.")

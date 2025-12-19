@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 
 public class AsuAddons implements ModInitializer {
-    public static final Gson GSON = new GsonBuilder().create();
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 	public static final String MOD_ID = "asuaddons";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final String MOD_VERSION = "1.3.0";
@@ -40,14 +40,15 @@ public class AsuAddons implements ModInitializer {
         WitherHitbox.init();
         ApiMonitor.init();
         Shortcuts.init();
+        AutoUpdater.init();
 
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(AsuAddons::joinWorld);
     }
 
     private static void joinWorld(MinecraftClient minecraftClient, ClientWorld clientWorld) {
-        if (ConfigManager.getConfig().miscCategory.firstLaunch) {
+        if (ConfigManager.getConfig().mainCategory.firstLaunch) {
             LOGGER.info("AsuAddons First Launch!");
-            ConfigManager.getConfig().miscCategory.firstLaunch = false;
+            ConfigManager.getConfig().mainCategory.firstLaunch = false;
             Shortcuts.queueClientMessage(Text.literal("§a" + Shortcuts.getChatBreak("=") +
             "\n§9§lAsuAddons " + MOD_VERSION +
             "\n§bThis seems to be your first time loading the module" +

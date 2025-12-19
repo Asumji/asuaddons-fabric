@@ -1,7 +1,5 @@
 package me.asumji.gui.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.github.notenoughupdates.moulconfig.common.IMinecraft;
 import io.github.notenoughupdates.moulconfig.gui.MoulConfigEditor;
 import io.github.notenoughupdates.moulconfig.processor.BuiltinMoulConfigGuis;
@@ -22,13 +20,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static me.asumji.AsuAddons.GSON;
+
 //Full credit to https://github.com/GiovanniClient/giovanni-client (hate cheater :angry:)
 public class ConfigManager {
-    private static final Gson GSON = new GsonBuilder()
-            .excludeFieldsWithoutExposeAnnotation()
-            .setPrettyPrinting()
-            .create();
-
     private static final File CONFIG_FILE =
             new File("config/asuaddons/config.json");
 
@@ -93,12 +88,19 @@ public class ConfigManager {
     public static void openConfigScreen() {
         if (editor == null) {
             editor = new MoulConfigEditor<>(processor);
+            editor.wide = true;
         }
         IMinecraft.getInstance().openWrappedScreen(editor);
     }
 
     public static ConfigGUI getConfig() {
         return config;
+    }
+
+    public static void setConfig(ConfigGUI obj) {
+        config = obj;
+        editor = new MoulConfigEditor<>(processor);
+        editor.wide = true;
     }
 
     public static Screen getConfigScreen(Screen screen) {

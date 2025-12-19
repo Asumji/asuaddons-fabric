@@ -1,6 +1,8 @@
 package me.asumji.features;
 
 import io.github.notenoughupdates.moulconfig.ChromaColour;
+import me.asumji.AsuAddons;
+import me.asumji.gui.MoveGUI;
 import me.asumji.gui.config.ConfigManager;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
@@ -11,6 +13,7 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 
 import java.awt.*;
 
+import static me.asumji.AsuAddons.GSON;
 import static me.asumji.util.Rendering.*;
 
 public class WitherHitbox {

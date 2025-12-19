@@ -29,7 +29,7 @@ public class ApiMonitor {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             if (failed) return;
             HTTP.GetRequest(AsuAddons.API_PROXY+"test").thenAcceptAsync(res -> {
-                ConfigManager.getConfig().miscCategory.webhookUrl = AsuAddons.GSON.fromJson(res.body(), JsonObject.class).get("webhookUrl").getAsString();
+                ConfigManager.getConfig().mainCategory.webhookUrl = AsuAddons.GSON.fromJson(res.body(), JsonObject.class).get("webhookUrl").getAsString();
                 AsuAddons.LOGGER.info("AU > API Check succeeded.");
             }).exceptionally(e -> {
                 if (!(e.getCause().getCause() instanceof ClosedChannelException)) return null;
@@ -52,7 +52,7 @@ public class ApiMonitor {
                 .executes(context -> {
                     if (used) return 1;
                     used = true;
-                    HTTP.sendWebhookMessage("{\"username\":\"AsuAddons API Reports\", \"content\": \"Someone has reported an API outage.\", \"embeds\": [{\"title\": \"New API Outage Report\", \"color\": 16711680, \"description\": \"" + MinecraftClient.getInstance().getSession().getUsername() + " has reported that the API is down.\\nError: " + getString(context, "error") + "\", \"footer\":{\"text\":\"This message was sent through the /au report command.\"}, \"thumbnail\":{\"url\":\"https://mc-heads.net/player/" + MinecraftClient.getInstance().getSession().getUsername() + "\"}}]}", ConfigManager.getConfig().miscCategory.webhookUrl);
+                    HTTP.sendWebhookMessage("{\"username\":\"AsuAddons API Reports\", \"content\": \"Someone has reported an API outage.\", \"embeds\": [{\"title\": \"New API Outage Report\", \"color\": 16711680, \"description\": \"" + MinecraftClient.getInstance().getSession().getUsername() + " has reported that the API is down.\\nError: " + getString(context, "error") + "\", \"footer\":{\"text\":\"This message was sent through the /au report command.\"}, \"thumbnail\":{\"url\":\"https://mc-heads.net/player/" + MinecraftClient.getInstance().getSession().getUsername() + "\"}}]}", ConfigManager.getConfig().mainCategory.webhookUrl);
                     return 1;
                 }))));
     }

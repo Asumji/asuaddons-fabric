@@ -7,12 +7,6 @@ import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
 
 public class MiscCategory {
     @Expose
-    public boolean firstLaunch = true;
-
-    @Expose
-    public String webhookUrl = "";
-
-    @Expose
     @ConfigOption(name = "Autopet Notif", desc = "Displays a title when an Autopet rule is procced.")
     @ConfigEditorBoolean
     public boolean AutopetNotif = false;

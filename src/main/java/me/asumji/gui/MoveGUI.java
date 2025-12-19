@@ -1,9 +1,9 @@
 package me.asumji.gui;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.asumji.AsuAddons;
+import me.asumji.gui.config.ConfigGUI;
 import me.asumji.gui.config.ConfigManager;
 import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
@@ -11,81 +11,89 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.io.*;
+import java.text.DecimalFormat;
+
+import static me.asumji.AsuAddons.GSON;
 
 public class MoveGUI extends Screen {
-    private final String placeholder;
-    private final String category;
-    private final String xProperty;
-    private final String yProperty;
-    private final String scaleProperty;
+    public static String[][] GUIElements = {};
 
-    private double x = 0;
-    private double y = 0;
-    private float scale = 1;
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE = new File("config/asuaddons/config.json");
-    private static JsonObject config = new JsonObject();
+    private static JsonObject config = null;
 
-    public MoveGUI(String placeholder, String category, String xProperty, String yProperty, String scaleProperty) {
+    private static String[] selectedElement = null;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+
+    public MoveGUI() {
         super(Text.literal("Move GUI"));
-        this.placeholder = placeholder;
-        this.category = category;
-        this.xProperty = xProperty;
-        this.yProperty = yProperty;
-        this.scaleProperty = scaleProperty;
+    }
+
+    public JsonElement getProperty(String property, String category) {
+        return config.getAsJsonObject(category).get(property);
     }
 
     @Override
     public void init() {
-        ConfigManager.saveConfig("MoveGUI");
-        try (FileReader fr = new FileReader(CONFIG_FILE)) {
-            config = GSON.fromJson(fr, JsonObject.class);
-            x = config.getAsJsonObject(category).get(xProperty).getAsInt();
-            y = config.getAsJsonObject(category).get(yProperty).getAsInt();
-            scale = config.getAsJsonObject(category).get(scaleProperty).getAsFloat();
-        } catch (Exception e) {
-            AsuAddons.LOGGER.info(e.toString());
-        }
+        selectedElement = null;
+        config = GSON.fromJson(GSON.toJson(ConfigManager.getConfig()), JsonObject.class);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        context.getMatrices().pushMatrix();
-        context.getMatrices().scale(scale,scale);
-        context.drawCenteredTextWithShadow(this.textRenderer, placeholder, (int) x, (int) y, 0xFFFFFFFF);
-        context.getMatrices().popMatrix();
+        for (String[] element : GUIElements) {
+            context.getMatrices().pushMatrix();
+            context.getMatrices().scale(getProperty(element[4],element[1]).getAsFloat(), getProperty(element[4],element[1]).getAsFloat());
+            context.drawCenteredTextWithShadow(this.textRenderer, element[0], getProperty(element[2],element[1]).getAsInt(), getProperty(element[3],element[1]).getAsInt(), 0xFFFFFFFF);
+            if (element == selectedElement)
+                context.fill(getProperty(element[2], element[1]).getAsInt() - (this.textRenderer.getWidth(element[0]) / 2) - 1, getProperty(element[3], element[1]).getAsInt() - 1, getProperty(element[2], element[1]).getAsInt() + (this.textRenderer.getWidth(element[0]) / 2) + 1, getProperty(element[3], element[1]).getAsInt() + this.textRenderer.fontHeight + 1, 0x33FFFFFF);
+            context.getMatrices().popMatrix();
+
+            if (element == selectedElement) {
+                context.drawTextWithShadow(this.textRenderer, element[2] + ": " + getProperty(element[2], element[1]).getAsString(), (int) ((getProperty(element[2], element[1]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[4], element[1]).getAsFloat()), (int) ((getProperty(element[3], element[1]).getAsInt() - 1) * getProperty(element[4], element[1]).getAsFloat() - this.textRenderer.fontHeight*3), 0xFFFFFFFF);
+                context.drawTextWithShadow(this.textRenderer, element[3] + ": " + getProperty(element[3], element[1]).getAsString(), (int) ((getProperty(element[2], element[1]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[4], element[1]).getAsFloat()), (int) ((getProperty(element[3], element[1]).getAsInt() - 1) * getProperty(element[4], element[1]).getAsFloat() - this.textRenderer.fontHeight*2), 0xFFFFFFFF);
+                context.drawTextWithShadow(this.textRenderer, element[4] + ": " + df.format(getProperty(element[4], element[1]).getAsFloat()), (int) ((getProperty(element[2], element[1]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[4], element[1]).getAsFloat()), (int) ((getProperty(element[3], element[1]).getAsInt() - 1) * getProperty(element[4], element[1]).getAsFloat() - this.textRenderer.fontHeight), 0xFFFFFFFF);
+            }
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(Click click, boolean doubled) {
+        for (String[] element : GUIElements) {
+            if ((click.x() >= (getProperty(element[2], element[1]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[4], element[1]).getAsFloat() && click.x() <= (getProperty(element[2], element[1]).getAsInt() + ((float) this.textRenderer.getWidth(element[0]) / 2) + 1) * getProperty(element[4], element[1]).getAsFloat() && click.y() >= (getProperty(element[3], element[1]).getAsInt() - 1) * getProperty(element[4], element[1]).getAsFloat() && click.y() <= (getProperty(element[3], element[1]).getAsInt() + this.textRenderer.fontHeight + 1) * getProperty(element[4], element[1]).getAsFloat())) {
+                selectedElement = element;
+            }
+        }
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        float scaleBefore = scale;
-        scale += (float) verticalAmount/5;
-        x = (int) (x*scaleBefore)/scale;
-        y = (int) (y*scaleBefore)/scale;
+        if (selectedElement == null) return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        float scaleBefore = getProperty(selectedElement[4],selectedElement[1]).getAsFloat();
+        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[4], getProperty(selectedElement[4],selectedElement[1]).getAsFloat() + (float) verticalAmount/5);
+        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[2], (int) (getProperty(selectedElement[2],selectedElement[1]).getAsInt()*scaleBefore/getProperty(selectedElement[4],selectedElement[1]).getAsFloat()));
+        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[3], (int) (getProperty(selectedElement[3],selectedElement[1]).getAsInt()*scaleBefore/getProperty(selectedElement[4],selectedElement[1]).getAsFloat()));
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Override
     public boolean mouseDragged(Click click, double offsetX, double offsetY) {
-        x = (int) click.x()/scale;
-        y = (int) click.y()/scale;
+        if (selectedElement == null) return super.mouseDragged(click, offsetX, offsetY);
+        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[2], (int) (click.x()/getProperty(selectedElement[4],selectedElement[1]).getAsFloat()));
+        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[3], (int) (click.y()/getProperty(selectedElement[4],selectedElement[1]).getAsFloat()));
         return super.mouseDragged(click, offsetX, offsetY);
     }
 
     @Override
     public void close() {
-        ConfigManager.saveConfig("MoveGUI");
-        config.getAsJsonObject(category).addProperty(xProperty,(int) x);
-        config.getAsJsonObject(category).addProperty(yProperty,(int) y);
-        config.getAsJsonObject(category).addProperty(scaleProperty,scale);
         try (FileWriter fw = new FileWriter(CONFIG_FILE)) {
             fw.write(GSON.toJson(config));
         } catch (IOException e) {
             AsuAddons.LOGGER.info(e.toString());
         }
-        ConfigManager.loadConfig();
+        ConfigManager.setConfig(GSON.fromJson(config, ConfigGUI.class));
+        config = null;
         this.client.setScreen(null);
     }
 }

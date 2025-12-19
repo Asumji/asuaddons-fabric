@@ -5,8 +5,15 @@ import io.github.notenoughupdates.moulconfig.ChromaColour;
 import io.github.notenoughupdates.moulconfig.annotations.*;
 import me.asumji.gui.MoveGUI;
 import net.minecraft.client.MinecraftClient;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class DungeonCategory {
+    public DungeonCategory() {
+        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"0.00s", "dungeonCategory", "lividTimerHudX", "lividTimerHudY", "lividTimerHudScale"});
+        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§eweeklies 3/4", "dungeonCategory","melodyHudX", "melodyHudY", "melodyHudScale"});
+        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§55.00", "dungeonCategory","purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale"});
+    }
+
     @Expose
     @ConfigOption(name = "PF preview", desc = "Shows a quick preview of the player joining in dungeons.")
     @ConfigEditorBoolean
@@ -15,7 +22,7 @@ public class DungeonCategory {
     @Expose
     @ConfigOption(name = "Relevant Items", desc = "List all items that should be listed in the preview from a players inventory. (e.g. item1,item2,item3)")
     @ConfigEditorText
-    public String relevantItems = "";
+    public String relevantItems = "scylla,hyperion,astraea,valkyrie,terminator,juju,axe of the shredded,livid dagger,spirit bow,last breath";
 
     @Expose
     @ConfigOption(name = "Livid timer", desc = "Displays a timer until livid is damageable.")
@@ -36,11 +43,6 @@ public class DungeonCategory {
     @Expose
     public float lividTimerHudScale = 2;
 
-    @ConfigOption(name = "Move Livid HUD", desc = "Allows you to move the Timer HUD")
-    @ConfigEditorButton(buttonText = "Click")
-    public Runnable moveLividHud = () ->
-        MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI("0.00s", "dungeonCategory","lividTimerHudX", "lividTimerHudY", "lividTimerHudScale")));
-
     @Expose
     @ConfigOption(name = "Diamante Alert", desc = "Chat Alert when a Diamante giant is detected.")
     @ConfigEditorBoolean
@@ -60,11 +62,6 @@ public class DungeonCategory {
     @Expose
     public float melodyHudScale = 2;
 
-    @ConfigOption(name = "Move Melody HUD", desc = "Allows you to move the Melody HUD")
-    @ConfigEditorButton(buttonText = "Click")
-    public Runnable moveMelodyHud = () ->
-            MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI("§eweeklies 3/4", "dungeonCategory","melodyHudX", "melodyHudY", "melodyHudScale")));
-
     @Expose
     @ConfigOption(name = "Purple Pad Timer", desc = "Displays timer when to crush purple.")
     @ConfigEditorBoolean
@@ -79,13 +76,8 @@ public class DungeonCategory {
     @Expose
     public float purplePadTimerHudScale = 2;
 
-    @ConfigOption(name = "Move Purple Pad Timer HUD", desc = "Allows you to move the Purple Pad Timer HUD")
-    @ConfigEditorButton(buttonText = "Click")
-    public Runnable movePurplePadTimerHud = () ->
-            MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI("§55.00", "dungeonCategory","purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale")));
-
     @Expose
-    @ConfigOption(name = "Wither Hitbox", desc = "Renders the wither's hitbox in f7.")
+    @ConfigOption(name = "Wither Hitbox", desc = "Renders the wither's hitbox in F7.")
     @ConfigEditorBoolean
     public boolean witherHitbox = false;
 
