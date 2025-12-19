@@ -15,6 +15,7 @@ import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.Text;
 
+import java.nio.channels.ClosedChannelException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -25,16 +26,18 @@ public class ApiMonitor {
     static boolean used = false;
 
     public static void init() {
-        if (failed) return;
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            if (failed) return;
             HTTP.GetRequest(AsuAddons.API_PROXY+"test").thenAcceptAsync(res -> {
                 ConfigManager.getConfig().miscCategory.webhookUrl = AsuAddons.GSON.fromJson(res.body(), JsonObject.class).get("webhookUrl").getAsString();
                 AsuAddons.LOGGER.info("AU > API Check succeeded.");
             }).exceptionally(e -> {
+                if (!(e.getCause().getCause() instanceof ClosedChannelException)) return null;
                 failed = true;
+                AsuAddons.LOGGER.info("AU > API Check failed.\n"+e.getMessage()+"\n"+e.getCause());
                 Shortcuts.queueClientMessage(Text.literal(
                         AsuAddons.MOD_PREFIX + "§cThe API cannot be reached! Some features might not work.\n")
-                        .append(Text.literal("§a§l[CLICK HERE]§r§a to send a report to the dev.").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/au report "+e.getMessage()))))
+                        .append(Text.literal("§a§l[CLICK HERE]§r§a to send a report to the dev.").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/au report "+e.getCause().getCause()))))
                 );
                 return null;
             });

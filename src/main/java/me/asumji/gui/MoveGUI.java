@@ -60,8 +60,10 @@ public class MoveGUI extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        scale += (float) verticalAmount/10;
-        scale += (float) verticalAmount/10;
+        float scaleBefore = scale;
+        scale += (float) verticalAmount/5;
+        x = (int) (x*scaleBefore)/scale;
+        y = (int) (y*scaleBefore)/scale;
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
