@@ -60,12 +60,13 @@ public class AutoUpdater {
     }
 
     public static void init() {
-        if (!ConfigManager.getConfig().mainCategory.autoUpdates || ConfigManager.getConfig().mainCategory.firstLaunch) return;
+        if (!ConfigManager.getConfig().mainCategory.autoUpdates) return;
         HTTP.GetRequest("https://api.github.com/repos/Asumji/asuaddons-fabric/actions/artifacts").thenAcceptAsync(res -> {
             JsonArray artifacts = GSON.fromJson(res.body(), JsonObject.class).getAsJsonObject().getAsJsonArray("artifacts");
             if (artifacts.get(0).getAsJsonObject().get("id").getAsString().equals(ConfigManager.getConfig().mainCategory.lastestAction)) return;
             Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aA new release has been found. Automatic Update has been started."));
             ConfigManager.getConfig().mainCategory.lastestAction = artifacts.get(0).getAsJsonObject().get("id").getAsString();
+            if (ConfigManager.getConfig().mainCategory.firstLaunch) return;
             String artifactId = artifacts.get(0).getAsJsonObject().get("id").getAsString();
             try {
                 //You don't get my key my raspberry pi is too cool for that.
