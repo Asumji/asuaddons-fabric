@@ -65,19 +65,21 @@ public class AutoUpdater {
             List<Path> result = List.of();
             try (Stream<Path> pathStream = Files.find(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"),
                     Integer.MAX_VALUE,
-                    (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-.*\\.jar") && !p.getFileName().toString().equals(ConfigManager.getConfig().mainCategory.downloaded))
+                    (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-.*\\.jar") &! p.getFileName().toString().equals(ConfigManager.getConfig().mainCategory.downloaded))
             ) {
                 result = pathStream.toList();
             } catch (Exception e) {
-                AsuAddons.LOGGER.info("Failed to delete old mod.");
+                AsuAddons.LOGGER.info("Failed finding mods to delete.");
             }
             for (Path filePath : result) {
                 try {
                     Files.deleteIfExists(filePath.toAbsolutePath());
                 } catch (Exception e) {
-                    AsuAddons.LOGGER.info("Failed to delete old mod.");
+                    AsuAddons.LOGGER.info("Failed to delete old mod after downloaded check.");
                 }
             }
+            ConfigManager.getConfig().mainCategory.downloaded = "";
+            ConfigManager.saveConfig("AutoUpdater");
         }
 
         if (!ConfigManager.getConfig().mainCategory.autoUpdates) return;
@@ -111,22 +113,9 @@ public class AutoUpdater {
                 File jarFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+".jar");
                 if (jarFile.exists()) {
                     try {
-                        List<Path> result;
-                        try (Stream<Path> pathStream = Files.find(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"),
-                                Integer.MAX_VALUE,
-                                (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-.*\\.jar"))
-                        ) {
-                            result = pathStream.toList();
-                        }
-                        for (Path filePath : result) {
-                            try {
-                                Files.deleteIfExists(filePath.toAbsolutePath());
-                            } catch (Exception e) {
-                                AsuAddons.LOGGER.info("Failed to delete old mod.");
-                            }
-                        }
-                        Files.copy(jarFile.toPath(), Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/asuaddons-"+AsuAddons.MOD_VERSION+"-"+Instant.now().toEpochMilli()+".jar"), StandardCopyOption.REPLACE_EXISTING);
-                        ConfigManager.getConfig().mainCategory.downloaded = "asuaddons-"+AsuAddons.MOD_VERSION+"-"+Instant.now().toEpochMilli()+".jar";
+                        String fileName = "asuaddons-"+AsuAddons.MOD_VERSION+"-"+Instant.now().toEpochMilli()+".jar";
+                        Files.copy(jarFile.toPath(), Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"+fileName), StandardCopyOption.REPLACE_EXISTING);
+                        ConfigManager.getConfig().mainCategory.downloaded = fileName;
                         Files.deleteIfExists(zipFile.toPath());
                         Files.deleteIfExists(jarFile.toPath());
                         Files.deleteIfExists(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+"-sources.jar"));
@@ -136,16 +125,19 @@ public class AutoUpdater {
                         e.printStackTrace();
                         Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cFailed organizing files. Retrying on next restart."));
                         ConfigManager.getConfig().mainCategory.lastestAction = "";
+                        ConfigManager.getConfig().mainCategory.downloaded = "";
                     }
                 } else {
                     Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cUnzipping failed. Retrying on next restart."));
                     ConfigManager.getConfig().mainCategory.lastestAction = "";
+                    ConfigManager.getConfig().mainCategory.downloaded = "";
                 }
             } else {
                 Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cThe download failed. Retrying on next restart."));
                 ConfigManager.getConfig().mainCategory.lastestAction = "";
+                ConfigManager.getConfig().mainCategory.downloaded = "";
             }
+            ConfigManager.saveConfig("AutoUpdater");
         });
-        ConfigManager.saveConfig("AutoUpdater");
     }
 }
