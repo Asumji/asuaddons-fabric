@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -60,10 +61,30 @@ public class AutoUpdater {
     }
 
     public static void init() {
+        if (!ConfigManager.getConfig().mainCategory.downloaded.isEmpty()) {
+            List<Path> result = List.of();
+            try (Stream<Path> pathStream = Files.find(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"),
+                    Integer.MAX_VALUE,
+                    (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-.*\\.jar") && !p.getFileName().toString().equals(ConfigManager.getConfig().mainCategory.downloaded))
+            ) {
+                result = pathStream.toList();
+            } catch (Exception e) {
+                AsuAddons.LOGGER.info("Failed to delete old mod.");
+            }
+            for (Path filePath : result) {
+                try {
+                    Files.deleteIfExists(filePath.toAbsolutePath());
+                } catch (Exception e) {
+                    AsuAddons.LOGGER.info("Failed to delete old mod.");
+                }
+            }
+        }
+
         if (!ConfigManager.getConfig().mainCategory.autoUpdates) return;
         HTTP.GetRequest("https://api.github.com/repos/Asumji/asuaddons-fabric/actions/artifacts").thenAcceptAsync(res -> {
             JsonArray artifacts = GSON.fromJson(res.body(), JsonObject.class).getAsJsonObject().getAsJsonArray("artifacts");
             if (artifacts.get(0).getAsJsonObject().get("id").getAsString().equals(ConfigManager.getConfig().mainCategory.lastestAction)) return;
+            AsuAddons.LOGGER.info("AU > Started Automatic Update.");
             Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aA new release has been found. Automatic Update has been started."));
             ConfigManager.getConfig().mainCategory.lastestAction = artifacts.get(0).getAsJsonObject().get("id").getAsString();
             if (ConfigManager.getConfig().mainCategory.firstLaunch) return;
@@ -82,7 +103,7 @@ public class AutoUpdater {
                 fis.close();
                 bis.close();
             } catch (Exception e) {
-                AsuAddons.LOGGER.info(e.toString());
+                e.printStackTrace();
             }
             File zipFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/dwnld.zip");
             if (zipFile.exists()) {
@@ -93,28 +114,38 @@ public class AutoUpdater {
                         List<Path> result;
                         try (Stream<Path> pathStream = Files.find(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"),
                                 Integer.MAX_VALUE,
-                                (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-\\d\\.\\d\\.\\d\\.jar"))
+                                (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-.*\\.jar"))
                         ) {
                             result = pathStream.toList();
                         }
                         for (Path filePath : result) {
-                            Files.deleteIfExists(filePath.toAbsolutePath());
+                            try {
+                                Files.deleteIfExists(filePath.toAbsolutePath());
+                            } catch (Exception e) {
+                                AsuAddons.LOGGER.info("Failed to delete old mod.");
+                            }
                         }
-                        Files.copy(jarFile.toPath(), Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/asuaddons-"+AsuAddons.MOD_VERSION+".jar"), StandardCopyOption.REPLACE_EXISTING);
+                        Files.copy(jarFile.toPath(), Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/asuaddons-"+AsuAddons.MOD_VERSION+"-"+Instant.now().toEpochMilli()+".jar"), StandardCopyOption.REPLACE_EXISTING);
+                        ConfigManager.getConfig().mainCategory.downloaded = "asuaddons-"+AsuAddons.MOD_VERSION+"-"+Instant.now().toEpochMilli()+".jar";
                         Files.deleteIfExists(zipFile.toPath());
                         Files.deleteIfExists(jarFile.toPath());
                         Files.deleteIfExists(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+"-sources.jar"));
                         Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aSuccessfully downloaded the newest version. Changes will apply on next restart."));
+                        AsuAddons.LOGGER.info("AU > Finished Automatic Update.");
                     } catch (IOException e) {
-                        AsuAddons.LOGGER.info(e.toString());
+                        e.printStackTrace();
                         Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cFailed organizing files. Retrying on next restart."));
+                        ConfigManager.getConfig().mainCategory.lastestAction = "";
                     }
                 } else {
                     Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cUnzipping failed. Retrying on next restart."));
+                    ConfigManager.getConfig().mainCategory.lastestAction = "";
                 }
             } else {
                 Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cThe download failed. Retrying on next restart."));
+                ConfigManager.getConfig().mainCategory.lastestAction = "";
             }
         });
+        ConfigManager.saveConfig("AutoUpdater");
     }
 }

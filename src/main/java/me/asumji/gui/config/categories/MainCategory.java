@@ -23,6 +23,9 @@ public class MainCategory {
     public String lastestAction = "";
 
     @Expose
+    public String downloaded = "";
+
+    @Expose
     @ConfigOption(name = "Auto Updater", desc = "Enables automatic updates whenever a new action run has been found.")
     @ConfigEditorBoolean
     public boolean autoUpdates = true;
