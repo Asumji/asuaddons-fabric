@@ -23,7 +23,7 @@ public class MainCategory {
     public String lastestAction = "";
 
     @Expose
-    @ConfigOption(name = "Auto Updater", desc = "Enables automatic updates whenever a new action run has been found.\nIMPORTANT: As I use GitHub Actions this functionality requires being logged in to github.com.")
+    @ConfigOption(name = "Auto Updater", desc = "Enables automatic updates whenever a new action run has been found.")
     @ConfigEditorBoolean
     public boolean autoUpdates = true;
 }
