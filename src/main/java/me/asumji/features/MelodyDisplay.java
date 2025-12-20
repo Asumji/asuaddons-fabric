@@ -2,6 +2,7 @@ package me.asumji.features;
 
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
+import me.asumji.util.Variables;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
@@ -51,9 +52,21 @@ public class MelodyDisplay {
             melodyProgress = "";
             return true;
         }
-        matcher = Pattern.compile("§.Party §.> §b\\[.*] (.*)§.: .* (\\d/\\d|\\d+%)").matcher(text.getString());
+
+        matcher = Pattern.compile("Party > (?:\\[.*] )?(.*): .* (\\d/\\d|\\d+%)").matcher(text.getString().replaceAll("§.",""));
         if (matcher.find()) {
-            melodyProgress = "§e" + matcher.group(1) + " " + matcher.group(2);
+            String name = String.valueOf(matcher.group(1));
+            String progress = String.valueOf(matcher.group(2));
+            String role = "";
+            String roleColor = "";
+            for (String line : Variables.getTablist()) {
+                Matcher classMatcher = Pattern.compile("\\[\\d+] "+name+" (?:. )?\\((.+) .+\\)").matcher(line);
+                if (classMatcher.find()) {
+                    role = classMatcher.group(1);
+                    roleColor = Variables.classes.get(role);
+                }
+            }
+            melodyProgress = roleColor + name + " (" + role.charAt(0) + ") §e" + progress;
             return true;
         }
         return true;
