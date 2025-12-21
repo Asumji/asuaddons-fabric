@@ -12,7 +12,7 @@ import net.minecraft.client.render.GameRenderer;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
     @Inject(method = "close", at = @At("RETURN"))
-    private void onGameRendererClose(CallbackInfo ci) {
+    private void close(CallbackInfo ci) {
        Rendering.close();
     }
 }

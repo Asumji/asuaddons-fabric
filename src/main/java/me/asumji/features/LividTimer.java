@@ -30,19 +30,19 @@ public class LividTimer {
         int ticksLeft = Variables.TickTimers.get("LividTimer");
         Matrix3x2fStack matrices = drawContext.getMatrices();
         matrices.pushMatrix();
-        matrices.scale(ConfigManager.getConfig().dungeonCategory.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.lividTimerHudScale);
-        drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal(df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.lividTimerHudX, ConfigManager.getConfig().dungeonCategory.lividTimerHudY, 0xFFFFFFFF);
+        matrices.scale(ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudScale);
+        drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal(df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudX, ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudY, 0xFFFFFFFF);
         matrices.popMatrix();
         if (ticksLeft == 0 && !timerDone) {
             timerDone = true;
             Shortcuts.displayTitle(Text.literal("§cLivid is vulnerable"), Text.literal(""), 0, 20, 0);
-            if (!ConfigManager.getConfig().dungeonCategory.lividTimerMessage.isEmpty())
-                MinecraftClient.getInstance().player.networkHandler.sendChatCommand("pc " + ConfigManager.getConfig().dungeonCategory.lividTimerMessage);
+            if (!ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerMessage.isEmpty())
+                MinecraftClient.getInstance().player.networkHandler.sendChatCommand("pc " + ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerMessage);
         }
     }
 
     private static boolean onChatMessage(Text text, boolean bool) {
-        if (!text.getString().matches("\\[BOSS] Livid: Welcome, you've arrived right on time. I am Livid, the Master of Shadows.") || !ConfigManager.getConfig().dungeonCategory.lividTimer) return true;
+        if (!text.getString().matches("\\[BOSS] Livid: Welcome, you've arrived right on time. I am Livid, the Master of Shadows.") || !ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimer) return true;
         Variables.TickTimers.put("LividTimer",390);
         timerDone = false;
         return true;

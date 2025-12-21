@@ -1,12 +1,9 @@
 package me.asumji.util;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import me.asumji.AsuAddons;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.scoreboard.*;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -28,7 +28,7 @@ public class DPU {
     }
 
     private static boolean onChatMessage(Text text, boolean bool) {
-        if (!text.getString().startsWith("Party Finder >") || !ConfigManager.getConfig().dungeonCategory.DPU) return true;
+        if (!text.getString().startsWith("Party Finder >") || !ConfigManager.getConfig().dungeonCategory.dpuAccordion.DPU) return true;
         Matcher matcher = Pattern.compile("(\\S*) joined the dungeon group!").matcher(text.getString());
         if (!matcher.find()) return true;
         GetRequest("https://api.mojang.com/users/profiles/minecraft/"+matcher.group(1)).thenAcceptAsync(mojangData -> {
@@ -77,7 +77,7 @@ public class DPU {
                                 lore += line + "\n";
                             }
                             String finalLore = lore.trim();
-                            for (String rItem : ConfigManager.getConfig().dungeonCategory.relevantItems.split(",")) {
+                            for (String rItem : ConfigManager.getConfig().dungeonCategory.dpuAccordion.relevantItems.split(",")) {
                                 if (name.toLowerCase().contains(rItem.toLowerCase())) {
                                     items.append(Text.literal(name+"  ").styled(style -> style.withHoverEvent(new HoverEvent.ShowText(Text.literal(finalLore)))));
                                 }

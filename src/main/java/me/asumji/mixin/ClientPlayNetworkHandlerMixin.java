@@ -2,6 +2,7 @@ package me.asumji.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import me.asumji.features.BloodGiant;
+import me.asumji.features.LividSolver;
 import me.asumji.features.WitherHitbox;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
@@ -10,6 +11,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.GiantEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.s2c.play.EntityTrackerUpdateS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +32,9 @@ public abstract class ClientPlayNetworkHandlerMixin extends ClientCommonNetworkH
         }
         if (entity instanceof GiantEntity giant) {
             BloodGiant.loadEntity(giant);
+        }
+        if (entity instanceof PlayerEntity player) {
+            LividSolver.loadEntity(player);
         }
     }
 }

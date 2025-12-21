@@ -25,11 +25,11 @@ public class MelodyDisplay {
     }
 
     private static void renderHud(DrawContext drawContext, RenderTickCounter renderTickCounter) {
-        if (!ConfigManager.getConfig().dungeonCategory.melodyDisplay || section == 0) return;
+        if (!ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyDisplay || section == 0) return;
         Matrix3x2fStack matrices = drawContext.getMatrices();
         matrices.pushMatrix();
-        matrices.scale(ConfigManager.getConfig().dungeonCategory.melodyHudScale,ConfigManager.getConfig().dungeonCategory.melodyHudScale);
-        drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer,Text.literal(melodyProgress),ConfigManager.getConfig().dungeonCategory.melodyHudX,ConfigManager.getConfig().dungeonCategory.melodyHudY,0xFFFFFFFF);
+        matrices.scale(ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudScale,ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudScale);
+        drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer,Text.literal(melodyProgress),ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudX,ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudY,0xFFFFFFFF);
         matrices.popMatrix();
     }
 

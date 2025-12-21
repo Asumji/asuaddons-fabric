@@ -1,8 +1,6 @@
 package me.asumji.features;
 
 import io.github.notenoughupdates.moulconfig.ChromaColour;
-import me.asumji.AsuAddons;
-import me.asumji.gui.MoveGUI;
 import me.asumji.gui.config.ConfigManager;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
@@ -13,7 +11,6 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 
 import java.awt.*;
 
-import static me.asumji.AsuAddons.GSON;
 import static me.asumji.util.Rendering.*;
 
 public class WitherHitbox {
@@ -29,8 +26,8 @@ public class WitherHitbox {
     }
 
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
-        if (witherEntity == null || !ConfigManager.getConfig().dungeonCategory.witherHitbox) return;
-        Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.witherHitboxColor).getEffectiveColour();
+        if (witherEntity == null || !ConfigManager.getConfig().dungeonCategory.f7Accordion.witherHitbox) return;
+        Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.f7Accordion.witherHitboxColor).getEffectiveColour();
         renderWaypoint(context, FILLED, (float) (witherEntity.getX()-0.5), (float) (witherEntity.getY()-3.5), (float) (witherEntity.getZ()-0.5), (float) (witherEntity.getX()+0.5), (float) (witherEntity.getY()), (float) (witherEntity.getZ()+0.5), effectiveColor.getRGB(), (float) effectiveColor.getAlpha() / 255);
     }
 

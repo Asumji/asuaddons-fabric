@@ -41,6 +41,7 @@ public class AsuAddons implements ModInitializer {
         ApiMonitor.init();
         Shortcuts.init();
         AutoUpdater.init();
+        LividSolver.init();
 
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(AsuAddons::joinWorld);
     }

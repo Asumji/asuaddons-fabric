@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientConnectionMixin {
 
     @Inject(at = @At("HEAD"), method = "handlePacket")
-    private static void init(Packet<?> packet, PacketListener listener, CallbackInfo ci) {
+    private static void handlePacket(Packet<?> packet, PacketListener listener, CallbackInfo ci) {
         if (!packet.getPacketType().toString().equals("clientbound/minecraft:ping")) return;
         if (Variables.TickTimers.isEmpty()) return;
         Variables.TickTimers.forEach((timerName, value) -> {

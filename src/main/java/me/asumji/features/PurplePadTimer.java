@@ -31,8 +31,8 @@ public class PurplePadTimer {
             int ticksLeft = Variables.TickTimers.get("PurplePadTimer");
             Matrix3x2fStack matrices = drawContext.getMatrices();
             matrices.pushMatrix();
-            matrices.scale(ConfigManager.getConfig().dungeonCategory.purplePadTimerHudScale,ConfigManager.getConfig().dungeonCategory.purplePadTimerHudScale);
-            drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("§5"+df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.purplePadTimerHudX, ConfigManager.getConfig().dungeonCategory.purplePadTimerHudY, 0xFFFFFFFF);
+            matrices.scale(ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudScale,ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudScale);
+            drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("§5"+df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudX, ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudY, 0xFFFFFFFF);
             matrices.popMatrix();
             if (ticksLeft == 0) timerDone = true;
         }
@@ -43,7 +43,7 @@ public class PurplePadTimer {
     }
 
     private static boolean onChatMessage(Text text, boolean b) {
-        if (!ConfigManager.getConfig().dungeonCategory.purplePadTimer) return true;
+        if (!ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimer) return true;
         Matcher matcher = Pattern.compile("\\[BOSS] Storm: (ENERGY HEED MY CALL|THUNDER LET ME BE YOUR CATALYST)!").matcher(text.getString());
         if (matcher.find()) {
             Variables.TickTimers.put("PurplePadTimer", 96);

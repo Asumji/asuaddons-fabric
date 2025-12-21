@@ -18,6 +18,7 @@ import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.system.MemoryUtil;
@@ -56,6 +57,138 @@ public class Rendering {
         }
 
         VertexRendering.drawFilledBox(matrices, buffer, x1, y1, z1, x2, y2, z2, r, g, b, alpha);
+
+        matrices.pop();
+
+        BuiltBuffer builtBuffer = buffer.end();
+        BuiltBuffer.DrawParameters drawParameters = builtBuffer.getDrawParameters();
+        VertexFormat format = drawParameters.format();
+
+        GpuBuffer vertices = upload(drawParameters, format, builtBuffer);
+        waypointColor.set(r,g,b,alpha);
+        draw(MinecraftClient.getInstance(), pipeline, builtBuffer, drawParameters, vertices, waypointColor);
+
+        vertexBuffer.rotate();
+        buffer = null;
+    }
+
+    public static void renderLine(WorldRenderContext context, @SuppressWarnings("SameParameterValue") RenderPipeline pipeline, double width, float x1, float y1, float z1, float x2, float y2, float z2, int color, float alpha) {
+        float r = ((color >> 16) & 0xFF) / 255f;
+        float g = ((color >> 8) & 0xFF) / 255f;
+        float b = (color & 0xFF) / 255f;
+
+        MatrixStack matrices = context.matrices();
+        Vec3d camera = context.worldState().cameraRenderState.pos;
+
+        assert matrices != null;
+        matrices.push();
+        matrices.translate(-camera.x, -camera.y, -camera.z);
+
+        if (buffer == null) {
+            buffer = new BufferBuilder(allocator, pipeline.getVertexFormatMode(), pipeline.getVertexFormat());
+        }
+
+        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        float dz = z2 - z1;
+
+        float length = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (length == 0) return;
+
+        dx /= length;
+        dy /= length;
+        dz /= length;
+
+        float upX = 0, upY = 1, upZ = 0;
+        if (Math.abs(dx * upX + dy * upY + dz * upZ) > 0.99f) {
+            upX = 1;
+            upY = 0;
+            upZ = 0;
+        }
+
+        float rx = dy * upZ - dz * upY;
+        float ry = dz * upX - dx * upZ;
+        float rz = dx * upY - dy * upX;
+
+        float rLen = (float) Math.sqrt(rx * rx + ry * ry + rz * rz);
+        rx = (float) ((rx / rLen) * (width/2));
+        ry = (float) ((ry / rLen) * (width/2));
+        rz = (float) ((rz / rLen) * (width/2));
+
+        float ux = ry * dz - rz * dy;
+        float uy = rz * dx - rx * dz;
+        float uz = rx * dy - ry * dx;
+
+        float uLen = (float) Math.sqrt(ux * ux + uy * uy + uz * uz);
+        ux = (float) ((ux / uLen) * (width/2));
+        uy = (float) ((uy / uLen) * (width/2));
+        uz = (float) ((uz / uLen) * (width/2));
+
+        float x0 = x1 + rx + ux, y0 = y1 + ry + uy, z0 = z1 + rz + uz;
+        float x1v = x1 - rx + ux, y1v = y1 - ry + uy, z1v = z1 - rz + uz;
+        float x2v = x1 - rx - ux, y2v = y1 - ry - uy, z2v = z1 - rz - uz;
+        float x3 = x1 + rx - ux, y3 = y1 + ry - uy, z3 = z1 + rz - uz;
+
+        float x4 = x2 + rx + ux, y4 = y2 + ry + uy, z4 = z2 + rz + uz;
+        float x5 = x2 - rx + ux, y5 = y2 - ry + uy, z5 = z2 - rz + uz;
+        float x6 = x2 - rx - ux, y6 = y2 - ry - uy, z6 = z2 - rz - uz;
+        float x7 = x2 + rx - ux, y7 = y2 + ry - uy, z7 = z2 + rz - uz;
+
+        // FRONT FACE
+        buffer.vertex(matrix4f, x0, y0, z0).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x1v, y1v, z1v).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x2v, y2v, z2v).color(r,g,b,alpha);
+
+        buffer.vertex(matrix4f, x0, y0, z0).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x2v, y2v, z2v).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x3, y3, z3).color(r,g,b,alpha);
+
+        // BACK FACE
+        buffer.vertex(matrix4f, x4, y4, z4).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x7, y7, z7).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x6, y6, z6).color(r,g,b,alpha);
+
+        buffer.vertex(matrix4f, x4, y4, z4).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x6, y6, z6).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x5, y5, z5).color(r,g,b,alpha);
+
+        // LEFT FACE
+        buffer.vertex(matrix4f, x0, y0, z0).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x3, y3, z3).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x7, y7, z7).color(r,g,b,alpha);
+
+        buffer.vertex(matrix4f, x0, y0, z0).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x7, y7, z7).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x4, y4, z4).color(r,g,b,alpha);
+
+        // RIGHT FACE
+        buffer.vertex(matrix4f, x1v, y1v, z1v).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x5, y5, z5).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x6, y6, z6).color(r,g,b,alpha);
+
+        buffer.vertex(matrix4f, x1v, y1v, z1v).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x6, y6, z6).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x2v, y2v, z2v).color(r,g,b,alpha);
+
+        // TOP FACE
+        buffer.vertex(matrix4f, x0, y0, z0).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x4, y4, z4).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x5, y5, z5).color(r,g,b,alpha);
+
+        buffer.vertex(matrix4f, x0, y0, z0).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x5, y5, z5).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x1v, y1v, z1v).color(r,g,b,alpha);
+
+        // BOTTOM FACE
+        buffer.vertex(matrix4f, x3, y3, z3).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x2v, y2v, z2v).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x6, y6, z6).color(r,g,b,alpha);
+
+        buffer.vertex(matrix4f, x3, y3, z3).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x6, y6, z6).color(r,g,b,alpha);
+        buffer.vertex(matrix4f, x7, y7, z7).color(r,g,b,alpha);
 
         matrices.pop();
 
