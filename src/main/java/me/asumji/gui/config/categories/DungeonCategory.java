@@ -9,7 +9,7 @@ import org.apache.commons.lang3.ArrayUtils;
 public class DungeonCategory {
     public DungeonCategory() {
         MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"0.00s", "dungeonCategory", "f5Accordion", "lividTimerHudX", "lividTimerHudY", "lividTimerHudScale"});
-        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§eweeklies 3/4", "dungeonCategory", "f7Accordion", "melodyHudX", "melodyHudY", "melodyHudScale"});
+        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§bweeklies (M) §e3/4", "dungeonCategory", "f7Accordion", "melodyHudX", "melodyHudY", "melodyHudScale"});
         MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§55.00", "dungeonCategory", "f7Accordion", "purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale"});
     }
 

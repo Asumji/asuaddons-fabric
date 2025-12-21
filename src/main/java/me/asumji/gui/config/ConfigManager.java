@@ -99,6 +99,11 @@ public class ConfigManager {
 
     public static void setConfig(ConfigGUI obj) {
         config = obj;
+        processor = new MoulConfigProcessor<>(config);
+        BuiltinMoulConfigGuis.addProcessors(processor);
+
+        driver = new ConfigProcessorDriver(processor);
+        driver.processConfig(config);
         editor = new MoulConfigEditor<>(processor);
         editor.wide = true;
     }
