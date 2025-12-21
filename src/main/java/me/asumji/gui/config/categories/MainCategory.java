@@ -26,6 +26,9 @@ public class MainCategory {
     public String downloaded = "";
 
     @Expose
+    public int jarNumber = 9999999;
+
+    @Expose
     @ConfigOption(name = "Auto Updater", desc = "Enables automatic updates whenever a new action run has been found.")
     @ConfigEditorBoolean
     public boolean autoUpdates = true;

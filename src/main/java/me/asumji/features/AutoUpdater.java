@@ -113,7 +113,9 @@ public class AutoUpdater {
                 File jarFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+".jar");
                 if (jarFile.exists()) {
                     try {
-                        String fileName = "asuaddons-"+AsuAddons.MOD_VERSION+"-"+Instant.now().toEpochMilli()+".jar";
+                        ConfigManager.getConfig().mainCategory.jarNumber -= 1;
+                        String fileNumber = new StringBuilder(String.valueOf(ConfigManager.getConfig().mainCategory.jarNumber)).reverse().toString();
+                        String fileName = "asuaddons-"+AsuAddons.MOD_VERSION+"-"+fileNumber+".jar";
                         Files.copy(jarFile.toPath(), Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"+fileName), StandardCopyOption.REPLACE_EXISTING);
                         ConfigManager.getConfig().mainCategory.downloaded = fileName;
                         Files.deleteIfExists(zipFile.toPath());
