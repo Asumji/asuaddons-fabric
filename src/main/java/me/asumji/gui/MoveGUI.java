@@ -28,8 +28,8 @@ public class MoveGUI extends Screen {
         super(Text.literal("Move GUI"));
     }
 
-    public JsonElement getProperty(String property, String category) {
-        return config.getAsJsonObject(category).get(property);
+    public JsonElement getProperty(String property, String category, String accordion) {
+        return config.getAsJsonObject(category).getAsJsonObject(accordion).get(property);
     }
 
     @Override
@@ -43,16 +43,16 @@ public class MoveGUI extends Screen {
         super.render(context, mouseX, mouseY, delta);
         for (String[] element : GUIElements) {
             context.getMatrices().pushMatrix();
-            context.getMatrices().scale(getProperty(element[4],element[1]).getAsFloat(), getProperty(element[4],element[1]).getAsFloat());
-            context.drawCenteredTextWithShadow(this.textRenderer, element[0], getProperty(element[2],element[1]).getAsInt(), getProperty(element[3],element[1]).getAsInt(), 0xFFFFFFFF);
+            context.getMatrices().scale(getProperty(element[5],element[1], element[2]).getAsFloat(), getProperty(element[5],element[1], element[2]).getAsFloat());
+            context.drawCenteredTextWithShadow(this.textRenderer, element[0], getProperty(element[3],element[1], element[2]).getAsInt(), getProperty(element[4],element[1], element[2]).getAsInt(), 0xFFFFFFFF);
             if (element == selectedElement)
-                context.fill(getProperty(element[2], element[1]).getAsInt() - (this.textRenderer.getWidth(element[0]) / 2) - 1, getProperty(element[3], element[1]).getAsInt() - 1, getProperty(element[2], element[1]).getAsInt() + (this.textRenderer.getWidth(element[0]) / 2) + 1, getProperty(element[3], element[1]).getAsInt() + this.textRenderer.fontHeight + 1, 0x33FFFFFF);
+                context.fill(getProperty(element[3], element[1], element[2]).getAsInt() - (this.textRenderer.getWidth(element[0]) / 2) - 1, getProperty(element[4], element[1], element[2]).getAsInt() - 1, getProperty(element[3], element[1], element[2]).getAsInt() + (this.textRenderer.getWidth(element[0]) / 2) + 1, getProperty(element[4], element[1], element[2]).getAsInt() + this.textRenderer.fontHeight + 1, 0x33FFFFFF);
             context.getMatrices().popMatrix();
 
             if (element == selectedElement) {
-                context.drawTextWithShadow(this.textRenderer, element[2] + ": " + getProperty(element[2], element[1]).getAsString(), (int) ((getProperty(element[2], element[1]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[4], element[1]).getAsFloat()), (int) ((getProperty(element[3], element[1]).getAsInt() - 1) * getProperty(element[4], element[1]).getAsFloat() - this.textRenderer.fontHeight*3), 0xFFFFFFFF);
-                context.drawTextWithShadow(this.textRenderer, element[3] + ": " + getProperty(element[3], element[1]).getAsString(), (int) ((getProperty(element[2], element[1]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[4], element[1]).getAsFloat()), (int) ((getProperty(element[3], element[1]).getAsInt() - 1) * getProperty(element[4], element[1]).getAsFloat() - this.textRenderer.fontHeight*2), 0xFFFFFFFF);
-                context.drawTextWithShadow(this.textRenderer, element[4] + ": " + df.format(getProperty(element[4], element[1]).getAsFloat()), (int) ((getProperty(element[2], element[1]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[4], element[1]).getAsFloat()), (int) ((getProperty(element[3], element[1]).getAsInt() - 1) * getProperty(element[4], element[1]).getAsFloat() - this.textRenderer.fontHeight), 0xFFFFFFFF);
+                context.drawTextWithShadow(this.textRenderer, element[3] + ": " + getProperty(element[3], element[1], element[2]).getAsString(), (int) ((getProperty(element[3], element[1], element[2]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[5], element[1], element[2]).getAsFloat()), (int) ((getProperty(element[4], element[1], element[2]).getAsInt() - 1) * getProperty(element[5], element[1], element[2]).getAsFloat() - this.textRenderer.fontHeight*3), 0xFFFFFFFF);
+                context.drawTextWithShadow(this.textRenderer, element[4] + ": " + getProperty(element[4], element[1], element[2]).getAsString(), (int) ((getProperty(element[3], element[1], element[2]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[5], element[1], element[2]).getAsFloat()), (int) ((getProperty(element[4], element[1], element[2]).getAsInt() - 1) * getProperty(element[5], element[1], element[2]).getAsFloat() - this.textRenderer.fontHeight*2), 0xFFFFFFFF);
+                context.drawTextWithShadow(this.textRenderer, element[5] + ": " + df.format(getProperty(element[5], element[1], element[2]).getAsFloat()), (int) ((getProperty(element[3], element[1], element[2]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[5], element[1], element[2]).getAsFloat()), (int) ((getProperty(element[4], element[1], element[2]).getAsInt() - 1) * getProperty(element[5], element[1], element[2]).getAsFloat() - this.textRenderer.fontHeight), 0xFFFFFFFF);
             }
         }
     }
@@ -60,7 +60,7 @@ public class MoveGUI extends Screen {
     @Override
     public boolean mouseClicked(Click click, boolean doubled) {
         for (String[] element : GUIElements) {
-            if ((click.x() >= (getProperty(element[2], element[1]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[4], element[1]).getAsFloat() && click.x() <= (getProperty(element[2], element[1]).getAsInt() + ((float) this.textRenderer.getWidth(element[0]) / 2) + 1) * getProperty(element[4], element[1]).getAsFloat() && click.y() >= (getProperty(element[3], element[1]).getAsInt() - 1) * getProperty(element[4], element[1]).getAsFloat() && click.y() <= (getProperty(element[3], element[1]).getAsInt() + this.textRenderer.fontHeight + 1) * getProperty(element[4], element[1]).getAsFloat())) {
+            if ((click.x() >= (getProperty(element[3], element[1], element[2]).getAsInt() - ((float) this.textRenderer.getWidth(element[0]) / 2) - 1) * getProperty(element[5], element[1], element[2]).getAsFloat() && click.x() <= (getProperty(element[3], element[1], element[2]).getAsInt() + ((float) this.textRenderer.getWidth(element[0]) / 2) + 1) * getProperty(element[5], element[1], element[2]).getAsFloat() && click.y() >= (getProperty(element[4], element[1], element[2]).getAsInt() - 1) * getProperty(element[5], element[1], element[2]).getAsFloat() && click.y() <= (getProperty(element[4], element[1], element[2]).getAsInt() + this.textRenderer.fontHeight + 1) * getProperty(element[5], element[1], element[2]).getAsFloat())) {
                 selectedElement = element;
             }
         }
@@ -70,18 +70,18 @@ public class MoveGUI extends Screen {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (selectedElement == null) return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-        float scaleBefore = getProperty(selectedElement[4],selectedElement[1]).getAsFloat();
-        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[4], getProperty(selectedElement[4],selectedElement[1]).getAsFloat() + (float) verticalAmount/5);
-        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[2], (int) (getProperty(selectedElement[2],selectedElement[1]).getAsInt()*scaleBefore/getProperty(selectedElement[4],selectedElement[1]).getAsFloat()));
-        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[3], (int) (getProperty(selectedElement[3],selectedElement[1]).getAsInt()*scaleBefore/getProperty(selectedElement[4],selectedElement[1]).getAsFloat()));
+        float scaleBefore = getProperty(selectedElement[5],selectedElement[1],selectedElement[2]).getAsFloat();
+        config.getAsJsonObject(selectedElement[1]).getAsJsonObject(selectedElement[2]).addProperty(selectedElement[5], getProperty(selectedElement[5],selectedElement[1],selectedElement[2]).getAsFloat() + (float) verticalAmount/5);
+        config.getAsJsonObject(selectedElement[1]).getAsJsonObject(selectedElement[2]).addProperty(selectedElement[3], (int) (getProperty(selectedElement[3],selectedElement[1],selectedElement[2]).getAsInt()*scaleBefore/getProperty(selectedElement[5],selectedElement[1],selectedElement[2]).getAsFloat()));
+        config.getAsJsonObject(selectedElement[1]).getAsJsonObject(selectedElement[2]).addProperty(selectedElement[4], (int) (getProperty(selectedElement[4],selectedElement[1],selectedElement[2]).getAsInt()*scaleBefore/getProperty(selectedElement[5],selectedElement[1],selectedElement[2]).getAsFloat()));
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Override
     public boolean mouseDragged(Click click, double offsetX, double offsetY) {
         if (selectedElement == null) return super.mouseDragged(click, offsetX, offsetY);
-        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[2], (int) (click.x()/getProperty(selectedElement[4],selectedElement[1]).getAsFloat()));
-        config.getAsJsonObject(selectedElement[1]).addProperty(selectedElement[3], (int) (click.y()/getProperty(selectedElement[4],selectedElement[1]).getAsFloat()));
+        config.getAsJsonObject(selectedElement[1]).getAsJsonObject(selectedElement[2]).addProperty(selectedElement[3], (int) (click.x()/getProperty(selectedElement[5],selectedElement[1],selectedElement[2]).getAsFloat()));
+        config.getAsJsonObject(selectedElement[1]).getAsJsonObject(selectedElement[2]).addProperty(selectedElement[4], (int) (click.y()/getProperty(selectedElement[5],selectedElement[1],selectedElement[2]).getAsFloat()));
         return super.mouseDragged(click, offsetX, offsetY);
     }
 
