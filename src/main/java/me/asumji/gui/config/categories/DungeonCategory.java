@@ -10,7 +10,7 @@ public class DungeonCategory {
     public DungeonCategory() {
         MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"0.00s", "dungeonCategory", "f5Accordion", "lividTimerHudX", "lividTimerHudY", "lividTimerHudScale"});
         MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§bweeklies (M) §e3/4", "dungeonCategory", "f7Accordion", "melodyHudX", "melodyHudY", "melodyHudScale"});
-        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§55.00", "dungeonCategory", "f7Accordion", "purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale"});
+        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§55.00s", "dungeonCategory", "f7Accordion", "purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale"});
     }
 
     @Expose
@@ -32,7 +32,7 @@ public class DungeonCategory {
 
     @Expose
     @Accordion
-    @ConfigOption(name = "F/M5 Boss", desc = "Various Features for Livid.")
+    @ConfigOption(name = "F5/M5 Boss", desc = "Various Features for Livid.")
     public F5Accordion f5Accordion = new F5Accordion();
 
     public static class F5Accordion {
@@ -83,7 +83,7 @@ public class DungeonCategory {
 
     @Expose
     @Accordion
-    @ConfigOption(name = "F/M7", desc = "Various Features for F7.")
+    @ConfigOption(name = "F7/M7", desc = "Various Features for F7.")
     public F7Accordion f7Accordion = new F7Accordion();
 
     public static class F7Accordion {

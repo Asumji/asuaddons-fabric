@@ -16,6 +16,10 @@ import java.text.DecimalFormat;
 import static me.asumji.AsuAddons.GSON;
 
 public class MoveGUI extends Screen {
+    /**
+     * The format of GUIElements is
+     * {placeholder, category, accordion, xProperty, yProperty, scaleProperty}
+     */
     public static String[][] GUIElements = {};
 
     private static final File CONFIG_FILE = new File("config/asuaddons/config.json");
