@@ -52,7 +52,7 @@ public class LividSolver {
 
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
         Entity correctLividEntity = MinecraftClient.getInstance().world.getEntityById(correctLividId);
-        if (correctLividEntity == null || !correctLividEntity.isAlive()) {
+        if (correctLividEntity == null) {
             correctLividId = 0;
             return;
         }
