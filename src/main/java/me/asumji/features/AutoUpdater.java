@@ -110,7 +110,7 @@ public class AutoUpdater {
             File zipFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/dwnld.zip");
             if (zipFile.exists()) {
                 unzip(zipFile.getPath(), FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons");
-                File jarFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+".jar");
+                File jarFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+"-9999999.jar");
                 if (jarFile.exists()) {
                     try {
                         ConfigManager.getConfig().mainCategory.jarNumber -= 1;
@@ -120,7 +120,7 @@ public class AutoUpdater {
                         ConfigManager.getConfig().mainCategory.downloaded = fileName;
                         Files.deleteIfExists(zipFile.toPath());
                         Files.deleteIfExists(jarFile.toPath());
-                        Files.deleteIfExists(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+"-sources.jar"));
+                        Files.deleteIfExists(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MOD_VERSION+"-9999999-sources.jar"));
                         Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aSuccessfully downloaded the newest version. Changes will apply on next restart."));
                         AsuAddons.LOGGER.info("AU > Finished Automatic Update.");
                     } catch (IOException e) {
