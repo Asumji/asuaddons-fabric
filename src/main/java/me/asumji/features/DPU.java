@@ -35,6 +35,10 @@ public class DPU {
             String uuid = AsuAddons.GSON.fromJson(mojangData.body(), JsonObject.class).get("id").getAsString();
             GetRequest(AsuAddons.API_PROXY +"v2/skyblock/profiles?uuid="+uuid).thenAcceptAsync(HypixelData -> {
                 JsonObject JSON = AsuAddons.GSON.fromJson(HypixelData.body(), JsonObject.class);
+                if (!JSON.get("success").getAsBoolean()) {
+                    Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cAPI Request failed: " + JSON.get("cause").getAsString()));
+                    return;
+                }
                 for (JsonElement jsonElement : JSON.getAsJsonArray("profiles")) {
                     JsonObject profile = jsonElement.getAsJsonObject();
                     if (!profile.get("selected").getAsBoolean()) continue;
