@@ -39,7 +39,7 @@ public class Number {
 
     public static int getPetLvl(BigDecimal xp, String type, String tier) {
         int maxLevel;
-        if (type.equals("GOLDEN_DRAGON") || type.equals("JADE_DRAGON")) {
+        if (type.equals("GOLDEN_DRAGON") || type.equals("JADE_DRAGON") || type.equals("ROSE_DRAGON")) {
             maxLevel = 200;
         } else {
             maxLevel = 100;
