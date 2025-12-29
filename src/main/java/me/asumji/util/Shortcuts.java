@@ -18,7 +18,7 @@ public class Shortcuts {
     }
 
     private static void tick(MinecraftClient minecraftClient) {
-        if (MinecraftClient.getInstance().player == null) return;
+        if (MinecraftClient.getInstance().player == null || messages.length == 0) return;
         Text[] tempMsgs = messages;
         messages = new Text[]{};
         for (Text message : tempMsgs) {

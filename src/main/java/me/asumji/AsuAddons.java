@@ -42,6 +42,7 @@ public class AsuAddons implements ModInitializer {
         Shortcuts.init();
         AutoUpdater.init();
         LividSolver.init();
+        RNGMeterTooltip.init();
 
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(AsuAddons::joinWorld);
     }

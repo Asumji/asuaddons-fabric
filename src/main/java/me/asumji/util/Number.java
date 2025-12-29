@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Number {
     public static String shortenNumber(BigDecimal n) {
+        n = n.setScale(4, RoundingMode.DOWN);
         if (n.compareTo(BigDecimal.ONE) < 0) return String.valueOf(n.setScale(2, RoundingMode.DOWN));
         String[] sizes = {"", "k", "m", "b"};
         for (int i = 0; i < sizes.length; i++) {
@@ -16,6 +17,15 @@ public class Number {
             }
         }
         return (n.divide(BigDecimal.valueOf(1000000000), RoundingMode.DOWN)).setScale(2, RoundingMode.DOWN)+"b";
+    }
+
+    public static BigDecimal expandNumber(String n) {
+        if (n.matches("\\d+")) return BigDecimal.valueOf(Float.parseFloat(n));
+        Map<String, Integer> sizes = new HashMap<>();
+        sizes.put("b", 1000000000);
+        sizes.put("m", 1000000);
+        sizes.put("k", 1000);
+        return BigDecimal.valueOf(Float.parseFloat(n.substring(0, n.length()-1))).multiply(BigDecimal.valueOf(sizes.get(n.substring(n.length()-1).toLowerCase())));
     }
 
     public static int getCata(BigDecimal xp) {

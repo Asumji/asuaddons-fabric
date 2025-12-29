@@ -1,6 +1,8 @@
 package me.asumji.util;
 
+import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import me.asumji.AsuAddons;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.scoreboard.*;
@@ -9,14 +11,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import static me.asumji.util.HTTP.GetRequest;
 
 public class Variables {
-    public static String location = "";
     public static Map<String, String> rarities = new HashMap<>();
     public static Map<String, String> classes = new HashMap<>();
     public static Map<String, Integer> TickTimers = new ConcurrentHashMap<>();
+    public static JsonObject lowestbin = null;
+    public static JsonObject bazaar = null;
 
     public static void init() {
         rarities.put("COMMON","§f");
@@ -34,6 +39,13 @@ public class Variables {
         classes.put("Mage","§b");
         classes.put("Healer","§d");
         classes.put("Tank","§2");
+
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(Variables::loadPrices, 10, 600, TimeUnit.SECONDS);
+    }
+
+    private static void loadPrices() {
+        GetRequest("https://moulberry.codes/lowestbin.json").thenAcceptAsync(data -> lowestbin = AsuAddons.GSON.fromJson(data.body(), JsonObject.class));
+        GetRequest(AsuAddons.API_PROXY+"v2/skyblock/bazaar").thenAcceptAsync(data -> bazaar = AsuAddons.GSON.fromJson(data.body(), JsonObject.class).getAsJsonObject("products"));
     }
 
     public static ObjectArrayList<String> getScoreboard() {
@@ -47,9 +59,6 @@ public class Variables {
                 if (team != null) {
                     String strLine = team.getPrefix().getString() + team.getSuffix().getString();
                     scoreboardList.add(strLine);
-
-                    Matcher matcher = Pattern.compile(" ⏣ (.*)").matcher(strLine);
-                    if (matcher.find()) location = matcher.group(1);
                 }
             }
         }
