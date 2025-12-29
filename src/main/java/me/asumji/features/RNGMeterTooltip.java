@@ -71,8 +71,9 @@ public class RNGMeterTooltip {
         texts.add(Text.empty());
         if (ConfigManager.getConfig().miscCategory.rngMeterAccordion.assumedIncrement) texts.add(Text.literal("§7Assumed Increment: §d" + meters.get(matcher.group(1)).toString()));
         texts.add(Text.literal("§7Increments left: §d" + (neededIncrements - currentIncrements) + " (" + currentIncrements + "§5/§d" + neededIncrements + ")"));
-        if (!ConfigManager.getConfig().miscCategory.rngMeterAccordion.profitPerIncrement) return;
+        if (!ConfigManager.getConfig().miscCategory.rngMeterAccordion.profitPerIncrement || Variables.bazaar == null || Variables.lowestbin == null) return;
         JsonObject itemCustomData = GSON.fromJson(itemStack.getComponents().get(DataComponentTypes.CUSTOM_DATA).toString(), JsonObject.class);
+        if (itemCustomData.get("id") == null) return;
         String itemId = itemCustomData.get("id").getAsString();
         if (itemId.equals("ENCHANTED_BOOK")) {
             String key = itemCustomData.getAsJsonObject("enchantments").keySet().iterator().next();
