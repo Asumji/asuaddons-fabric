@@ -90,7 +90,6 @@ public class AutoUpdater {
             AsuAddons.LOGGER.info("AU > Started Automatic Update.");
             Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aA new release has been found. Automatic Update has been started."));
             ConfigManager.getConfig().mainCategory.lastestAction = artifacts.get(0).getAsJsonObject().get("id").getAsString();
-            if (ConfigManager.getConfig().mainCategory.firstLaunch) return;
             String artifactId = artifacts.get(0).getAsJsonObject().get("id").getAsString();
             try {
                 //You don't get my key my raspberry pi is too cool for that.
@@ -126,17 +125,17 @@ public class AutoUpdater {
                         AsuAddons.LOGGER.info("AU > Finished Automatic Update.");
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cFailed organizing files. Retrying on next restart."));
+                        Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cFailed organizing files. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
                         ConfigManager.getConfig().mainCategory.lastestAction = "";
                         ConfigManager.getConfig().mainCategory.downloaded = "";
                     }
                 } else {
-                    Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cUnzipping failed. Retrying on next restart."));
+                    Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cUnzipping failed. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
                     ConfigManager.getConfig().mainCategory.lastestAction = "";
                     ConfigManager.getConfig().mainCategory.downloaded = "";
                 }
             } else {
-                Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cThe download failed. Retrying on next restart."));
+                Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cThe download failed. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
                 ConfigManager.getConfig().mainCategory.lastestAction = "";
                 ConfigManager.getConfig().mainCategory.downloaded = "";
             }
