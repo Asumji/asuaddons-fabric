@@ -1,10 +1,9 @@
 package me.asumji.gui.config.categories;
 
 import com.google.gson.annotations.Expose;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorSlider;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
-import io.github.notenoughupdates.moulconfig.annotations.Accordion;
+import io.github.notenoughupdates.moulconfig.annotations.*;
+import me.asumji.util.Shortcuts;
+import net.minecraft.text.Text;
 
 public class MiscCategory {
     @Expose
@@ -16,6 +15,11 @@ public class MiscCategory {
     @Accordion
     @ConfigOption(name = "RNG Meter", desc = "RNG Meter Features.")
     public RNGMeterAccordion rngMeterAccordion = new RNGMeterAccordion();
+
+    @Expose
+    @Accordion
+    @ConfigOption(name = "Bridge", desc = "Bridge Features.")
+    public BridgeAccordion bridgeAccordion = new BridgeAccordion();
 
     public static class AutoPetAccordion {
         @Expose
@@ -49,5 +53,34 @@ public class MiscCategory {
         @ConfigOption(name = "Show Profit per Increment", desc = "Displays the profit per Increment for an item.\nDoes not include Chest price for dungeons (might add in future).")
         @ConfigEditorBoolean
         public boolean profitPerIncrement = false;
+    }
+
+    public static class BridgeAccordion {
+        @Expose
+        @ConfigOption(name = "Enable Bridge", desc = "Enabled the bridge features.")
+        @ConfigEditorBoolean
+        public boolean bridge = false;
+
+        @Expose
+        @ConfigOption(name = "Bridge Bot", desc = "The IGN of the bridge bot.")
+        @ConfigEditorText
+        public String bridgeBot = "";
+
+        @Expose
+        @ConfigOption(name = "Bridge Format", desc = "The Format the bridge message should have.\n{usr} for the message sender.\n{msg} for the message.\nUse & for colors.")
+        @ConfigEditorText
+        public String bridgeMessage = "&2Bridge > &6{usr}: &r{msg}";
+
+        @Expose
+        @ConfigOption(name = "Officer Format", desc = "The Format the officer chat message should have.\n{usr} for the message sender.\n{msg} for the message.\nUse & for colors.")
+        @ConfigEditorText
+        public String officerMessage = "&3Bridge > &6{usr}: &r{msg}";
+
+        @ConfigOption(name = "Test Message", desc = "Sends a test message to preview how it looks in chat.")
+        @ConfigEditorButton(buttonText = "Click")
+        public Runnable testMessage = () -> {
+            Shortcuts.queueClientMessage(Text.literal(bridgeMessage.replace("{usr}", "weeklies").replace("{msg}", "This is a test message.").replace("&","§")));
+            Shortcuts.queueClientMessage(Text.literal(officerMessage.replace("{usr}", "weeklies").replace("{msg}", "This is a test message.").replace("&","§")));
+        };
     }
 }
