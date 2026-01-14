@@ -145,6 +145,6 @@ public class DungeonCategory {
         @Expose
         @ConfigOption(name = "Shadow Assassin Color", desc = "The color for the shadow assassin highlight.")
         @ConfigEditorColour
-        public String saColor = ChromaColour.special(255,255,0,0,0);
+        public String saColor = ChromaColour.special(0,255,255,0,0);
     }
 }
