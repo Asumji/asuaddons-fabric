@@ -57,7 +57,7 @@ public class LividSolver {
             return;
         }
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverColor).getEffectiveColour();
-        renderWaypoint(context, FILLED, (float) (correctLividEntity.getX()-0.5), (float) (correctLividEntity.getY()), (float) (correctLividEntity.getZ()-0.5), (float) (correctLividEntity.getX()+0.5), (float) (correctLividEntity.getY()+2), (float) (correctLividEntity.getZ()+0.5), ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverAdaptColor ? lividToColor.get(correctLividEntity.getName().getString()) : effectiveColor.getRGB(), (float) effectiveColor.getAlpha() / 255);
+        renderWaypoint(context, FILLED, (float) (correctLividEntity.getX()-0.5), (float) (correctLividEntity.getY()), (float) (correctLividEntity.getZ()-0.5), (float) (correctLividEntity.getX()+0.5), (float) (correctLividEntity.getY()+2), (float) (correctLividEntity.getZ()+0.5), ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverAdaptColor ? lividToColor.get(correctLividEntity.getName().getString()) : effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
 
         float tickProgress = MinecraftClient.getInstance().getRenderTickCounter().getTickProgress(false);
         Vec3d eyeVector = MinecraftClient.getInstance().player.getLerpedPos(tickProgress).add(MinecraftClient.getInstance().player.getRotationVec(tickProgress));

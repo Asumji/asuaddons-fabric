@@ -3,6 +3,7 @@ package me.asumji.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.asumji.features.BloodGiant;
 import me.asumji.features.LividSolver;
+import me.asumji.features.ShadowAssassinHighlight;
 import me.asumji.features.WitherHitbox;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
@@ -35,6 +36,7 @@ public abstract class ClientPlayNetworkHandlerMixin extends ClientCommonNetworkH
         }
         if (entity instanceof PlayerEntity player) {
             LividSolver.loadEntity(player);
+            ShadowAssassinHighlight.loadEntity(player);
         }
     }
 }

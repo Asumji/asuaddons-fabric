@@ -13,6 +13,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.mixin.Shadow;
 
 
 public class AsuAddons implements ModInitializer {
@@ -44,6 +45,7 @@ public class AsuAddons implements ModInitializer {
         LividSolver.init();
         RNGMeterTooltip.init();
         Bridge.init();
+        ShadowAssassinHighlight.init();
 
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(AsuAddons::joinWorld);
     }

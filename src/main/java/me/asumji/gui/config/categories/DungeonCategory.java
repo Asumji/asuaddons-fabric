@@ -130,4 +130,21 @@ public class DungeonCategory {
         @ConfigEditorColour
         public String witherHitboxColor = ChromaColour.special(0,255,255,0,0);
     }
+
+    @Expose
+    @Accordion
+    @ConfigOption(name = "Starred", desc = "Starmob things.")
+    public StarredAccordion starredAccordion = new StarredAccordion();
+
+    public static class StarredAccordion {
+        @Expose
+        @ConfigOption(name = "Shadow Assassin Highlight", desc = "Highlights Shadow Assassins (Only Highlights boots when invisible to stay legit).")
+        @ConfigEditorBoolean
+        public boolean saHighlight = false;
+
+        @Expose
+        @ConfigOption(name = "Shadow Assassin Color", desc = "The color for the shadow assassin highlight.")
+        @ConfigEditorColour
+        public String saColor = ChromaColour.special(255,255,0,0,0);
+    }
 }

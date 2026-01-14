@@ -66,7 +66,15 @@ public class MelodyDisplay {
                     roleColor = Variables.classes.get(role);
                 }
             }
-            melodyProgress = roleColor + name + " (" + role.charAt(0) + ") §e" + progress;
+            if (role.isEmpty()) {
+                AsuAddons.LOGGER.info("MelodyDisplay: Role not found!");
+                for (String line : Variables.getTablist()) {
+                    AsuAddons.LOGGER.info(line);
+                }
+                melodyProgress = "§e" + name + " " + progress;
+            } else {
+                melodyProgress = roleColor + name + " (" + role.charAt(0) + ") §e" + progress;
+            }
             return true;
         }
         return true;
