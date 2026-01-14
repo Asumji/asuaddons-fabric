@@ -26,7 +26,7 @@ public class ShadowAssassinHighlight {
     }
 
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
-        if (entity == null) return;
+        if (entity == null || !ConfigManager.getConfig().dungeonCategory.starredAccordion.saHighlight) return;
         float tickProgress = MinecraftClient.getInstance().getRenderTickCounter().getTickProgress(false);
         Vec3d entityPos = entity.getLerpedPos(tickProgress);
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.starredAccordion.saColor).getEffectiveColour();
