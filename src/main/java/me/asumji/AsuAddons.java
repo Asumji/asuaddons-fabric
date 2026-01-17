@@ -13,7 +13,9 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 
 public class AsuAddons implements ModInitializer {
@@ -24,6 +26,8 @@ public class AsuAddons implements ModInitializer {
     public static final String NAMESPACE = "au";
     public static final String API_PROXY = "http://asumji.duckdns.org/";
     public static final String MOD_PREFIX = "§6AU > §r";
+    public static final ScheduledExecutorService SCHEDULER =
+            Executors.newSingleThreadScheduledExecutor();
 
 	@Override
 	public void onInitialize() {
@@ -46,6 +50,7 @@ public class AsuAddons implements ModInitializer {
         RNGMeterTooltip.init();
         Bridge.init();
         ShadowAssassinHighlight.init();
+        SellValue.init();
 
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(AsuAddons::joinWorld);
     }

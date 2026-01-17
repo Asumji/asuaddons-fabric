@@ -97,7 +97,7 @@ public class AutoUpdater {
                 BufferedInputStream bis = new BufferedInputStream(url.openStream());
                 FileOutputStream fis = new FileOutputStream(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/dwnld.zip");
                 byte[] buffer = new byte[1024];
-                int count=0;
+                int count;
                 while((count = bis.read(buffer,0,1024)) != -1)
                 {
                     fis.write(buffer, 0, count);

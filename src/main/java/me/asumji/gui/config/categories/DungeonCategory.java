@@ -3,14 +3,36 @@ package me.asumji.gui.config.categories;
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.ChromaColour;
 import io.github.notenoughupdates.moulconfig.annotations.*;
-import me.asumji.gui.MoveGUI;
-import org.apache.commons.lang3.ArrayUtils;
+import me.asumji.gui.move.HudElement;
+import me.asumji.gui.move.MoveGUI;
+import net.minecraft.client.MinecraftClient;
 
 public class DungeonCategory {
     public DungeonCategory() {
-        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"0.00s", "dungeonCategory", "f5Accordion", "lividTimerHudX", "lividTimerHudY", "lividTimerHudScale"});
-        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§bweeklies (M) §e3/4", "dungeonCategory", "f7Accordion", "melodyHudX", "melodyHudY", "melodyHudScale"});
-        MoveGUI.GUIElements = ArrayUtils.add(MoveGUI.GUIElements, new String[]{"§55.00s", "dungeonCategory", "f7Accordion", "purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale"});
+        MoveGUI.HudElements.add(
+                new HudElement(
+                        "dungeonCategory", "f5Accordion", "lividTimerHudX", "lividTimerHudY", "lividTimerHudScale", "lividTimer",
+                        (context, x, y, width, height) ->
+                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "0.00s", x, y, 0xFFFFFFFF),
+                        26, 9
+                )
+        );
+        MoveGUI.HudElements.add(
+                new HudElement(
+                        "dungeonCategory", "f7Accordion", "melodyHudX", "melodyHudY", "melodyHudScale", "melodyDisplay",
+                        (context, x, y, width, height) ->
+                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "§bweeklies (M) §e3/4", x, y, 0xFFFFFFFF),
+                        82, 9
+                )
+        );
+        MoveGUI.HudElements.add(
+                new HudElement(
+                        "dungeonCategory", "f7Accordion", "purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale", "purplePadTimer",
+                        (context, x, y, width, height) ->
+                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "§55.00s", x, y, 0xFFFFFFFF),
+                        26, 9
+                )
+        );
     }
 
     @Expose

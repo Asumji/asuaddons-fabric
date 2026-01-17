@@ -46,7 +46,7 @@ public class PurplePadTimer {
         if (!ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimer) return true;
         Matcher matcher = Pattern.compile("\\[BOSS] Storm: (ENERGY HEED MY CALL|THUNDER LET ME BE YOUR CATALYST)!").matcher(text.getString());
         if (matcher.find()) {
-            Variables.TickTimers.put("PurplePadTimer", 96);
+            Variables.TickTimers.put("PurplePadTimer", 76);
             return true;
         }
         return true;

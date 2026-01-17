@@ -2,10 +2,33 @@ package me.asumji.gui.config.categories;
 
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.annotations.*;
+import me.asumji.AsuAddons;
+import me.asumji.gui.move.HudElement;
+import me.asumji.gui.move.MoveGUI;
 import me.asumji.util.Shortcuts;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.text.Text;
 
 public class MiscCategory {
+    public MiscCategory() {
+        MoveGUI.HudElements.add(
+                new HudElement(
+                        "miscCategory", "financeAccordion", "sellValueHudX", "sellValueHudY", "sellValueHudScale", "sellValueAH",
+                        (context, x, y, width, height) -> {
+                            TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+                            context.fill((x - width / 2), y, (x - width / 2) + width, y + 27, 0xFF5C5C5C);
+                            context.fill((x - width / 2), y, (x - width / 2) + width, y + 4, 0xFF444445);
+                            context.fill((x - width / 2), y, (x - width / 2) + 4, y + 27, 0xFF444445);
+                            context.fill((x - width / 2), y + 27, (x - width / 2) + width, y + 27 - 4, 0xFF444445);
+                            context.fill((x - width / 2) + width, y, (x - width / 2) + width - 4, y + 27, 0xFF444445);
+                            context.drawTextWithShadow(textRenderer, Text.literal("§6Total Value: 250.32m"), (x - width / 2) + 7, y + 18 - textRenderer.fontHeight, 0xFFFFFFFF);
+                        },
+                        118, 27
+                )
+        );
+    }
+
     @Expose
     @Accordion
     @ConfigOption(name = "Autopet", desc = "Autopet Features.")
@@ -82,5 +105,31 @@ public class MiscCategory {
             Shortcuts.queueClientMessage(Text.literal(bridgeMessage.replace("{usr}", "weeklies").replace("{msg}", "This is a test message.").replace("&","§")));
             Shortcuts.queueClientMessage(Text.literal(officerMessage.replace("{usr}", "weeklies").replace("{msg}", "This is a test message.").replace("&","§")));
         };
+    }
+
+    @Expose
+    @Accordion
+    @ConfigOption(name = "AH/BZ", desc = "Finance Features.")
+    public FinanceAccordion financeAccordion = new FinanceAccordion();
+
+    public static class FinanceAccordion {
+        @Expose
+        public int sellValueHudX = 50;
+
+        @Expose
+        public int sellValueHudY = 50;
+
+        @Expose
+        public float sellValueHudScale = 2;
+
+        @Expose
+        @ConfigOption(name = "Calculate Total AH Value", desc = "Adds an Overlay to show how much your Auction House is worth if everything sells.")
+        @ConfigEditorBoolean
+        public boolean sellValueAH = false;
+
+        @Expose
+        @ConfigOption(name = "Calculate Total Bazaar Value", desc = "Adds an Overlay to show how much your Bazaar is worth if everything sells.")
+        @ConfigEditorBoolean
+        public boolean sellValueBZ = false;
     }
 }

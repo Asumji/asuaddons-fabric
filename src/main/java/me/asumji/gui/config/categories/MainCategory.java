@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorButton;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
-import me.asumji.gui.MoveGUI;
+import me.asumji.gui.move.MoveGUI;
 import net.minecraft.client.MinecraftClient;
 
 public class MainCategory {
