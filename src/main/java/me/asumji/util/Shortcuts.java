@@ -75,7 +75,8 @@ public class Shortcuts {
             MinecraftClient.getInstance().getNetworkHandler().onTitle(new TitleS2CPacket(Text.literal(title)));
             MinecraftClient.getInstance().getNetworkHandler().onSubtitle(new SubtitleS2CPacket(Text.literal(subtitle)));
         } else {
-            titles = ArrayUtils.add(titles, new AUTitle(title, subtitle, stayTicks));
+            if (ConfigManager.getConfig().mainCategory.titleAccordion.stackingTitles) titles = ArrayUtils.add(titles, new AUTitle(title, subtitle, stayTicks));
+            else titles = new AUTitle[]{new AUTitle(title, subtitle, stayTicks)};
         }
     }
 
@@ -90,7 +91,7 @@ public class Shortcuts {
         return str.repeat(times);
     }
 
-    public static class AUTitle {
+    private static class AUTitle {
         private final String title;
         private final String subtitle;
         private int stayTicks;

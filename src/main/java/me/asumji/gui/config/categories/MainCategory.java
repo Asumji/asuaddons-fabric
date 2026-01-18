@@ -69,6 +69,11 @@ public class MainCategory {
         public boolean customTitles = false;
 
         @Expose
+        @ConfigOption(name = "Allow Stacking", desc = "Allows concurrent titles to stack below each other rather than replace each other.")
+        @ConfigEditorBoolean
+        public boolean stackingTitles = false;
+
+        @Expose
         public int titleHudX = 50;
 
         @Expose
