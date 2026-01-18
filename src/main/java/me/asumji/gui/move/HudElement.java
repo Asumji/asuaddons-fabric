@@ -25,16 +25,15 @@ public class HudElement {
         this.toggleProp = toggleProp;
     }
 
-    public void render(DrawContext ctx, int x, int y, int width, int height) {
-        renderer.render(ctx, x, y, width, height);
+    public void render(DrawContext ctx, int x, int y, int width, int height, float scale) {
+        renderer.render(ctx, x, y, width, height, scale);
     }
 
     public int getWidth() {
-        return this.width;
+        return width;
     }
-
     public int getHeight() {
-        return this.height;
+        return height;
     }
 
     public String getCategory() { return category; }

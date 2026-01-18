@@ -12,25 +12,34 @@ public class DungeonCategory {
         MoveGUI.HudElements.add(
                 new HudElement(
                         "dungeonCategory", "f5Accordion", "lividTimerHudX", "lividTimerHudY", "lividTimerHudScale", "lividTimer",
-                        (context, x, y, width, height) ->
-                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "0.00s", x, y, 0xFFFFFFFF),
-                        26, 9
+                        (context, x, y, width, height, scale) -> {
+                            context.getMatrices().pushMatrix();
+                            context.getMatrices().scale(scale);
+                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "0.00s", x, y, 0xFFFFFFFF);
+                            context.getMatrices().popMatrix();
+                        }, 26, 9
                 )
         );
         MoveGUI.HudElements.add(
                 new HudElement(
                         "dungeonCategory", "f7Accordion", "melodyHudX", "melodyHudY", "melodyHudScale", "melodyDisplay",
-                        (context, x, y, width, height) ->
-                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "§bweeklies (M) §e3/4", x, y, 0xFFFFFFFF),
-                        82, 9
+                        (context, x, y, width, height, scale) -> {
+                            context.getMatrices().pushMatrix();
+                            context.getMatrices().scale(scale);
+                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "§bweeklies (M) §e3/4", x, y, 0xFFFFFFFF);
+                            context.getMatrices().popMatrix();
+                        }, 82, 9
                 )
         );
         MoveGUI.HudElements.add(
                 new HudElement(
                         "dungeonCategory", "f7Accordion", "purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale", "purplePadTimer",
-                        (context, x, y, width, height) ->
-                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "§55.00s", x, y, 0xFFFFFFFF),
-                        26, 9
+                        (context, x, y, width, height, scale) -> {
+                            context.getMatrices().pushMatrix();
+                            context.getMatrices().scale(scale);
+                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "§55.00s", x, y, 0xFFFFFFFF);
+                            context.getMatrices().popMatrix();
+                        }, 26, 9
                 )
         );
     }

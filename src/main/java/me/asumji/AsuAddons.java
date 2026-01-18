@@ -22,7 +22,7 @@ public class AsuAddons implements ModInitializer {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 	public static final String MOD_ID = "asuaddons";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final String MOD_VERSION = "1.5.0";
+    public static final String MOD_VERSION = "1.6.0";
     public static final String NAMESPACE = "au";
     public static final String API_PROXY = "http://asumji.duckdns.org/";
     public static final String MOD_PREFIX = "§6AU > §r";

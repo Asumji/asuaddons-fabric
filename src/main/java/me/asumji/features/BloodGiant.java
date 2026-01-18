@@ -28,7 +28,7 @@ public class BloodGiant {
     public static void loadEntity(GiantEntity giant) {
         if (!ConfigManager.getConfig().dungeonCategory.f7Accordion.diamanteAlert || !watcherSpawning) return;
         if (!giant.getEquippedStack(EquipmentSlot.CHEST).toString().equals("1 minecraft:diamond_chestplate")) return;
-        Shortcuts.displayTitle(Text.literal("§bDiamante detected"), Text.empty(), 0, 20, 0);
+        Shortcuts.displayTitle("§bDiamante detected", "", 20);
         Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§bDiamante Giant detected."));
     }
 }

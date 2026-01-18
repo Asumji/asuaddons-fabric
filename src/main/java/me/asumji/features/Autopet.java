@@ -18,7 +18,7 @@ public class Autopet {
         if (!text.getString().matches("§.Autopet §.equipped your §.\\[Lvl \\d+] (§.)([A-z ]+)(?:§. ✦)?§.! §.§.VIEW RULE") || !ConfigManager.getConfig().miscCategory.autoPetAccordion.AutopetNotif) return true;
         Matcher matcher = Pattern.compile("§.Autopet §.equipped your §.\\[Lvl \\d+] (§.)([A-z ]+)(?:§. ✦)?§.! §.§.VIEW RULE").matcher(text.getString());
         if (!matcher.find()) return true;
-        Shortcuts.displayTitle(Text.literal(matcher.group(1)+matcher.group(2)),Text.literal("§cAutopet"),0,ConfigManager.getConfig().miscCategory.autoPetAccordion.AutopetTicks,0);
+        Shortcuts.displayTitle(matcher.group(1)+matcher.group(2),"§cAutopet",ConfigManager.getConfig().miscCategory.autoPetAccordion.AutopetTicks);
         return true;
     }
 }

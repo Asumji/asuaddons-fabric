@@ -9,10 +9,7 @@ import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.component.ComponentType;
-import net.minecraft.predicate.component.ComponentPredicateTypes;
 import net.minecraft.text.Text;
-import net.minecraft.component.Component;
 
 import java.awt.*;
 import java.io.File;
@@ -53,6 +50,7 @@ public class MoveGUI extends Screen {
         ButtonWidget buttonWidget = ButtonWidget.builder(Text.literal((showAll ? "Hide" : "Show") + " disabled features"), (btn) -> {
             showAll = !showAll;
             btn.setMessage(Text.literal((showAll ? "Hide" : "Show") + " disabled features"));
+            selectedElement = null;
         }).dimensions(this.width / 2 - 70, this.height - 20, 140, 20).build();
 
         this.addDrawableChild(buttonWidget);
@@ -71,10 +69,7 @@ public class MoveGUI extends Screen {
             int width = element.getWidth();
             int height = element.getHeight();
 
-            context.getMatrices().pushMatrix();
-            context.getMatrices().scale(scale, scale);
-            element.render(context, x, y, width, height);
-            context.getMatrices().popMatrix();
+            element.render(context, x, y, width, height, scale);
 
             if (element == selectedElement) {
                 context.fill((int) ((x - width / 2f) * scale), (int) (y * scale), (int) ((x + width / 2f) * scale), (int) ((y + height) * scale), 0x33FFFFFF);

@@ -35,7 +35,7 @@ public class LividTimer {
         matrices.popMatrix();
         if (ticksLeft == 0 && !timerDone) {
             timerDone = true;
-            Shortcuts.displayTitle(Text.literal("§cLivid is vulnerable"), Text.literal(""), 0, 20, 0);
+            Shortcuts.displayTitle("§cLivid is vulnerable", "", 20);
             if (!ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerMessage.isEmpty())
                 MinecraftClient.getInstance().player.networkHandler.sendChatCommand("pc " + ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerMessage);
         }

@@ -15,7 +15,9 @@ public class MiscCategory {
         MoveGUI.HudElements.add(
                 new HudElement(
                         "miscCategory", "financeAccordion", "sellValueHudX", "sellValueHudY", "sellValueHudScale", "sellValueAH",
-                        (context, x, y, width, height) -> {
+                        (context, x, y, width, height, scale) -> {
+                            context.getMatrices().pushMatrix();
+                            context.getMatrices().scale(scale);
                             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                             context.fill((x - width / 2), y, (x - width / 2) + width, y + 27, 0xFF5C5C5C);
                             context.fill((x - width / 2), y, (x - width / 2) + width, y + 4, 0xFF444445);
@@ -23,8 +25,8 @@ public class MiscCategory {
                             context.fill((x - width / 2), y + 27, (x - width / 2) + width, y + 27 - 4, 0xFF444445);
                             context.fill((x - width / 2) + width, y, (x - width / 2) + width - 4, y + 27, 0xFF444445);
                             context.drawTextWithShadow(textRenderer, Text.literal("§6Total Value: 250.32m"), (x - width / 2) + 7, y + 18 - textRenderer.fontHeight, 0xFFFFFFFF);
-                        },
-                        118, 27
+                            context.getMatrices().popMatrix();
+                        }, 118, 27
                 )
         );
     }

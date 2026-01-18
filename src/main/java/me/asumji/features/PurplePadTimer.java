@@ -37,7 +37,7 @@ public class PurplePadTimer {
             if (ticksLeft == 0) timerDone = true;
         }
         if (timerDone) {
-            Shortcuts.displayTitle(Text.literal("§aCrush!"),Text.empty(),0,10,0);
+            Shortcuts.displayTitle("§aCrush!", "", 10);
             timerDone = false;
         }
     }
