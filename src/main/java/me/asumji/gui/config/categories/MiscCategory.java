@@ -2,7 +2,6 @@ package me.asumji.gui.config.categories;
 
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.annotations.*;
-import me.asumji.AsuAddons;
 import me.asumji.gui.move.HudElement;
 import me.asumji.gui.move.MoveGUI;
 import me.asumji.util.Shortcuts;
@@ -50,12 +49,17 @@ public class MiscCategory {
         @Expose
         @ConfigOption(name = "Autopet Notif", desc = "Displays a title when an Autopet rule is procced.")
         @ConfigEditorBoolean
-        public boolean AutopetNotif = false;
+        public boolean autopetNotif = false;
+
+        @Expose
+        @ConfigOption(name = "Autopet Subtitle", desc = "Draws a red subitle saying  \"Autopet\" under the pet name.")
+        @ConfigEditorBoolean
+        public boolean autopetSubtitle = false;
 
         @Expose
         @ConfigOption(name = "Autopet Ticks", desc = "Defines the ticks how long the title should stay for")
         @ConfigEditorSlider(minValue = 1, maxValue = 20, minStep = 1)
-        public int AutopetTicks = 8;
+        public int autopetTicks = 8;
     }
 
     public static class RNGMeterAccordion {
