@@ -34,6 +34,7 @@ public class Shortcuts {
 
         int offset = 0;
         for (AUTitle title : titles) {
+            if (title.getStayTicks() <= 0) titles = ArrayUtils.remove(titles, ArrayUtils.indexOf(titles, title));
             context.getMatrices().pushMatrix();
             context.getMatrices().scale(scale);
             context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, title.getTitle(), x, y + offset, 0xFFFFFFFF);
@@ -46,7 +47,6 @@ public class Shortcuts {
             context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, title.getSubtitle(), x * 2, (y + offset) * 2, 0xFFFFFFFF);
             context.getMatrices().popMatrix();
             offset += 10;
-            if (title.getStayTicks() <= 0) titles = ArrayUtils.remove(titles, ArrayUtils.indexOf(titles, title));
         }
     }
 
