@@ -64,7 +64,7 @@ public class AutoUpdater {
             List<Path> result = List.of();
             try (Stream<Path> pathStream = Files.find(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"),
                     Integer.MAX_VALUE,
-                    (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-.*\\.jar") &! p.getFileName().toString().equals(ConfigManager.getConfig().mainCategory.downloaded))
+                    (p, basicFileAttributes) -> p.getFileName().toString().matches("asuaddons-"+AsuAddons.MINECRAFT_VERSION+"-.*\\.jar") &! p.getFileName().toString().equals(ConfigManager.getConfig().mainCategory.downloaded))
             ) {
                 result = pathStream.toList();
             } catch (Exception e) {
@@ -110,17 +110,16 @@ public class AutoUpdater {
             File zipFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/dwnld.zip");
             if (zipFile.exists()) {
                 unzip(zipFile.getPath(), FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons");
-                File jarFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-9999999.jar");
+                File jarFile = new File(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-"+AsuAddons.MINECRAFT_VERSION+"-9999999.jar");
                 if (jarFile.exists()) {
                     try {
                         ConfigManager.getConfig().mainCategory.jarNumber -= 1;
                         String fileNumber = new StringBuilder(String.valueOf(ConfigManager.getConfig().mainCategory.jarNumber)).reverse().toString();
-                        String fileName = "asuaddons-"+fileNumber+".jar";
+                        String fileName = "asuaddons-"+AsuAddons.MINECRAFT_VERSION+"-"+fileNumber+".jar";
                         Files.copy(jarFile.toPath(), Path.of(FabricLoader.getInstance().getGameDir().toString()+"/mods/"+fileName), StandardCopyOption.REPLACE_EXISTING);
                         ConfigManager.getConfig().mainCategory.downloaded = fileName;
                         Files.deleteIfExists(zipFile.toPath());
                         Files.deleteIfExists(jarFile.toPath());
-                        Files.deleteIfExists(Path.of(FabricLoader.getInstance().getGameDir().toString()+"/config/asuaddons/asuaddons-9999999-sources.jar"));
                         Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aSuccessfully downloaded the newest version. Changes will apply on next restart."));
                         AsuAddons.LOGGER.info("AU > Finished Automatic Update.");
                     } catch (IOException e) {
