@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 public class PurplePadTimer {
     private static final DecimalFormat df = new DecimalFormat("0.00");
     private static boolean timerDone = false;
+    private static boolean ticking = false;
     public static void init() {
         ClientReceiveMessageEvents.ALLOW_GAME.register(PurplePadTimer::onChatMessage);
         HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.of(AsuAddons.MOD_ID, "purplepadhud"), PurplePadTimer::renderHud);
@@ -36,7 +37,8 @@ public class PurplePadTimer {
             matrices.popMatrix();
             if (ticksLeft == 0) timerDone = true;
         }
-        if (timerDone) {
+        if (timerDone && ticking) {
+            ticking = false;
             Shortcuts.displayTitle("§aCrush!", "", 10);
             timerDone = false;
         }
@@ -47,6 +49,7 @@ public class PurplePadTimer {
         Matcher matcher = Pattern.compile("\\[BOSS] Storm: (ENERGY HEED MY CALL|THUNDER LET ME BE YOUR CATALYST)!").matcher(text.getString());
         if (matcher.find()) {
             Variables.TickTimers.put("PurplePadTimer", 76);
+            ticking = true;
             return true;
         }
         return true;
