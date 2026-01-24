@@ -129,23 +129,23 @@ public class DPU {
                         String finalPb = pb.trim();
 
                         Shortcuts.queueClientMessage(Text.literal(
-                                        "§cName:§b " + matcher.group(1) +
-                                                "\n§6Cata: §a" + cata +
-                                                "\n§6Secrets: §c" + secrets +
-                                                "\n§6MP: §c" + mp +
-                                                "\n§6Bank: " + bank +
-                                                "\n§6Spirit: " + pets[1] +
-                                                "\n\n§6Items:§r\n")
-                                .append(items)
-                                .append(Text.literal("\n\n§6Armor:§r\n")
-                                        .append(armor)
-                                        .append(Text.literal("\n\n§6Pet: §r" + pets[0] + "§7 / " + pets[2]))
-                                        .append(Text.literal("\n§4[Kick from Party]").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/party kick " + matcher.group(1)))))
-                                        .append(Text.literal("        "))
-                                        .append(Text.literal("§7[Ignore]").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/ignore add " + matcher.group(1)))))
-                                        .append(Text.literal("        "))
-                                        .append(Text.literal("§6[PBs]").styled(style -> style.withHoverEvent(new HoverEvent.ShowText(Text.literal(finalPb)))))
-                                ));
+                            "§cName:§b " + matcher.group(1) +
+                            "\n§6Cata: §a" + cata +
+                            "\n§6Secrets: §c" + secrets +
+                            "\n§6MP: §c" + mp +
+                            "\n§6Bank: " + bank +
+                            "\n§6Spirit: " + pets[1] +
+                            "\n\n§6Items:§r\n")
+                            .append(items)
+                            .append(Text.literal("\n\n§6Armor:§r\n"))
+                            .append(armor)
+                            .append(Text.literal("\n\n§6Pet: §r" + pets[0] + "§7 / " + pets[2]))
+                            .append(Text.literal("\n§4[Kick from Party]").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/party kick " + matcher.group(1)))))
+                            .append(Text.literal("        "))
+                            .append(Text.literal("§7[Ignore]").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/ignore add " + matcher.group(1)))))
+                            .append(Text.literal("        "))
+                            .append(Text.literal("§6[PBs]").styled(style -> style.withHoverEvent(new HoverEvent.ShowText(Text.literal(finalPb)))))
+                        );
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
