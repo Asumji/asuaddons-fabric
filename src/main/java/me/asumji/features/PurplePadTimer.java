@@ -35,11 +35,11 @@ public class PurplePadTimer {
             matrices.scale(ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudScale,ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudScale);
             drawContext.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, Text.literal("§5"+df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudX, ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudY, 0xFFFFFFFF);
             matrices.popMatrix();
-            if (ticksLeft == 0) timerDone = true;
+            if (ticksLeft == 0 && ticking) timerDone = true;
         }
-        if (timerDone && ticking) {
-            ticking = false;
+        if (timerDone) {
             Shortcuts.displayTitle("§aCrush!", "", 10);
+            ticking = false;
             timerDone = false;
         }
     }
