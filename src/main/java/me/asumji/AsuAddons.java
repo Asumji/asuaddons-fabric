@@ -2,6 +2,10 @@ package me.asumji;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.asumji.commands.ConfigCommand;
+import me.asumji.commands.MoveCommand;
+import me.asumji.commands.ReportCommand;
+import me.asumji.commands.SimulateCommand;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.features.*;
 import me.asumji.util.Shortcuts;
@@ -35,7 +39,7 @@ public class AsuAddons implements ModInitializer {
         LOGGER.info("AsuAddons initialized!");
         ConfigManager.init();
         DPU.init();
-        AUCommand.init();
+        ConfigCommand.init();
         SimulateCommand.init();
         Variables.init();
         Autopet.init();
@@ -52,6 +56,8 @@ public class AsuAddons implements ModInitializer {
         Bridge.init();
         ShadowAssassinHighlight.init();
         SellValue.init();
+        ReportCommand.init();
+        MoveCommand.init();
 
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(AsuAddons::joinWorld);
     }

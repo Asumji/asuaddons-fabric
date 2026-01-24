@@ -1,7 +1,6 @@
 package me.asumji.features;
 
 import io.github.notenoughupdates.moulconfig.ChromaColour;
-import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Rendering;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

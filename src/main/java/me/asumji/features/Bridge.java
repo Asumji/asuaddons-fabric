@@ -1,6 +1,5 @@
 package me.asumji.features;
 
-import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;

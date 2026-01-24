@@ -10,7 +10,10 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.text.Text;
 
 public class MiscCategory {
+    public static boolean initialized = false;
+
     public MiscCategory() {
+        if (initialized) return;
         MoveGUI.HudElements.add(
                 new HudElement(
                         "miscCategory", "financeAccordion", "sellValueHudX", "sellValueHudY", "sellValueHudScale", "sellValueAH",
@@ -28,6 +31,7 @@ public class MiscCategory {
                         }, 118, 27
                 )
         );
+        initialized = true;
     }
 
     @Expose

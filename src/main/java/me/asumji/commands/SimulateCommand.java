@@ -1,4 +1,4 @@
-package me.asumji.features;
+package me.asumji.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import me.asumji.AsuAddons;

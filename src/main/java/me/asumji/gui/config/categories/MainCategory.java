@@ -5,15 +5,15 @@ import io.github.notenoughupdates.moulconfig.annotations.Accordion;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorButton;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
-import me.asumji.AsuAddons;
 import me.asumji.gui.move.HudElement;
 import me.asumji.gui.move.MoveGUI;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.text.Text;
 
 public class MainCategory {
+    public static boolean initialized = false;
+
     public MainCategory() {
+        if (initialized) return;
         MoveGUI.HudElements.add(
                 new HudElement(
                         "mainCategory", "titleAccordion", "titleHudX", "titleHudY", "titleHudScale", "customTitles",
@@ -30,6 +30,7 @@ public class MainCategory {
                         }, 47, 15
                 )
         );
+        initialized = true;
     }
 
     @ConfigOption(name = "Move GUI Elements", desc = "Allows you to move the GUI Elements.")

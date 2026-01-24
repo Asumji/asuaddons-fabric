@@ -8,7 +8,10 @@ import me.asumji.gui.move.MoveGUI;
 import net.minecraft.client.MinecraftClient;
 
 public class DungeonCategory {
+    public static boolean initialized = false;
+
     public DungeonCategory() {
+        if (initialized) return;
         MoveGUI.HudElements.add(
                 new HudElement(
                         "dungeonCategory", "f5Accordion", "lividTimerHudX", "lividTimerHudY", "lividTimerHudScale", "lividTimer",
@@ -42,6 +45,7 @@ public class DungeonCategory {
                         }, 26, 9
                 )
         );
+        initialized = true;
     }
 
     @Expose

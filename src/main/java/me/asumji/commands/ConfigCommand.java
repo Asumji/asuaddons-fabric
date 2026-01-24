@@ -1,4 +1,4 @@
-package me.asumji.features;
+package me.asumji.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import me.asumji.AsuAddons;
@@ -10,12 +10,12 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandRegistryAccess;
 
-public class AUCommand {
+public class ConfigCommand {
     public static Boolean openGUI = false;
 
     public static void init() {
-        ClientCommandRegistrationCallback.EVENT.register(AUCommand::onCommand);
-        ClientTickEvents.END_CLIENT_TICK.register(AUCommand::openGUI);
+        ClientCommandRegistrationCallback.EVENT.register(ConfigCommand::configCommand);
+        ClientTickEvents.END_CLIENT_TICK.register(ConfigCommand::openGUI);
     }
 
     private static void openGUI(MinecraftClient client) {
@@ -25,7 +25,7 @@ public class AUCommand {
         }
     }
 
-    private static void onCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+    private static void configCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
         dispatcher.register(ClientCommandManager.literal(AsuAddons.NAMESPACE).executes(context -> {
             openGUI = true;
             return 1;

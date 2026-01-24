@@ -97,6 +97,15 @@ public class MoveGUI extends Screen {
                         (int) (y * scale - textRenderer.fontHeight),
                         0xFFFFFFFF
                 );
+
+                if (Math.abs(this.width / 2f - x * scale) < 5) {
+                    context.fill(this.width / 2 - 1, 0, this.width / 2 + 1, (int) (y * scale), 0x33FFFFFF);
+                    context.fill(this.width / 2 - 1, (int) ((y + height) * scale), this.width / 2 + 1, this.height, 0x33FFFFFF);
+                }
+                if (Math.abs(this.height / 2f - (y + height / 2f) * scale) < 5) {
+                    context.fill(0, this.height / 2 - 1, (int) ((x - width / 2f) * scale), this.height / 2 + 1, 0x33FFFFFF);
+                    context.fill((int) ((x + width / 2f) * scale), this.height / 2 - 1, this.width, this.height / 2 + 1, 0x33FFFFFF);
+                }
             } else {
                 if (mouseX >= (x - width / 2f) * scale && mouseX <= (x + width / 2f) * scale && mouseY >= y * scale && mouseY <= (y + height) * scale)
                     context.fill((int) ((x - width / 2f) * scale), (int) (y * scale), (int) ((x + width / 2f) * scale), (int) ((y + height) * scale), 0x11FFFFFF);
@@ -118,7 +127,7 @@ public class MoveGUI extends Screen {
             if (click.x() >= (x - width / 2f) * scale && click.x() <= (x + width / 2f) * scale && click.y() >= y * scale && click.y() <= (y + height) * scale)
                 selectedElement = element;
         }
-        return super.mouseClicked(click, doubled);
+        return true;
     }
 
     @Override
@@ -127,13 +136,21 @@ public class MoveGUI extends Screen {
         if (click.x() >= this.width / 2f - 70 && click.x() <= this.width / 2f + 70 && click.y() >= this.height - 20 && click.y() <= this.height) return super.mouseDragged(click, offsetX, offsetY);
 
         float scale = getProperty(selectedElement.getScaleName(), selectedElement.getCategory(), selectedElement.getAccordion()).getAsFloat();
-        config.getAsJsonObject(selectedElement.getCategory())
-                .getAsJsonObject(selectedElement.getAccordion())
-                .addProperty(selectedElement.getXName(), (int) (click.x() / scale));
+        double x = click.x();
+        double y = click.y()-(selectedElement.getHeight()/2f*scale);
+
+        if (Math.abs(this.width / 2f - click.x()) < 15)
+            x = this.width / 2f;
+        if (Math.abs(this.height / 2f - click.y()) < 15)
+            y = this.height / 2f - (selectedElement.getHeight() / 2f * scale);
 
         config.getAsJsonObject(selectedElement.getCategory())
                 .getAsJsonObject(selectedElement.getAccordion())
-                .addProperty(selectedElement.getYName(), (int) (click.y() / scale));
+                .addProperty(selectedElement.getXName(), (int) (x / scale));
+
+        config.getAsJsonObject(selectedElement.getCategory())
+                .getAsJsonObject(selectedElement.getAccordion())
+                .addProperty(selectedElement.getYName(), (int) (y / scale));
 
         return true;
     }
