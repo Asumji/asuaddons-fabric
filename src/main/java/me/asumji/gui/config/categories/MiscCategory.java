@@ -102,12 +102,12 @@ public class MiscCategory {
         @Expose
         @ConfigOption(name = "Bridge Format", desc = "The Format the bridge message should have.\n{usr} for the message sender.\n{msg} for the message.\nUse & for colors.")
         @ConfigEditorText
-        public String bridgeMessage = "&2Bridge > &6{usr}: &r{msg}";
+        public String bridgeMessage = "&2Bridge > &6{usr}: &f{msg}";
 
         @Expose
         @ConfigOption(name = "Officer Format", desc = "The Format the officer chat message should have.\n{usr} for the message sender.\n{msg} for the message.\nUse & for colors.")
         @ConfigEditorText
-        public String officerMessage = "&3Bridge > &6{usr}: &r{msg}";
+        public String officerMessage = "&3Bridge > &6{usr}: &f{msg}";
 
         @ConfigOption(name = "Test Message", desc = "Sends a test message to preview how it looks in chat.")
         @ConfigEditorButton(buttonText = "Click")
