@@ -74,13 +74,13 @@ public class AutoUpdater {
             for (Path filePath : result) {
                 try {
                     Files.deleteIfExists(filePath.toAbsolutePath());
+                    ConfigManager.getConfig().mainCategory.downloaded = "";
+                    ConfigManager.saveConfig("AutoUpdater");
                 } catch (Exception e) {
                     e.printStackTrace();
                     AsuAddons.LOGGER.info("Failed to delete old mod after downloaded check.");
                 }
             }
-            ConfigManager.getConfig().mainCategory.downloaded = "";
-            ConfigManager.saveConfig("AutoUpdater");
         }
 
         if (!ConfigManager.getConfig().mainCategory.autoUpdates) return;
