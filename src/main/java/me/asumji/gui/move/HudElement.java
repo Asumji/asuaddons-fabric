@@ -2,7 +2,7 @@ package me.asumji.gui.move;
 
 
 import me.asumji.util.interfaces.HudRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 
 public class HudElement {
 
@@ -25,7 +25,7 @@ public class HudElement {
         this.toggleProp = toggleProp;
     }
 
-    public void render(DrawContext ctx, int x, int y, int width, int height, float scale) {
+    public void render(GuiGraphics ctx, int x, int y, int width, int height, float scale) {
         renderer.render(ctx, x, y, width, height, scale);
     }
 

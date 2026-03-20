@@ -7,8 +7,7 @@ import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.HTTP;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.text.Text;
-
+import net.minecraft.network.chat.Component;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -88,7 +87,7 @@ public class AutoUpdater {
             JsonArray artifacts = GSON.fromJson(res.body(), JsonObject.class).getAsJsonObject().getAsJsonArray("artifacts");
             if (artifacts.get(0).getAsJsonObject().get("id").getAsString().equals(ConfigManager.getConfig().mainCategory.lastestAction)) return;
             AsuAddons.LOGGER.info("AU > Started Automatic Update.");
-            Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aA new release has been found. Automatic Update has been started."));
+            Shortcuts.queueClientMessage(Component.literal(AsuAddons.MOD_PREFIX + "§aA new release has been found. Automatic Update has been started."));
             ConfigManager.getConfig().mainCategory.lastestAction = artifacts.get(0).getAsJsonObject().get("id").getAsString();
             String artifactId = artifacts.get(0).getAsJsonObject().get("id").getAsString();
             try {
@@ -120,21 +119,21 @@ public class AutoUpdater {
                         ConfigManager.getConfig().mainCategory.downloaded = fileName;
                         Files.deleteIfExists(zipFile.toPath());
                         Files.deleteIfExists(jarFile.toPath());
-                        Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§aSuccessfully downloaded the newest version. Changes will apply on next restart."));
+                        Shortcuts.queueClientMessage(Component.literal(AsuAddons.MOD_PREFIX + "§aSuccessfully downloaded the newest version. Changes will apply on next restart."));
                         AsuAddons.LOGGER.info("AU > Finished Automatic Update.");
                     } catch (IOException e) {
                         e.printStackTrace();
-                        Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cFailed organizing files. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
+                        Shortcuts.queueClientMessage(Component.literal(AsuAddons.MOD_PREFIX + "§cFailed organizing files. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
                         ConfigManager.getConfig().mainCategory.lastestAction = "";
                         ConfigManager.getConfig().mainCategory.downloaded = "";
                     }
                 } else {
-                    Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cUnzipping failed. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
+                    Shortcuts.queueClientMessage(Component.literal(AsuAddons.MOD_PREFIX + "§cUnzipping failed. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
                     ConfigManager.getConfig().mainCategory.lastestAction = "";
                     ConfigManager.getConfig().mainCategory.downloaded = "";
                 }
             } else {
-                Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cThe download failed. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
+                Shortcuts.queueClientMessage(Component.literal(AsuAddons.MOD_PREFIX + "§cThe download failed. Retrying on next restart. If this keeps happening consider updating to the newest version manually."));
                 ConfigManager.getConfig().mainCategory.lastestAction = "";
                 ConfigManager.getConfig().mainCategory.downloaded = "";
             }

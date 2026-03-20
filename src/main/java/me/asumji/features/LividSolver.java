@@ -5,14 +5,13 @@ import me.asumji.gui.config.ConfigManager;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +50,7 @@ public class LividSolver {
     }
 
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
-        Entity correctLividEntity = MinecraftClient.getInstance().world.getEntityById(correctLividId);
+        Entity correctLividEntity = Minecraft.getInstance().level.getEntity(correctLividId);
         if (correctLividEntity == null) {
             correctLividId = 0;
             return;
@@ -59,25 +58,25 @@ public class LividSolver {
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverColor).getEffectiveColour();
         renderWaypoint(context, FILLED, (float) (correctLividEntity.getX()-0.5), (float) (correctLividEntity.getY()), (float) (correctLividEntity.getZ()-0.5), (float) (correctLividEntity.getX()+0.5), (float) (correctLividEntity.getY()+2), (float) (correctLividEntity.getZ()+0.5), ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverAdaptColor ? lividToColor.get(correctLividEntity.getName().getString()) : effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
 
-        float tickProgress = MinecraftClient.getInstance().getRenderTickCounter().getTickProgress(false);
-        Vec3d eyeVector = MinecraftClient.getInstance().player.getLerpedPos(tickProgress).add(MinecraftClient.getInstance().player.getRotationVec(tickProgress));
-        Vec3d lividPos = correctLividEntity.getLerpedPos(tickProgress);
+        float tickProgress = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        Vec3 eyeVector = Minecraft.getInstance().player.getPosition(tickProgress).add(Minecraft.getInstance().player.getViewVector(tickProgress));
+        Vec3 lividPos = correctLividEntity.getPosition(tickProgress);
         if (ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTracer) renderLine(context, FILLED, 0.02, (float) eyeVector.x, (float) (eyeVector.y + 1.61), (float) eyeVector.z, (float) lividPos.x, (float) (lividPos.y+1), (float) lividPos.z, ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverAdaptColor ? lividToColor.get(correctLividEntity.getName().getString()) : effectiveColor.getRGB(), 1);
     }
 
-    private static boolean onChatMessage(Text text, boolean b) {
+    private static boolean onChatMessage(Component text, boolean b) {
         if (!text.getString().matches("\\[BOSS] Livid: Welcome, you've arrived right on time. I am Livid, the Master of Shadows.")) return true;
         spawning = true;
         return true;
     }
 
-    public static void loadEntity(PlayerEntity playerEntity) {
-        if (playerEntity == null || !spawning || !MinecraftClient.getInstance().player.hasStatusEffect(StatusEffects.BLINDNESS) || !ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolver) return;
-        String blockName = MinecraftClient.getInstance().world.getBlockState(new BlockPos(5, 110, 42)).getBlock().getName().getString();
+    public static void loadEntity(Player playerEntity) {
+        if (playerEntity == null || !spawning || !Minecraft.getInstance().player.hasEffect(MobEffects.BLINDNESS) || !ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolver) return;
+        String blockName = Minecraft.getInstance().level.getBlockState(new BlockPos(5, 110, 42)).getBlock().getName().getString();
         String correctLividName = blockToLivid.get(blockName);
         if (playerEntity.getName().getString().equals(correctLividName)) {
             correctLividId = playerEntity.getId();
-            if (!ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverMessage.isEmpty()) MinecraftClient.getInstance().player.networkHandler.sendChatCommand("pc " + ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverMessage.replace("{livid}", blockName.split(" ")[0]));
+            if (!ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverMessage.isEmpty()) Minecraft.getInstance().player.connection.sendCommand("pc " + ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverMessage.replace("{livid}", blockName.split(" ")[0]));
             spawning = false;
         }
     }

@@ -5,7 +5,7 @@ import io.github.notenoughupdates.moulconfig.ChromaColour;
 import io.github.notenoughupdates.moulconfig.annotations.*;
 import me.asumji.gui.move.HudElement;
 import me.asumji.gui.move.MoveGUI;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class DungeonCategory {
     public static boolean initialized = false;
@@ -16,10 +16,10 @@ public class DungeonCategory {
                 new HudElement(
                         "dungeonCategory", "f5Accordion", "lividTimerHudX", "lividTimerHudY", "lividTimerHudScale", "lividTimer",
                         (context, x, y, width, height, scale) -> {
-                            context.getMatrices().pushMatrix();
-                            context.getMatrices().scale(scale);
-                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "0.00s", x, y, 0xFFFFFFFF);
-                            context.getMatrices().popMatrix();
+                            context.pose().pushMatrix();
+                            context.pose().scale(scale);
+                            context.drawCenteredString(Minecraft.getInstance().font, "0.00s", x, y, 0xFFFFFFFF);
+                            context.pose().popMatrix();
                         }, 26, 9
                 )
         );
@@ -27,10 +27,10 @@ public class DungeonCategory {
                 new HudElement(
                         "dungeonCategory", "f7Accordion", "melodyHudX", "melodyHudY", "melodyHudScale", "melodyDisplay",
                         (context, x, y, width, height, scale) -> {
-                            context.getMatrices().pushMatrix();
-                            context.getMatrices().scale(scale);
-                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "§bweeklies (M) §e3/4", x, y, 0xFFFFFFFF);
-                            context.getMatrices().popMatrix();
+                            context.pose().pushMatrix();
+                            context.pose().scale(scale);
+                            context.drawCenteredString(Minecraft.getInstance().font, "§bweeklies (M) §e3/4", x, y, 0xFFFFFFFF);
+                            context.pose().popMatrix();
                         }, 82, 9
                 )
         );
@@ -38,10 +38,10 @@ public class DungeonCategory {
                 new HudElement(
                         "dungeonCategory", "f7Accordion", "purplePadTimerHudX", "purplePadTimerHudY", "purplePadTimerHudScale", "purplePadTimer",
                         (context, x, y, width, height, scale) -> {
-                            context.getMatrices().pushMatrix();
-                            context.getMatrices().scale(scale);
-                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "§55.00s", x, y, 0xFFFFFFFF);
-                            context.getMatrices().popMatrix();
+                            context.pose().pushMatrix();
+                            context.pose().scale(scale);
+                            context.drawCenteredString(Minecraft.getInstance().font, "§55.00s", x, y, 0xFFFFFFFF);
+                            context.pose().popMatrix();
                         }, 26, 9
                 )
         );

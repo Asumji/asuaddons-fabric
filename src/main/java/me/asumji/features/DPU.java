@@ -6,12 +6,12 @@ import me.asumji.util.Compression;
 import me.asumji.util.Variables;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
 import me.asumji.AsuAddons;
 
 import java.util.Date;
@@ -27,7 +27,7 @@ public class DPU {
         ClientReceiveMessageEvents.ALLOW_GAME.register(DPU::onChatMessage);
     }
 
-    private static boolean onChatMessage(Text text, boolean bool) {
+    private static boolean onChatMessage(Component text, boolean bool) {
         if (!text.getString().startsWith("Party Finder >") || !ConfigManager.getConfig().dungeonCategory.dpuAccordion.DPU) return true;
         Matcher matcher = Pattern.compile("(\\S*) joined the dungeon group!").matcher(text.getString());
         if (!matcher.find()) return true;
@@ -36,7 +36,7 @@ public class DPU {
             GetRequest(AsuAddons.API_PROXY +"v2/skyblock/profiles?uuid="+uuid).thenAcceptAsync(HypixelData -> {
                 JsonObject JSON = AsuAddons.GSON.fromJson(HypixelData.body(), JsonObject.class);
                 if (!JSON.get("success").getAsBoolean()) {
-                    Shortcuts.queueClientMessage(Text.literal(AsuAddons.MOD_PREFIX + "§cAPI Request failed: " + JSON.get("cause").getAsString()));
+                    Shortcuts.queueClientMessage(Component.literal(AsuAddons.MOD_PREFIX + "§cAPI Request failed: " + JSON.get("cause").getAsString()));
                     return;
                 }
                 try {
@@ -50,52 +50,52 @@ public class DPU {
                         String mp = player.getAsJsonObject("accessory_bag_storage").get("highest_magical_power").getAsString();
                         String bank = profile.getAsJsonObject("banking") == null ? "§cAPI Off" : shortenNumber(profile.getAsJsonObject("banking").get("balance").getAsBigDecimal());
                         String[] pets = {"§cNone", "§cNo", "§cNo Edrag"};
-                        MutableText armor = Text.literal("");
-                        MutableText items = Text.literal("");
+                        MutableComponent armor = Component.literal("");
+                        MutableComponent items = Component.literal("");
                         String pb = "";
 
 
                         if (player.getAsJsonObject("inventory") != null) {
                             if (player.getAsJsonObject("inventory").getAsJsonObject("inv_armor") != null) {
-                                NbtList armorContent = Compression.decodeInv(player.getAsJsonObject("inventory").getAsJsonObject("inv_armor"));
+                                ListTag armorContent = Compression.decodeInv(player.getAsJsonObject("inventory").getAsJsonObject("inv_armor"));
                                 for (int i = armorContent.size() - 1; i >= 0; i--) {
-                                    NbtCompound piece = armorContent.getCompoundOrEmpty(i);
-                                    if (piece.getInt("id", 0) == 0) continue;
-                                    String name = piece.getCompoundOrEmpty("tag").getCompoundOrEmpty("display").getString("Name", "");
+                                    CompoundTag piece = armorContent.getCompoundOrEmpty(i);
+                                    if (piece.getIntOr("id", 0) == 0) continue;
+                                    String name = piece.getCompoundOrEmpty("tag").getCompoundOrEmpty("display").getStringOr("Name", "");
                                     String lore = name + "\n";
-                                    NbtList loreContent = piece.getCompoundOrEmpty("tag").getCompoundOrEmpty("display").getListOrEmpty("Lore");
+                                    ListTag loreContent = piece.getCompoundOrEmpty("tag").getCompoundOrEmpty("display").getListOrEmpty("Lore");
                                     for (int j = 0; j < loreContent.size(); j++) {
-                                        String line = loreContent.getString(j, "");
+                                        String line = loreContent.getStringOr(j, "");
                                         lore += line + "\n";
                                     }
                                     String finalLore = lore.trim();
-                                    armor.append(Text.literal(name + "  ").styled(style -> style.withHoverEvent(new HoverEvent.ShowText(Text.literal(finalLore)))));
+                                    armor.append(Component.literal(name + "  ").withStyle(style -> style.withHoverEvent(new HoverEvent.ShowText(Component.literal(finalLore)))));
                                 }
                             }
 
                             if (player.getAsJsonObject("inventory").getAsJsonObject("inv_contents") != null) {
-                                NbtList invContent = Compression.decodeInv(player.getAsJsonObject("inventory").getAsJsonObject("inv_contents"));
+                                ListTag invContent = Compression.decodeInv(player.getAsJsonObject("inventory").getAsJsonObject("inv_contents"));
                                 for (int i = invContent.size() - 1; i >= 0; i--) {
-                                    NbtCompound item = invContent.getCompoundOrEmpty(i);
-                                    if (item.getInt("id", 0) == 0) continue;
-                                    String name = item.getCompoundOrEmpty("tag").getCompoundOrEmpty("display").getString("Name", "");
+                                    CompoundTag item = invContent.getCompoundOrEmpty(i);
+                                    if (item.getIntOr("id", 0) == 0) continue;
+                                    String name = item.getCompoundOrEmpty("tag").getCompoundOrEmpty("display").getStringOr("Name", "");
                                     String lore = name + "\n";
-                                    NbtList loreContent = item.getCompoundOrEmpty("tag").getCompoundOrEmpty("display").getListOrEmpty("Lore");
+                                    ListTag loreContent = item.getCompoundOrEmpty("tag").getCompoundOrEmpty("display").getListOrEmpty("Lore");
                                     for (int j = 0; j < loreContent.size(); j++) {
-                                        String line = loreContent.getString(j, "");
+                                        String line = loreContent.getStringOr(j, "");
                                         lore += line + "\n";
                                     }
                                     String finalLore = lore.trim();
                                     for (String rItem : ConfigManager.getConfig().dungeonCategory.dpuAccordion.relevantItems.split(",")) {
                                         if (name.toLowerCase().contains(rItem.toLowerCase())) {
-                                            items.append(Text.literal(name + "  ").styled(style -> style.withHoverEvent(new HoverEvent.ShowText(Text.literal(finalLore)))));
+                                            items.append(Component.literal(name + "  ").withStyle(style -> style.withHoverEvent(new HoverEvent.ShowText(Component.literal(finalLore)))));
                                         }
                                     }
                                 }
                             }
                         } else {
-                            armor.append(Text.literal("§cAPI Off"));
-                            items.append(Text.literal("§cAPI Off"));
+                            armor.append(Component.literal("§cAPI Off"));
+                            items.append(Component.literal("§cAPI Off"));
                         }
 
                         for (JsonElement petElement : player.getAsJsonObject("pets_data").getAsJsonArray("pets")) {
@@ -128,7 +128,7 @@ public class DPU {
                         }
                         String finalPb = pb.trim();
 
-                        Shortcuts.queueClientMessage(Text.literal(
+                        Shortcuts.queueClientMessage(Component.literal(
                             "§cName:§b " + matcher.group(1) +
                             "\n§6Cata: §a" + cata +
                             "\n§6Secrets: §c" + secrets +
@@ -137,14 +137,14 @@ public class DPU {
                             "\n§6Spirit: " + pets[1] +
                             "\n\n§6Items:§r\n")
                             .append(items)
-                            .append(Text.literal("\n\n§6Armor:§r\n"))
+                            .append(Component.literal("\n\n§6Armor:§r\n"))
                             .append(armor)
-                            .append(Text.literal("\n\n§6Pet: §r" + pets[0] + "§7 / " + pets[2]))
-                            .append(Text.literal("\n§4[Kick from Party]").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/party kick " + matcher.group(1)))))
-                            .append(Text.literal("        "))
-                            .append(Text.literal("§7[Ignore]").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/ignore add " + matcher.group(1)))))
-                            .append(Text.literal("        "))
-                            .append(Text.literal("§6[PBs]").styled(style -> style.withHoverEvent(new HoverEvent.ShowText(Text.literal(finalPb)))))
+                            .append(Component.literal("\n\n§6Pet: §r" + pets[0] + "§7 / " + pets[2]))
+                            .append(Component.literal("\n§4[Kick from Party]").withStyle(style -> style.withClickEvent(new ClickEvent.RunCommand("/party kick " + matcher.group(1)))))
+                            .append(Component.literal("        "))
+                            .append(Component.literal("§7[Ignore]").withStyle(style -> style.withClickEvent(new ClickEvent.RunCommand("/ignore add " + matcher.group(1)))))
+                            .append(Component.literal("        "))
+                            .append(Component.literal("§6[PBs]").withStyle(style -> style.withHoverEvent(new HoverEvent.ShowText(Component.literal(finalPb)))))
                         );
                     }
                 } catch (Exception e) {

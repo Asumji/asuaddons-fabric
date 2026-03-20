@@ -5,9 +5,9 @@ import io.github.notenoughupdates.moulconfig.annotations.*;
 import me.asumji.gui.move.HudElement;
 import me.asumji.gui.move.MoveGUI;
 import me.asumji.util.Shortcuts;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
 
 public class MiscCategory {
     public static boolean initialized = false;
@@ -18,16 +18,16 @@ public class MiscCategory {
                 new HudElement(
                         "miscCategory", "financeAccordion", "sellValueHudX", "sellValueHudY", "sellValueHudScale", "sellValueAH",
                         (context, x, y, width, height, scale) -> {
-                            context.getMatrices().pushMatrix();
-                            context.getMatrices().scale(scale);
-                            TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+                            context.pose().pushMatrix();
+                            context.pose().scale(scale);
+                            Font textRenderer = Minecraft.getInstance().font;
                             context.fill((x - width / 2), y, (x - width / 2) + width, y + 27, 0xFF5C5C5C);
                             context.fill((x - width / 2), y, (x - width / 2) + width, y + 4, 0xFF444445);
                             context.fill((x - width / 2), y, (x - width / 2) + 4, y + 27, 0xFF444445);
                             context.fill((x - width / 2), y + 27, (x - width / 2) + width, y + 27 - 4, 0xFF444445);
                             context.fill((x - width / 2) + width, y, (x - width / 2) + width - 4, y + 27, 0xFF444445);
-                            context.drawTextWithShadow(textRenderer, Text.literal("§6Total Value: 250.32m"), (x - width / 2) + 7, y + 18 - textRenderer.fontHeight, 0xFFFFFFFF);
-                            context.getMatrices().popMatrix();
+                            context.drawString(textRenderer, Component.literal("§6Total Value: 250.32m"), (x - width / 2) + 7, y + 18 - textRenderer.lineHeight, 0xFFFFFFFF);
+                            context.pose().popMatrix();
                         }, 118, 27
                 )
         );
@@ -112,8 +112,8 @@ public class MiscCategory {
         @ConfigOption(name = "Test Message", desc = "Sends a test message to preview how it looks in chat.")
         @ConfigEditorButton(buttonText = "Click")
         public Runnable testMessage = () -> {
-            Shortcuts.queueClientMessage(Text.literal(bridgeMessage.replace("{usr}", "weeklies").replace("{msg}", "This is a test message.").replace("&","§")));
-            Shortcuts.queueClientMessage(Text.literal(officerMessage.replace("{usr}", "weeklies").replace("{msg}", "This is a test message.").replace("&","§")));
+            Shortcuts.queueClientMessage(Component.literal(bridgeMessage.replace("{usr}", "weeklies").replace("{msg}", "This is a test message.").replace("&","§")));
+            Shortcuts.queueClientMessage(Component.literal(officerMessage.replace("{usr}", "weeklies").replace("{msg}", "This is a test message.").replace("&","§")));
         };
     }
 

@@ -3,8 +3,7 @@ package me.asumji.features;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.minecraft.text.Text;
-
+import net.minecraft.network.chat.Component;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +13,7 @@ public class Autopet {
         ClientReceiveMessageEvents.ALLOW_GAME.register(Autopet::onChatMessage);
     }
 
-    private static boolean onChatMessage(Text text, boolean bool) {
+    private static boolean onChatMessage(Component text, boolean bool) {
         if (!text.getString().matches("§.Autopet §.equipped your §.\\[Lvl \\d+] (§.)([A-z ]+)(?:§. ✦)?§.! §.§.VIEW RULE") || !ConfigManager.getConfig().miscCategory.autoPetAccordion.autopetNotif) return true;
         Matcher matcher = Pattern.compile("§.Autopet §.equipped your §.\\[Lvl \\d+] (§.)([A-z ]+)(?:§. ✦)?§.! §.§.VIEW RULE").matcher(text.getString());
         if (!matcher.find()) return true;

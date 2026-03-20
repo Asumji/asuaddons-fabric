@@ -1,8 +1,7 @@
 package me.asumji.util;
 
 import me.asumji.AsuAddons;
-
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,7 +13,7 @@ public class HTTP {
     public static CompletableFuture<HttpResponse<String>> GetRequest(String url) {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
-            .header("User-Agent", "AsuAddons v" + AsuAddons.MOD_VERSION + " | "+ MinecraftClient.getInstance().getSession().getUsername())
+            .header("User-Agent", "AsuAddons v" + AsuAddons.MOD_VERSION + " | "+ Minecraft.getInstance().getUser().getName())
             .GET()
             .timeout(Duration.ofSeconds(10))
             .build();
@@ -24,7 +23,7 @@ public class HTTP {
     public static void sendWebhookMessage(String webhookData, String url) {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
-            .header("User-Agent", "AsuAddons v" + AsuAddons.MOD_VERSION + " | "+ MinecraftClient.getInstance().getSession().getUsername())
+            .header("User-Agent", "AsuAddons v" + AsuAddons.MOD_VERSION + " | "+ Minecraft.getInstance().getUser().getName())
             .header("Content-type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(webhookData))
             .timeout(Duration.ofSeconds(10))

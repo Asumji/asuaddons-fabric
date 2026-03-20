@@ -5,10 +5,9 @@ import me.asumji.gui.config.ConfigManager;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import java.awt.*;
 
 import static me.asumji.util.Rendering.*;
@@ -21,7 +20,7 @@ public class WitherHitbox {
         ClientTickEvents.START_CLIENT_TICK.register(WitherHitbox::tick);
     }
 
-    private static void tick(MinecraftClient minecraftClient) {
+    private static void tick(Minecraft minecraftClient) {
         if (witherEntity != null && !witherEntity.isAlive()) witherEntity = null;
     }
 
@@ -31,7 +30,7 @@ public class WitherHitbox {
         renderWaypoint(context, FILLED, (float) (witherEntity.getX()-0.5), (float) (witherEntity.getY()-3.5), (float) (witherEntity.getZ()-0.5), (float) (witherEntity.getX()+0.5), (float) (witherEntity.getY()), (float) (witherEntity.getZ()+0.5), effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
     }
 
-    public static void loadEntity(ArmorStandEntity stand) {
+    public static void loadEntity(ArmorStand stand) {
         if (!stand.hasCustomName() || !stand.isInvisible() || !stand.isCustomNameVisible()) return;
         if (!stand.getCustomName().getString().matches("(﴾ ☠♃ Maxor ﴿|﴾ ☠♃ Storm ﴿|﴾ ☠♃ Goldor ﴿|﴾ ☠♃ Necron ﴿)")) return;
         witherEntity = stand;

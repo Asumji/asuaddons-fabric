@@ -5,9 +5,8 @@ import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.HTTP;
 import me.asumji.util.Shortcuts;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.Text;
-
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
 import java.nio.channels.ClosedChannelException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -25,9 +24,9 @@ public class ApiMonitor {
                 if (!(e.getCause().getCause() instanceof ClosedChannelException)) return null;
                 failed = true;
                 AsuAddons.LOGGER.info("AU > API Check failed.\n"+e.getMessage()+"\n"+e.getCause());
-                Shortcuts.queueClientMessage(Text.literal(
+                Shortcuts.queueClientMessage(Component.literal(
                     AsuAddons.MOD_PREFIX + "§cThe API cannot be reached! Some features might not work.\n")
-                    .append(Text.literal("§a§l[CLICK HERE]§r§a to send a report to the dev.").styled(style -> style.withClickEvent(new ClickEvent.RunCommand("/au report "+e.getCause().getCause()))))
+                    .append(Component.literal("§a§l[CLICK HERE]§r§a to send a report to the dev.").withStyle(style -> style.withClickEvent(new ClickEvent.RunCommand("/au report "+e.getCause().getCause()))))
                 );
                 return null;
             });

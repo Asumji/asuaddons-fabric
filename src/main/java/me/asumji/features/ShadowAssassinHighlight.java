@@ -6,17 +6,16 @@ import me.asumji.util.Rendering;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.phys.Vec3;
 import java.awt.*;
 
 public class ShadowAssassinHighlight {
-    public static PlayerEntity entity = null;
+    public static Player entity = null;
     public static final int ShadowAssassinBootsRGB = 6029470;
 
     public static void init() {
@@ -26,22 +25,22 @@ public class ShadowAssassinHighlight {
 
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
         if (entity == null || !ConfigManager.getConfig().dungeonCategory.starredAccordion.saHighlight) return;
-        float tickProgress = MinecraftClient.getInstance().getRenderTickCounter().getTickProgress(false);
-        Vec3d entityPos = entity.getLerpedPos(tickProgress);
+        float tickProgress = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        Vec3 entityPos = entity.getPosition(tickProgress);
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.starredAccordion.saColor).getEffectiveColour();
         if (entity.isInvisible()) Rendering.renderWaypoint(context, Rendering.FILLED, (float) (entityPos.x-0.35), (float) entityPos.y, (float) (entityPos.z-0.35), (float) (entityPos.x+0.35), (float) (entityPos.y+0.45), (float) (entityPos.z+0.35), effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
         else Rendering.renderWaypoint(context, Rendering.FILLED, (float) (entityPos.x-0.35), (float) entityPos.y, (float) (entityPos.z-0.35), (float) (entityPos.x+0.35), (float) (entityPos.y+2), (float) (entityPos.z+0.35), effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
     }
 
-    private static void tick(MinecraftClient minecraftClient) {
+    private static void tick(Minecraft minecraftClient) {
         if (entity != null && !entity.isAlive()) entity = null;
     }
 
-    public static void loadEntity(PlayerEntity player) {
-        ItemStack bootsStack = player.getInventory().getStack(36);
+    public static void loadEntity(Player player) {
+        ItemStack bootsStack = player.getInventory().getItem(36);
         if (bootsStack.isEmpty()) return;
         if (!bootsStack.toString().equals("1 minecraft:leather_boots")) return;
-        DyedColorComponent color = bootsStack.getComponents().get(DataComponentTypes.DYED_COLOR);
+        DyedItemColor color = bootsStack.getComponents().get(DataComponents.DYED_COLOR);
         if (color == null || color.rgb() != ShadowAssassinBootsRGB) return;
         entity = player;
     }

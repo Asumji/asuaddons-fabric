@@ -1,12 +1,15 @@
 package me.asumji.util;
 
-import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import com.google.gson.JsonObject;
 import me.asumji.AsuAddons;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.scoreboard.*;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.world.scores.DisplaySlot;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.ScoreHolder;
+import net.minecraft.world.scores.Scoreboard;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -50,14 +53,14 @@ public class Variables {
 
     public static ObjectArrayList<String> getScoreboard() {
         ObjectArrayList<String> scoreboardList = new ObjectArrayList<>();
-        if (MinecraftClient.getInstance().player == null) return scoreboardList;
-        Scoreboard scoreboard = Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getScoreboard();
-        ScoreboardObjective objective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.FROM_ID.apply(1));
-        for (ScoreHolder scoreHolder : scoreboard.getKnownScoreHolders()) {
-            if (scoreboard.getScoreHolderObjectives(scoreHolder).containsKey(objective)) {
-                Team team = scoreboard.getScoreHolderTeam(scoreHolder.getNameForScoreboard());
+        if (Minecraft.getInstance().player == null) return scoreboardList;
+        Scoreboard scoreboard = Objects.requireNonNull(Minecraft.getInstance().getConnection()).scoreboard();
+        Objective objective = scoreboard.getDisplayObjective(DisplaySlot.BY_ID.apply(1));
+        for (ScoreHolder scoreHolder : scoreboard.getTrackedPlayers()) {
+            if (scoreboard.listPlayerScores(scoreHolder).containsKey(objective)) {
+                PlayerTeam team = scoreboard.getPlayersTeam(scoreHolder.getScoreboardName());
                 if (team != null) {
-                    String strLine = team.getPrefix().getString() + team.getSuffix().getString();
+                    String strLine = team.getPlayerPrefix().getString() + team.getPlayerSuffix().getString();
                     scoreboardList.add(strLine);
                 }
             }
@@ -67,9 +70,9 @@ public class Variables {
 
     public static ObjectArrayList<String> getTablist() {
         ObjectArrayList<String> tabList = new ObjectArrayList<>();
-        for (PlayerListEntry player : Objects.requireNonNull(MinecraftClient.getInstance().getNetworkHandler()).getListedPlayerListEntries()) {
-            if (player.getDisplayName() == null) continue;
-            tabList.add(player.getDisplayName().getString());
+        for (PlayerInfo player : Objects.requireNonNull(Minecraft.getInstance().getConnection()).getListedOnlinePlayers()) {
+            if (player.getTabListDisplayName() == null) continue;
+            tabList.add(player.getTabListDisplayName().getString());
         }
         return tabList;
     }

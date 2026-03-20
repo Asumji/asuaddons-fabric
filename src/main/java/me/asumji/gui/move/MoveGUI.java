@@ -5,12 +5,11 @@ import com.google.gson.JsonObject;
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigGUI;
 import me.asumji.gui.config.ConfigManager;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
@@ -33,7 +32,7 @@ public class MoveGUI extends Screen {
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
     public MoveGUI() {
-        super(Text.literal("Move GUI"));
+        super(Component.literal("Move GUI"));
     }
 
     public JsonElement getProperty(String property, String category, String accordion) {
@@ -47,17 +46,17 @@ public class MoveGUI extends Screen {
         selectedElement = null;
         config = GSON.fromJson(GSON.toJson(ConfigManager.getConfig()), JsonObject.class);
 
-        ButtonWidget buttonWidget = ButtonWidget.builder(Text.literal((showAll ? "Hide" : "Show") + " disabled features"), (btn) -> {
+        Button buttonWidget = Button.builder(Component.literal((showAll ? "Hide" : "Show") + " disabled features"), (btn) -> {
             showAll = !showAll;
-            btn.setMessage(Text.literal((showAll ? "Hide" : "Show") + " disabled features"));
+            btn.setMessage(Component.literal((showAll ? "Hide" : "Show") + " disabled features"));
             selectedElement = null;
-        }).dimensions(this.width / 2 - 70, this.height - 20, 140, 20).build();
+        }).bounds(this.width / 2 - 70, this.height - 20, 140, 20).build();
 
-        this.addDrawableChild(buttonWidget);
+        this.addRenderableWidget(buttonWidget);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
         for (HudElement element : HudElements) {
@@ -74,27 +73,27 @@ public class MoveGUI extends Screen {
             if (element == selectedElement) {
                 context.fill((int) ((x - width / 2f) * scale), (int) (y * scale), (int) ((x + width / 2f) * scale), (int) ((y + height) * scale), 0x33FFFFFF);
 
-                context.drawTextWithShadow(
-                        textRenderer,
+                context.drawString(
+                        font,
                         element.getXName() + ": " + x,
                         (int) ((x - width / 2f) * scale),
-                        (int) (y * scale - textRenderer.fontHeight * 3),
+                        (int) (y * scale - font.lineHeight * 3),
                         0xFFFFFFFF
                 );
 
-                context.drawTextWithShadow(
-                        textRenderer,
+                context.drawString(
+                        font,
                         element.getYName() + ": " + y,
                         (int) ((x - width / 2f) * scale),
-                        (int) (y * scale - textRenderer.fontHeight * 2),
+                        (int) (y * scale - font.lineHeight * 2),
                         0xFFFFFFFF
                 );
 
-                context.drawTextWithShadow(
-                        textRenderer,
+                context.drawString(
+                        font,
                         element.getScaleName() + ": " + df.format(scale),
                         (int) ((x - width / 2f) * scale),
-                        (int) (y * scale - textRenderer.fontHeight),
+                        (int) (y * scale - font.lineHeight),
                         0xFFFFFFFF
                 );
 
@@ -114,7 +113,7 @@ public class MoveGUI extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         for (HudElement element : HudElements) {
             if (!getProperty(element.getToggleName(), element.getCategory(), element.getAccordion()).getAsBoolean() && !showAll) continue;
             int x = getProperty(element.getXName(), element.getCategory(), element.getAccordion()).getAsInt();
@@ -131,7 +130,7 @@ public class MoveGUI extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
+    public boolean mouseDragged(MouseButtonEvent click, double offsetX, double offsetY) {
         if (selectedElement == null) return super.mouseDragged(click, offsetX, offsetY);
         if (click.x() >= this.width / 2f - 70 && click.x() <= this.width / 2f + 70 && click.y() >= this.height - 20 && click.y() <= this.height) return super.mouseDragged(click, offsetX, offsetY);
 
@@ -173,7 +172,7 @@ public class MoveGUI extends Screen {
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         try (FileWriter fw = new FileWriter(CONFIG_FILE)) {
             fw.write(GSON.toJson(config));
         } catch (IOException e) {
@@ -182,6 +181,6 @@ public class MoveGUI extends Screen {
 
         ConfigManager.setConfig(GSON.fromJson(config, ConfigGUI.class));
         config = null;
-        this.client.setScreen(null);
+        this.minecraft.setScreen(null);
     }
 }

@@ -12,9 +12,9 @@ import me.asumji.util.Shortcuts;
 import me.asumji.util.Variables;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,11 +62,11 @@ public class AsuAddons implements ModInitializer {
         ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(AsuAddons::joinWorld);
     }
 
-    private static void joinWorld(MinecraftClient minecraftClient, ClientWorld clientWorld) {
+    private static void joinWorld(Minecraft minecraftClient, ClientLevel clientWorld) {
         if (ConfigManager.getConfig().mainCategory.firstLaunch) {
             LOGGER.info("AsuAddons First Launch!");
             ConfigManager.getConfig().mainCategory.firstLaunch = false;
-            Shortcuts.queueClientMessage(Text.literal("§a" + Shortcuts.getChatBreak("=") +
+            Shortcuts.queueClientMessage(Component.literal("§a" + Shortcuts.getChatBreak("=") +
             "\n§9§lAsuAddons " + MOD_VERSION +
             "\n§bThis seems to be your first time loading the module" +
             "\n§bUse §6\"/au\"§b to open the config menu" +

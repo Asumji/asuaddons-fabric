@@ -7,7 +7,7 @@ import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorButton;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
 import me.asumji.gui.move.HudElement;
 import me.asumji.gui.move.MoveGUI;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class MainCategory {
     public static boolean initialized = false;
@@ -18,15 +18,15 @@ public class MainCategory {
                 new HudElement(
                         "mainCategory", "titleAccordion", "titleHudX", "titleHudY", "titleHudScale", "customTitles",
                         (context, x, y, width, height, scale) -> {
-                            context.getMatrices().pushMatrix();
-                            context.getMatrices().scale(scale);
-                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "Test Title", x, y, 0xFFFFFFFF);
-                            context.getMatrices().popMatrix();
+                            context.pose().pushMatrix();
+                            context.pose().scale(scale);
+                            context.drawCenteredString(Minecraft.getInstance().font, "Test Title", x, y, 0xFFFFFFFF);
+                            context.pose().popMatrix();
 
-                            context.getMatrices().pushMatrix();
-                            context.getMatrices().scale(scale/2);
-                            context.drawCenteredTextWithShadow(MinecraftClient.getInstance().textRenderer, "Test Subtitle", x * 2, (y + 10) * 2, 0xFFFFFFFF);
-                            context.getMatrices().popMatrix();
+                            context.pose().pushMatrix();
+                            context.pose().scale(scale/2);
+                            context.drawCenteredString(Minecraft.getInstance().font, "Test Subtitle", x * 2, (y + 10) * 2, 0xFFFFFFFF);
+                            context.pose().popMatrix();
                         }, 47, 15
                 )
         );
@@ -36,7 +36,7 @@ public class MainCategory {
     @ConfigOption(name = "Move GUI Elements", desc = "Allows you to move the GUI Elements.")
     @ConfigEditorButton(buttonText = "Click")
     public Runnable moveHud = () ->
-            MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(new MoveGUI()));
+            Minecraft.getInstance().schedule(() -> Minecraft.getInstance().setScreen(new MoveGUI()));
 
     @Expose
     public boolean firstLaunch = true;

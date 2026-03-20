@@ -6,9 +6,8 @@ import io.github.notenoughupdates.moulconfig.processor.BuiltinMoulConfigGuis;
 import io.github.notenoughupdates.moulconfig.processor.ConfigProcessorDriver;
 import io.github.notenoughupdates.moulconfig.processor.MoulConfigProcessor;
 import me.asumji.AsuAddons;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -110,6 +109,6 @@ public class ConfigManager {
 
     public static Screen getConfigScreen(Screen screen) {
         openConfigScreen();
-        return MinecraftClient.getInstance().currentScreen;
+        return Minecraft.getInstance().screen;
     }
 }
