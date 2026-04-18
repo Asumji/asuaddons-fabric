@@ -45,6 +45,17 @@ public class DungeonCategory {
                         }, 26, 9
                 )
         );
+        MoveGUI.HudElements.add(
+                new HudElement(
+                        "dungeonCategory", "f7Accordion", "simonSaysHudX", "simonSaysHudY", "simonSaysHudScale", "simonSaysHud",
+                        (context, x, y, width, height, scale) -> {
+                            context.pose().pushMatrix();
+                            context.pose().scale(scale);
+                            context.drawCenteredString(Minecraft.getInstance().font, "§aSS 2/5", x, y, 0xFFFFFFFF);
+                            context.pose().popMatrix();
+                        }, 26, 9
+                )
+        );
         initialized = true;
     }
 
@@ -164,6 +175,30 @@ public class DungeonCategory {
         @ConfigOption(name = "Wither Hitbox Color", desc = "The color of the hitbox.")
         @ConfigEditorColour
         public String witherHitboxColor = ChromaColour.special(0,255,255,0,0);
+
+        @Expose
+        @ConfigOption(name = "Simon Says Solver", desc = "Shows the correct buttons to press in Simon Says.")
+        @ConfigEditorBoolean
+        public boolean simonSaysSolver = false;
+
+        @Expose
+        @ConfigOption(name = "Simon Says Tracker", desc = "Says progress and reset in chat.")
+        @ConfigEditorBoolean
+        public boolean simonSaysTracker = false;
+
+        @Expose
+        @ConfigOption(name = "Simon Says Tracker HUD", desc = "Display Simon Says Progress on the screen.")
+        @ConfigEditorBoolean
+        public boolean simonSaysHud = false;
+
+        @Expose
+        public int simonSaysHudX = 50;
+
+        @Expose
+        public int simonSaysHudY = 50;
+
+        @Expose
+        public float simonSaysHudScale = 2;
     }
 
     @Expose

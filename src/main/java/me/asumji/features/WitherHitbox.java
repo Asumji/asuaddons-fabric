@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.phys.AABB;
+
 import java.awt.*;
 
 import static me.asumji.util.Rendering.*;
@@ -27,7 +29,7 @@ public class WitherHitbox {
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
         if (witherEntity == null || !ConfigManager.getConfig().dungeonCategory.f7Accordion.witherHitbox) return;
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.f7Accordion.witherHitboxColor).getEffectiveColour();
-        renderWaypoint(context, FILLED, (float) (witherEntity.getX()-0.5), (float) (witherEntity.getY()-3.5), (float) (witherEntity.getZ()-0.5), (float) (witherEntity.getX()+0.5), (float) (witherEntity.getY()), (float) (witherEntity.getZ()+0.5), effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
+        renderWaypoint(new AABB(witherEntity.getX()-0.5, witherEntity.getY()-3.5, witherEntity.getZ()-0.5, witherEntity.getX()+0.5, witherEntity.getY(), witherEntity.getZ()+0.5), effectiveColor);
     }
 
     public static void loadEntity(ArmorStand stand) {

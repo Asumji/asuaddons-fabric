@@ -1,6 +1,7 @@
 package me.asumji.features;
 
 import io.github.notenoughupdates.moulconfig.ChromaColour;
+import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Rendering;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -8,9 +9,13 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.gizmos.GizmoStyle;
+import net.minecraft.gizmos.Gizmos;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import java.awt.*;
 
@@ -28,8 +33,8 @@ public class ShadowAssassinHighlight {
         float tickProgress = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
         Vec3 entityPos = entity.getPosition(tickProgress);
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.starredAccordion.saColor).getEffectiveColour();
-        if (entity.isInvisible()) Rendering.renderWaypoint(context, Rendering.FILLED, (float) (entityPos.x-0.35), (float) entityPos.y, (float) (entityPos.z-0.35), (float) (entityPos.x+0.35), (float) (entityPos.y+0.45), (float) (entityPos.z+0.35), effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
-        else Rendering.renderWaypoint(context, Rendering.FILLED, (float) (entityPos.x-0.35), (float) entityPos.y, (float) (entityPos.z-0.35), (float) (entityPos.x+0.35), (float) (entityPos.y+2), (float) (entityPos.z+0.35), effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
+        if (entity.isInvisible()) Rendering.renderWaypoint(new AABB(entityPos.x-0.35, entityPos.y, entityPos.z-0.35, entityPos.x+0.35, entityPos.y+0.45, entityPos.z+0.35), effectiveColor);
+        else Rendering.renderWaypoint(new AABB(entityPos.x-0.35, entityPos.y, entityPos.z-0.35, entityPos.x+0.35, entityPos.y+2, entityPos.z+0.35), effectiveColor);
     }
 
     private static void tick(Minecraft minecraftClient) {

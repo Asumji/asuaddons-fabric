@@ -30,7 +30,7 @@ public class LividTimer {
         int ticksLeft = Variables.TickTimers.get("LividTimer");
         Matrix3x2fStack matrices = drawContext.pose();
         matrices.pushMatrix();
-        matrices.scale(ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudScale,ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudScale);
+        matrices.scale(ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudScale);
         drawContext.drawCenteredString(Minecraft.getInstance().font, Component.literal(df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudX, ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTimerHudY, 0xFFFFFFFF);
         matrices.popMatrix();
         if (ticksLeft == 0 && !timerDone) {

@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import java.awt.*;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import static me.asumji.util.Rendering.*;
 public class LividSolver {
     public static boolean spawning = false;
     public static Map<String, String> blockToLivid = new HashMap<>();
-    public static Map<String, Integer> lividToColor = new HashMap<>();
+    public static Map<String, Color> lividToColor = new HashMap<>();
     public static int correctLividId = 0;
 
     public static void init() {
@@ -38,15 +39,15 @@ public class LividSolver {
         blockToLivid.put("Gray Wool", "Doctor Livid");
         blockToLivid.put("White Wool", "Vendetta Livid");
 
-        lividToColor.put("Hockey Livid", 0xFF5555);
-        lividToColor.put("Arcade Livid", 0xFFFF55);
-        lividToColor.put("Smile Livid", 0x55FF55);
-        lividToColor.put("Frog Livid", 0x00AA00);
-        lividToColor.put("Scream Livid", 0x5555FF);
-        lividToColor.put("Crossed Livid", 0xFF55FF);
-        lividToColor.put("Purple Livid", 0xAA00AA);
-        lividToColor.put("Doctor Livid", 0xAAAAAA);
-        lividToColor.put("Vendetta Livid", 0xFFFFFF);
+        lividToColor.put("Hockey Livid", new Color(0xFF5555));
+        lividToColor.put("Arcade Livid", new Color(0xFFFF55));
+        lividToColor.put("Smile Livid", new Color(0x55FF55));
+        lividToColor.put("Frog Livid", new Color(0x00AA00));
+        lividToColor.put("Scream Livid", new Color(0x5555FF));
+        lividToColor.put("Crossed Livid", new Color(0xFF55FF));
+        lividToColor.put("Purple Livid", new Color(0xAA00AA));
+        lividToColor.put("Doctor Livid", new Color(0xAAAAAA));
+        lividToColor.put("Vendetta Livid", new Color(0xFFFFFF));
     }
 
     private static void extractAndDrawWaypoint(WorldRenderContext context) {
@@ -56,12 +57,12 @@ public class LividSolver {
             return;
         }
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverColor).getEffectiveColour();
-        renderWaypoint(context, FILLED, (float) (correctLividEntity.getX()-0.5), (float) (correctLividEntity.getY()), (float) (correctLividEntity.getZ()-0.5), (float) (correctLividEntity.getX()+0.5), (float) (correctLividEntity.getY()+2), (float) (correctLividEntity.getZ()+0.5), ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverAdaptColor ? lividToColor.get(correctLividEntity.getName().getString()) : effectiveColor.getRGB(), effectiveColor.getAlpha() / 255f);
+        renderWaypoint(new AABB(correctLividEntity.getX()-0.5, correctLividEntity.getY(), correctLividEntity.getZ()-0.5, correctLividEntity.getX()+0.5, correctLividEntity.getY()+2, correctLividEntity.getZ()+0.5), ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverAdaptColor ? lividToColor.get(correctLividEntity.getName().getString()) : effectiveColor);
 
         float tickProgress = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
         Vec3 eyeVector = Minecraft.getInstance().player.getPosition(tickProgress).add(Minecraft.getInstance().player.getViewVector(tickProgress));
         Vec3 lividPos = correctLividEntity.getPosition(tickProgress);
-        if (ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTracer) renderLine(context, FILLED, 0.02, (float) eyeVector.x, (float) (eyeVector.y + 1.61), (float) eyeVector.z, (float) lividPos.x, (float) (lividPos.y+1), (float) lividPos.z, ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverAdaptColor ? lividToColor.get(correctLividEntity.getName().getString()) : effectiveColor.getRGB(), 1);
+        if (ConfigManager.getConfig().dungeonCategory.f5Accordion.lividTracer) renderLine(4F, new Vec3(eyeVector.x, eyeVector.y + 1.61, eyeVector.z), new Vec3(lividPos.x, lividPos.y+1, lividPos.z), ConfigManager.getConfig().dungeonCategory.f5Accordion.lividSolverAdaptColor ? lividToColor.get(correctLividEntity.getName().getString()) : effectiveColor);
     }
 
     private static boolean onChatMessage(Component text, boolean b) {
