@@ -63,7 +63,7 @@ public class SimonSays {
             if (ticks <= 0) {
                 failed = true;
                 displayStage = -1;
-                Minecraft.getInstance().player.connection.sendCommand("pc SS Failed!");
+                if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) Minecraft.getInstance().player.connection.sendCommand("pc SS Failed!");
             }
         }
     }
@@ -102,7 +102,7 @@ public class SimonSays {
     }
 
     public static void blockUpdate(BlockPos pos, BlockState state) {
-        if (!inP3S1 || Minecraft.getInstance().player == null || !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) return;
+        if (!inP3S1 || Minecraft.getInstance().player == null || (!ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysSolver && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHud)) return;
         if (state.getBlock().equals(Blocks.STONE_BUTTON) && !clicked) {
             clicked = true;
             if (pos.getX() != 110) return;
@@ -112,23 +112,20 @@ public class SimonSays {
                     buttonOrder = ArrayUtils.remove(buttonOrder, 0);
                 }
             } else if (pos.equals(new BlockPos(110, 121, 91))) {
-                //inButtons = true;
                 displayStage = -1;
                 buttonOrder = new BlockPos[]{};
             }
         } else if (state.getBlock().equals(Blocks.SEA_LANTERN)) {
             if (pos.getX() != 111) return;
             if (pos.getY() < 120 || pos.getY() > 123 || pos.getZ() < 92 || pos.getZ() > 95) return;
-            //AsuAddons.LOGGER.info(String.valueOf(inButtons));
             if (Minecraft.getInstance().level.getBlockState(new BlockPos(new BlockPos(110, 120, 92))).getBlock().equals(Blocks.STONE_BUTTON)) {
-                //inButtons = false;
                 buttonOrder = new BlockPos[]{};
                 displayStage = tmpLength-1;
-                if (displayStage > 0 && displayStage < 5) Minecraft.getInstance().player.connection.sendCommand("pc SS " + displayStage + "/5!");
+                if (displayStage > 0 && displayStage < 5 && ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) Minecraft.getInstance().player.connection.sendCommand("pc SS " + displayStage + "/5!");
             }
             buttonOrder = ArrayUtils.add(buttonOrder, new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
             ticks = 20;
-            if (failed) Minecraft.getInstance().player.connection.sendCommand("pc SS Restarted!");
+            if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) if (failed) Minecraft.getInstance().player.connection.sendCommand("pc SS Restarted!");
             failed = false;
         }
     }
@@ -136,6 +133,6 @@ public class SimonSays {
     public static void loadEntity(ArmorStand stand) {
         if (!stand.getName().getString().equals("Active") || stand.getX() != 110.5 || stand.getY() != 119 || stand.getZ() != 91.5) return;
         inP3S1 = false;
-        Minecraft.getInstance().player.connection.sendCommand("pc SS Completed!");
+        if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) Minecraft.getInstance().player.connection.sendCommand("pc SS Completed!");
     }
 }
