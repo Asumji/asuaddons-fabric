@@ -9,8 +9,8 @@
     "requireAnnotations": true
   },
   "client": [
-    "ClientPlayNetworkHandlerMixin",
-    "ClientConnectionMixin",
+    "ConnectionMixin",
+    "ClientPacketListenerMixin",
     "PlayerManagerMixin"
   ]
 }
