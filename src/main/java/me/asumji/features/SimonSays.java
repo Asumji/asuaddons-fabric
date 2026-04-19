@@ -63,7 +63,7 @@ public class SimonSays {
             if (ticks <= 0) {
                 failed = true;
                 displayStage = -1;
-                if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) Minecraft.getInstance().player.connection.sendCommand("pc SS Failed!");
+                if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysAlerts) Minecraft.getInstance().player.connection.sendCommand("pc SS Failed!");
             }
         }
     }
@@ -102,7 +102,7 @@ public class SimonSays {
     }
 
     public static void blockUpdate(BlockPos pos, BlockState state) {
-        if (!inP3S1 || Minecraft.getInstance().player == null || (!ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysSolver && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHud)) return;
+        if (!inP3S1 || Minecraft.getInstance().player == null || (!ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysSolver && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHud && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysAlerts)) return;
         if (state.getBlock().equals(Blocks.STONE_BUTTON) && !clicked) {
             clicked = true;
             if (pos.getX() != 110) return;
@@ -125,7 +125,7 @@ public class SimonSays {
             }
             buttonOrder = ArrayUtils.add(buttonOrder, new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
             ticks = 20;
-            if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) if (failed) Minecraft.getInstance().player.connection.sendCommand("pc SS Restarted!");
+            if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysAlerts && failed) Minecraft.getInstance().player.connection.sendCommand("pc SS Restarted!");
             failed = false;
         }
     }
@@ -133,6 +133,6 @@ public class SimonSays {
     public static void loadEntity(ArmorStand stand) {
         if (!stand.getName().getString().equals("Active") || stand.getX() != 110.5 || stand.getY() != 119 || stand.getZ() != 91.5) return;
         inP3S1 = false;
-        if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) Minecraft.getInstance().player.connection.sendCommand("pc SS Completed!");
+        if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysAlerts) Minecraft.getInstance().player.connection.sendCommand("pc SS Completed!");
     }
 }

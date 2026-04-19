@@ -53,7 +53,7 @@ public class DungeonCategory {
                             context.pose().scale(scale);
                             context.drawCenteredString(Minecraft.getInstance().font, "§aSS 2/5", x, y, 0xFFFFFFFF);
                             context.pose().popMatrix();
-                        }, 26, 9
+                        }, 28, 9
                 )
         );
         initialized = true;
@@ -182,9 +182,14 @@ public class DungeonCategory {
         public boolean simonSaysSolver = false;
 
         @Expose
-        @ConfigOption(name = "Simon Says Tracker", desc = "Says progress and reset in chat.")
+        @ConfigOption(name = "Simon Says Tracker", desc = "Says progress in chat.")
         @ConfigEditorBoolean
         public boolean simonSaysTracker = false;
+
+        @Expose
+        @ConfigOption(name = "Simon Says Alerts", desc = "Says started/reset in chat.")
+        @ConfigEditorBoolean
+        public boolean simonSaysAlerts = false;
 
         @Expose
         @ConfigOption(name = "Simon Says Tracker HUD", desc = "Display Simon Says Progress on the screen.")

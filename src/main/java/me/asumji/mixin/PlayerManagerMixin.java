@@ -1,5 +1,6 @@
 package me.asumji.mixin;
 
+import me.asumji.features.SimonSays;
 import me.asumji.gui.config.ConfigManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerManagerMixin {
     @Inject(at = @At("HEAD"), method = "remove")
     private void remove(ServerPlayer player, CallbackInfo ci) {
+        SimonSays.inP3S1 = false;
         ConfigManager.saveConfig("leave");
     }
 }

@@ -54,7 +54,7 @@ public class MelodyDisplay {
         }
 
         matcher = Pattern.compile("Party > (?:\\[.*] )?(.*): .* (\\d/\\d|\\d+%)").matcher(text.getString().replaceAll("§.",""));
-        if (matcher.find()) {
+        if (matcher.find() && !text.getString().contains("SS")) {
             String name = String.valueOf(matcher.group(1));
             String progress = String.valueOf(matcher.group(2));
             String role = "";
