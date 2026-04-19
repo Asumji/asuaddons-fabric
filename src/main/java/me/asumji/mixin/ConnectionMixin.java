@@ -43,6 +43,7 @@ public class ConnectionMixin {
         } else if (packet instanceof ClientboundAnimatePacket animatePacket) {
             if (animatePacket.getAction() != 0 || !SimonSays.inP3S1 || animatePacket.getId() == Minecraft.getInstance().player.getId()) return;
             Entity ent = Minecraft.getInstance().level.getEntity(animatePacket.getId());
+            if (ent == null) return;
             float range = 6.0F;
             Vec3 eye = ent.getEyePosition(1.0F);
             Vec3 look = ent.getLookAngle();
