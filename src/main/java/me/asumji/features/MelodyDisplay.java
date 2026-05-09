@@ -34,7 +34,7 @@ public class MelodyDisplay {
     }
 
     private static boolean onChatMessage(Component text, boolean b) {
-        Matcher matcher = Pattern.compile("\\[BOSS] Storm: At least my son died by your hands\\.").matcher(text.getString());
+        Matcher matcher = Pattern.compile("\\[BOSS] Goldor: Who dares trespass into my domain\\?").matcher(text.getString());
         if (matcher.find()) {
             section = 1;
             return true;

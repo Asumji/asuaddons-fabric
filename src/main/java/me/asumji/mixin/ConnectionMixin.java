@@ -41,6 +41,7 @@ public class ConnectionMixin {
         } else if (packet instanceof ClientboundBlockUpdatePacket blockPacket) {
             SimonSays.blockUpdate(blockPacket.getPos(), blockPacket.getBlockState());
         } else if (packet instanceof ClientboundAnimatePacket animatePacket) {
+            //this breaks for bigger buttons and auto ss I believe and thus hate cheater :angry:
             if (animatePacket.getAction() != 0 || !SimonSays.inP3S1 || animatePacket.getId() == Minecraft.getInstance().player.getId()) return;
             Entity ent = Minecraft.getInstance().level.getEntity(animatePacket.getId());
             if (ent == null) return;

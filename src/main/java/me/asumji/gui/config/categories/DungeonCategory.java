@@ -187,11 +187,6 @@ public class DungeonCategory {
         public boolean simonSaysTracker = false;
 
         @Expose
-        @ConfigOption(name = "Simon Says Alerts", desc = "Says started/reset in chat.")
-        @ConfigEditorBoolean
-        public boolean simonSaysAlerts = false;
-
-        @Expose
         @ConfigOption(name = "Simon Says Tracker HUD", desc = "Display Simon Says Progress on the screen.")
         @ConfigEditorBoolean
         public boolean simonSaysHud = false;
@@ -204,6 +199,11 @@ public class DungeonCategory {
 
         @Expose
         public float simonSaysHudScale = 2;
+
+        @Expose
+        @ConfigOption(name = "Simon Says Block Clicks Timer", desc = "Blocks start button clicks after a certain duration of milliseconds.\nLeave at 0 to disable.\n450ms-500ms is recommended.")
+        @ConfigEditorSlider(minValue = 0, maxValue = 1000, minStep = 10)
+        public int simonSaysStopClicks = 0;
     }
 
     @Expose

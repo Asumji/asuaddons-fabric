@@ -11,6 +11,7 @@
   "client": [
     "ConnectionMixin",
     "ClientPacketListenerMixin",
-    "PlayerManagerMixin"
+    "PlayerManagerMixin",
+    "MinecraftMixin"
   ]
 }

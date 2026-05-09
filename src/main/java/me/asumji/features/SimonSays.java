@@ -2,12 +2,15 @@ package me.asumji.features;
 
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
+import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,25 +18,32 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import org.apache.commons.lang3.ArrayUtils;
 import org.joml.Matrix3x2fStack;
 
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static me.asumji.util.Rendering.renderWaypoint;
 
 public class SimonSays {
     public static boolean inP3S1 = false;
+    public static boolean ssLoaded = false;
     public static int tmpLength = 0;
     public static BlockPos[] buttonOrder = {};
     public static int displayStage = -1;
     public static boolean clicked;
     public static int ticks = 20;
     public static boolean failed = false;
+    public static BlockPos startBtnPos = new BlockPos(110, 121, 91);
+    public static BlockPos ssBtnPos = new BlockPos(110, 120, 92);
+    public static boolean blockStartClicks = false;
 
     public static void init() {
         ClientReceiveMessageEvents.ALLOW_GAME.register(SimonSays::onChatMessage);
@@ -55,15 +65,34 @@ public class SimonSays {
         clicked = false;
     }
 
+    public static void p3Started() {
+        if (ssLoaded) return;
+        ssLoaded = true;
+        if(ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysStopClicks < 1) return;
+        AsuAddons.SCHEDULER.schedule(() -> {
+            blockStartClicks = true;
+            Shortcuts.queueClientMessage(Component.literal(AsuAddons.MOD_PREFIX + "§cBlocking start button clicks now!"));
+        }, ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysStopClicks, TimeUnit.MILLISECONDS);
+
+        AsuAddons.SCHEDULER.schedule(() -> {
+            blockStartClicks = false;
+            Shortcuts.queueClientMessage(Component.literal(AsuAddons.MOD_PREFIX + "§aAllowing start button clicks now!"));
+        }, ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysStopClicks*4L, TimeUnit.MILLISECONDS);
+    }
+
+    public static boolean blockInteract(BlockHitResult blockHitResult) {
+        if (!inP3S1 || Minecraft.getInstance().player == null || !blockHitResult.getBlockPos().immutable().equals(startBtnPos)) return false;
+        return blockStartClicks;
+    }
+
     public static void serverTick() {
-        if (failed || !inP3S1) return;
-        if (Minecraft.getInstance().level.getBlockState(new BlockPos(new BlockPos(110, 120, 92))).getBlock().equals(Blocks.AIR)) {
+        if (failed || !inP3S1 || Minecraft.getInstance().level == null || Minecraft.getInstance().player == null) return;
+        if (Minecraft.getInstance().level.getBlockState(ssBtnPos).getBlock().equals(Blocks.AIR)) {
             tmpLength = buttonOrder.length+1;
             ticks--;
             if (ticks <= 0) {
                 failed = true;
                 displayStage = -1;
-                if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysAlerts) Minecraft.getInstance().player.connection.sendCommand("pc SS Failed!");
             }
         }
     }
@@ -81,28 +110,29 @@ public class SimonSays {
 
     private static boolean onChatMessage(Component text, boolean b) {
        Matcher matcher = Pattern.compile("\\[BOSS] Storm: At least my son died by your hands\\.").matcher(text.getString());
-        if (matcher.find()) {
+       if (matcher.find()) {
+            ssLoaded = false;
             inP3S1 = true;
             displayStage = -1;
             buttonOrder = new BlockPos[]{};
-        }
-        matcher = Pattern.compile("(\\(7/7\\)|\\(8/8\\))").matcher(text.getString());
-        if (matcher.find() && inP3S1) {
+       }
+       matcher = Pattern.compile("(\\(7/7\\)|\\(8/8\\))").matcher(text.getString());
+       if (matcher.find() && inP3S1) {
             inP3S1 = false;
             displayStage = -1;
             buttonOrder = new BlockPos[]{};
-        }
-        matcher = Pattern.compile("Sending to server .*\\.\\.\\.").matcher(text.getString());
-        if (matcher.find()) {
+       }
+       matcher = Pattern.compile("Sending to server .*\\.\\.\\.").matcher(text.getString());
+       if (matcher.find()) {
             inP3S1 = false;
             displayStage = -1;
             buttonOrder = new BlockPos[]{};
-        }
-        return true;
+       }
+       return true;
     }
 
     public static void blockUpdate(BlockPos pos, BlockState state) {
-        if (!inP3S1 || Minecraft.getInstance().player == null || (!ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysSolver && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHud && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysAlerts)) return;
+        if (!inP3S1 || Minecraft.getInstance().player == null || Minecraft.getInstance().level == null || (!ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysSolver && !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHud)) return;
         if (state.getBlock().equals(Blocks.STONE_BUTTON) && !clicked) {
             clicked = true;
             if (pos.getX() != 110) return;
@@ -111,28 +141,29 @@ public class SimonSays {
                 if (buttonOrder[0].equals(new BlockPos(pos.getX()+1, pos.getY(), pos.getZ()))) {
                     buttonOrder = ArrayUtils.remove(buttonOrder, 0);
                 }
-            } else if (pos.equals(new BlockPos(110, 121, 91))) {
+            } else if (pos.equals(startBtnPos)) {
                 displayStage = -1;
                 buttonOrder = new BlockPos[]{};
             }
         } else if (state.getBlock().equals(Blocks.SEA_LANTERN)) {
             if (pos.getX() != 111) return;
             if (pos.getY() < 120 || pos.getY() > 123 || pos.getZ() < 92 || pos.getZ() > 95) return;
-            if (Minecraft.getInstance().level.getBlockState(new BlockPos(new BlockPos(110, 120, 92))).getBlock().equals(Blocks.STONE_BUTTON)) {
+            if (Minecraft.getInstance().level.getBlockState(ssBtnPos).getBlock().equals(Blocks.STONE_BUTTON)) {
                 buttonOrder = new BlockPos[]{};
                 displayStage = tmpLength-1;
                 if (displayStage > 0 && displayStage < 5 && ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysTracker) Minecraft.getInstance().player.connection.sendCommand("pc SS " + displayStage + "/5!");
             }
             buttonOrder = ArrayUtils.add(buttonOrder, new BlockPos(pos.getX(), pos.getY(), pos.getZ()));
             ticks = 20;
-            if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysAlerts && failed) Minecraft.getInstance().player.connection.sendCommand("pc SS Restarted!");
             failed = false;
         }
     }
 
     public static void loadEntity(ArmorStand stand) {
+        if (Minecraft.getInstance().player == null) return;
+        if (stand.getName().getString().equals("Inactive") && stand.getX() == 110.5 && stand.getY() == 119 && stand.getZ() == 91.5) p3Started();
         if (!stand.getName().getString().equals("Active") || stand.getX() != 110.5 || stand.getY() != 119 || stand.getZ() != 91.5) return;
         inP3S1 = false;
-        if (ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysAlerts) Minecraft.getInstance().player.connection.sendCommand("pc SS Completed!");
+        blockStartClicks = false;
     }
 }
