@@ -1,9 +1,9 @@
 plugins {
-	id 'fabric-loom' version "${loom_version}"
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
-version = "1.7.0"
+version = "1.8.0"
 group = project.maven_group
 
 base {
@@ -27,13 +27,12 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation("org.notenoughupdates.moulconfig:${project.moulconfig_flavour}:${project.moulconfig_version}")
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "org.notenoughupdates.moulconfig:${project.moulconfig_flavour}:${project.moulconfig_version}"
     include "org.notenoughupdates.moulconfig:${project.moulconfig_flavour}:${project.moulconfig_version}"
-    modImplementation("net.fabricmc:fabric-language-kotlin:${project.flk_version}")
-    modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+    implementation "net.fabricmc:fabric-language-kotlin:${project.flk_version}"
+    implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	
 }
 
@@ -48,12 +47,12 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {
@@ -64,7 +63,7 @@ jar {
 	}
 }
 
-tasks.named("remapJar") {
+tasks.named("jar") {
     archiveVersion.set("")
     project.base.archivesName.set("asuaddons-${project.minecraft_version}-9999999")
 }

@@ -3,7 +3,7 @@ package me.asumji.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -26,7 +26,7 @@ public class ConfigCommand {
     }
 
     private static void configCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext registryAccess) {
-        dispatcher.register(ClientCommandManager.literal(AsuAddons.NAMESPACE).executes(context -> {
+        dispatcher.register(ClientCommands.literal(AsuAddons.NAMESPACE).executes(context -> {
             openGUI = true;
             return 1;
         }));

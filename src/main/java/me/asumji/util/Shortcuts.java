@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundClearTitlesPacket;
@@ -26,7 +26,7 @@ public class Shortcuts {
         HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.fromNamespaceAndPath(AsuAddons.MOD_ID, "titlehud"), Shortcuts::renderHud);
     }
 
-    private static void renderHud(GuiGraphics context, DeltaTracker renderTickCounter) {
+    private static void renderHud(GuiGraphicsExtractor context, DeltaTracker renderTickCounter) {
         if (Minecraft.getInstance().player == null) return;
         float scale = ConfigManager.getConfig().mainCategory.titleAccordion.titleHudScale;
         int x = ConfigManager.getConfig().mainCategory.titleAccordion.titleHudX;
@@ -37,14 +37,14 @@ public class Shortcuts {
             if (title.getStayTicks() <= 0) titles = ArrayUtils.remove(titles, ArrayUtils.indexOf(titles, title));
             context.pose().pushMatrix();
             context.pose().scale(scale);
-            context.drawCenteredString(Minecraft.getInstance().font, title.getTitle(), x, y + offset, 0xFFFFFFFF);
+            context.centeredText(Minecraft.getInstance().font, title.getTitle(), x, y + offset, 0xFFFFFFFF);
             context.pose().popMatrix();
             offset += 10;
 
             if (title.getSubtitle().isEmpty()) continue;
             context.pose().pushMatrix();
             context.pose().scale(scale/2);
-            context.drawCenteredString(Minecraft.getInstance().font, title.getSubtitle(), x * 2, (y + offset) * 2, 0xFFFFFFFF);
+            context.centeredText(Minecraft.getInstance().font, title.getSubtitle(), x * 2, (y + offset) * 2, 0xFFFFFFFF);
             context.pose().popMatrix();
             offset += 10;
         }
@@ -59,7 +59,7 @@ public class Shortcuts {
         Component[] tempMsgs = messages;
         messages = new Component[]{};
         for (Component message : tempMsgs) {
-            Minecraft.getInstance().player.displayClientMessage(message, false);
+            Minecraft.getInstance().player.sendSystemMessage(message);
         }
     }
 

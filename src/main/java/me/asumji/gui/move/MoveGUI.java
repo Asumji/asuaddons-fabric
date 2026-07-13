@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigGUI;
 import me.asumji.gui.config.ConfigManager;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -56,8 +56,8 @@ public class MoveGUI extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractRenderState(context, mouseX, mouseY, delta);
 
         for (HudElement element : HudElements) {
             if (!getProperty(element.getToggleName(), element.getCategory(), element.getAccordion()).getAsBoolean() && !showAll) continue;
@@ -73,7 +73,7 @@ public class MoveGUI extends Screen {
             if (element == selectedElement) {
                 context.fill((int) ((x - width / 2f) * scale), (int) (y * scale), (int) ((x + width / 2f) * scale), (int) ((y + height) * scale), 0x33FFFFFF);
 
-                context.drawString(
+                context.text(
                         font,
                         element.getXName() + ": " + x,
                         (int) ((x - width / 2f) * scale),
@@ -81,7 +81,7 @@ public class MoveGUI extends Screen {
                         0xFFFFFFFF
                 );
 
-                context.drawString(
+                context.text(
                         font,
                         element.getYName() + ": " + y,
                         (int) ((x - width / 2f) * scale),
@@ -89,7 +89,7 @@ public class MoveGUI extends Screen {
                         0xFFFFFFFF
                 );
 
-                context.drawString(
+                context.text(
                         font,
                         element.getScaleName() + ": " + df.format(scale),
                         (int) ((x - width / 2f) * scale),

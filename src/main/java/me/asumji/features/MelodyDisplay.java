@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
@@ -24,12 +24,12 @@ public class MelodyDisplay {
         HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.fromNamespaceAndPath(AsuAddons.MOD_ID, "melodyhud"), MelodyDisplay::renderHud);
     }
 
-    private static void renderHud(GuiGraphics drawContext, DeltaTracker renderTickCounter) {
+    private static void renderHud(GuiGraphicsExtractor drawContext, DeltaTracker renderTickCounter) {
         if (!ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyDisplay || section == 0) return;
         Matrix3x2fStack matrices = drawContext.pose();
         matrices.pushMatrix();
         matrices.scale(ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudScale,ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudScale);
-        drawContext.drawCenteredString(Minecraft.getInstance().font,Component.literal(melodyProgress),ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudX,ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudY,0xFFFFFFFF);
+        drawContext.centeredText(Minecraft.getInstance().font,Component.literal(melodyProgress),ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudX,ConfigManager.getConfig().dungeonCategory.f7Accordion.melodyHudY,0xFFFFFFFF);
         matrices.popMatrix();
     }
 

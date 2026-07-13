@@ -18,7 +18,7 @@ public class DungeonCategory {
                         (context, x, y, width, height, scale) -> {
                             context.pose().pushMatrix();
                             context.pose().scale(scale);
-                            context.drawCenteredString(Minecraft.getInstance().font, "0.00s", x, y, 0xFFFFFFFF);
+                            context.centeredText(Minecraft.getInstance().font, "0.00s", x, y, 0xFFFFFFFF);
                             context.pose().popMatrix();
                         }, 26, 9
                 )
@@ -29,7 +29,7 @@ public class DungeonCategory {
                         (context, x, y, width, height, scale) -> {
                             context.pose().pushMatrix();
                             context.pose().scale(scale);
-                            context.drawCenteredString(Minecraft.getInstance().font, "§bweeklies (M) §e3/4", x, y, 0xFFFFFFFF);
+                            context.centeredText(Minecraft.getInstance().font, "§bweeklies (M) §e3/4", x, y, 0xFFFFFFFF);
                             context.pose().popMatrix();
                         }, 82, 9
                 )
@@ -40,7 +40,7 @@ public class DungeonCategory {
                         (context, x, y, width, height, scale) -> {
                             context.pose().pushMatrix();
                             context.pose().scale(scale);
-                            context.drawCenteredString(Minecraft.getInstance().font, "§55.00s", x, y, 0xFFFFFFFF);
+                            context.centeredText(Minecraft.getInstance().font, "§55.00s", x, y, 0xFFFFFFFF);
                             context.pose().popMatrix();
                         }, 26, 9
                 )
@@ -51,7 +51,7 @@ public class DungeonCategory {
                         (context, x, y, width, height, scale) -> {
                             context.pose().pushMatrix();
                             context.pose().scale(scale);
-                            context.drawCenteredString(Minecraft.getInstance().font, "§aSS 2/5", x, y, 0xFFFFFFFF);
+                            context.centeredText(Minecraft.getInstance().font, "§aSS 2/5", x, y, 0xFFFFFFFF);
                             context.pose().popMatrix();
                         }, 28, 9
                 )

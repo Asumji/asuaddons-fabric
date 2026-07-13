@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractStringWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
@@ -42,7 +42,7 @@ public class SellValue {
                                 totalValue += Integer.parseInt(matcher.group(1).replace(",", ""));
                         }
                     }
-                    Screens.getButtons(containerScreen).add(new CustomWidget(ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudX, ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudY, 130, 27, Component.empty(), Minecraft.getInstance().font));
+                    Screens.getWidgets(containerScreen).add(new CustomWidget(ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudX, ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudY, 130, 27, Component.empty(), Minecraft.getInstance().font));
                 } else if (screen.getTitle().getString().matches("(?:Co-op )?Bazaar Orders") && ConfigManager.getConfig().miscCategory.financeAccordion.sellValueBZ) {
                     for (ItemStack item : containerScreen.getMenu().getContainer()) {
                         if (!item.getHoverName().getString().startsWith("SELL") || item.getComponents().get(DataComponents.LORE) == null) continue;
@@ -54,7 +54,7 @@ public class SellValue {
                                 totalValue += Number.expandNumber(matcher.group(1)).intValue();
                         }
                     }
-                    Screens.getButtons(containerScreen).add(new CustomWidget(ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudX, ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudY, 130, 27, Component.empty(), Minecraft.getInstance().font));
+                    Screens.getWidgets(containerScreen).add(new CustomWidget(ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudX, ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudY, 130, 27, Component.empty(), Minecraft.getInstance().font));
                 }
             }, 100, TimeUnit.MILLISECONDS);
         }
@@ -72,7 +72,7 @@ public class SellValue {
         }
 
         @Override
-        public void renderWidget(GuiGraphics context, int mouseX, int mouseY, float delta) {
+        public void extractWidgetRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
             if (totalValue <= 0) return;
             context.pose().pushMatrix();
             context.pose().scale(ConfigManager.getConfig().miscCategory.financeAccordion.sellValueHudScale);
@@ -85,7 +85,7 @@ public class SellValue {
             context.fill((getX() - width / 2), getY(), (getX() - width / 2) + 4, getY() + this.height, 0xFF444445);
             context.fill((getX() - width / 2), getY() + this.height, (getX() - width / 2) + width, getY() + this.height - 4, 0xFF444445);
             context.fill((getX() - width / 2) + width, getY(), (getX() - width / 2) + width - 4, getY() + this.height, 0xFF444445);
-            context.drawString(textRenderer, Component.literal("§6Total Value: " + Number.shortenNumber(BigDecimal.valueOf(totalValue))), (getX() - width / 2) + 7, getY() + 18 - textRenderer.lineHeight, 0xFFFFFFFF);
+            context.text(textRenderer, Component.literal("§6Total Value: " + Number.shortenNumber(BigDecimal.valueOf(totalValue))), (getX() - width / 2) + 7, getY() + 18 - textRenderer.lineHeight, 0xFFFFFFFF);
 
             context.pose().popMatrix();
         }

@@ -3,8 +3,8 @@ package me.asumji.features;
 import io.github.notenoughupdates.moulconfig.ChromaColour;
 import me.asumji.gui.config.ConfigManager;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -27,7 +27,7 @@ public class LividSolver {
 
     public static void init() {
         ClientReceiveMessageEvents.ALLOW_GAME.register(LividSolver::onChatMessage);
-        WorldRenderEvents.BEFORE_TRANSLUCENT.register(LividSolver::extractAndDrawWaypoint);
+        LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(LividSolver::extractAndDrawWaypoint);
 
         blockToLivid.put("Red Wool", "Hockey Livid");
         blockToLivid.put("Yellow Wool", "Arcade Livid");
@@ -50,7 +50,7 @@ public class LividSolver {
         lividToColor.put("Vendetta Livid", new Color(0xFFFFFF));
     }
 
-    private static void extractAndDrawWaypoint(WorldRenderContext context) {
+    private static void extractAndDrawWaypoint(LevelRenderContext context) {
         Entity correctLividEntity = Minecraft.getInstance().level.getEntity(correctLividId);
         if (correctLividEntity == null) {
             correctLividId = 0;

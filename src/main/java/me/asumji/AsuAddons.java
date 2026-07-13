@@ -11,7 +11,7 @@ import me.asumji.features.*;
 import me.asumji.util.Shortcuts;
 import me.asumji.util.Variables;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
@@ -26,8 +26,8 @@ public class AsuAddons implements ModInitializer {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 	public static final String MOD_ID = "asuaddons";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final String MOD_VERSION = "1.7.0";
-    public static final String MINECRAFT_VERSION = "1.21.11";
+    public static final String MOD_VERSION = "1.8.0";
+    public static final String MINECRAFT_VERSION = "26.1";
     public static final String NAMESPACE = "au";
     public static final String API_PROXY = "http://asumji.duckdns.org/";
     public static final String MOD_PREFIX = "§6AU > §r";
@@ -60,7 +60,7 @@ public class AsuAddons implements ModInitializer {
         MoveCommand.init();
         SimonSays.init();
 
-        ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register(AsuAddons::joinWorld);
+        ClientLevelEvents.AFTER_CLIENT_LEVEL_CHANGE.register(AsuAddons::joinWorld);
     }
 
     private static void joinWorld(Minecraft minecraftClient, ClientLevel clientWorld) {

@@ -6,7 +6,7 @@ import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.HTTP;
 import me.asumji.util.Shortcuts;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
@@ -23,9 +23,9 @@ public class ReportCommand {
     }
 
     private static void reportCommand(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext registryAccess) {
-        dispatcher.register(ClientCommandManager.literal(AsuAddons.NAMESPACE)
-            .then(ClientCommandManager.literal("report")
-            .then(ClientCommandManager.argument("error", StringArgumentType.greedyString())
+        dispatcher.register(ClientCommands.literal(AsuAddons.NAMESPACE)
+            .then(ClientCommands.literal("report")
+            .then(ClientCommands.argument("error", StringArgumentType.greedyString())
             .executes(context -> {
                 if (used) return 1;
                 used = true;

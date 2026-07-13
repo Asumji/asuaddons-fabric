@@ -5,8 +5,8 @@ import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Rendering;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gizmos.GizmoStyle;
@@ -24,11 +24,11 @@ public class ShadowAssassinHighlight {
     public static final int ShadowAssassinBootsRGB = 6029470;
 
     public static void init() {
-        WorldRenderEvents.BEFORE_TRANSLUCENT.register(ShadowAssassinHighlight::extractAndDrawWaypoint);
+        LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(ShadowAssassinHighlight::extractAndDrawWaypoint);
         ClientTickEvents.START_CLIENT_TICK.register(ShadowAssassinHighlight::tick);
     }
 
-    private static void extractAndDrawWaypoint(WorldRenderContext context) {
+    private static void extractAndDrawWaypoint(LevelRenderContext context) {
         if (entity == null || !ConfigManager.getConfig().dungeonCategory.starredAccordion.saHighlight) return;
         float tickProgress = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
         Vec3 entityPos = entity.getPosition(tickProgress);

@@ -26,7 +26,7 @@ public class MiscCategory {
                             context.fill((x - width / 2), y, (x - width / 2) + 4, y + 27, 0xFF444445);
                             context.fill((x - width / 2), y + 27, (x - width / 2) + width, y + 27 - 4, 0xFF444445);
                             context.fill((x - width / 2) + width, y, (x - width / 2) + width - 4, y + 27, 0xFF444445);
-                            context.drawString(textRenderer, Component.literal("§6Total Value: 250.32m"), (x - width / 2) + 7, y + 18 - textRenderer.lineHeight, 0xFFFFFFFF);
+                            context.text(textRenderer, Component.literal("§6Total Value: 250.32m"), (x - width / 2) + 7, y + 18 - textRenderer.lineHeight, 0xFFFFFFFF);
                             context.pose().popMatrix();
                         }, 118, 27
                 )

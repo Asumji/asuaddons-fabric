@@ -20,12 +20,12 @@ public class MainCategory {
                         (context, x, y, width, height, scale) -> {
                             context.pose().pushMatrix();
                             context.pose().scale(scale);
-                            context.drawCenteredString(Minecraft.getInstance().font, "Test Title", x, y, 0xFFFFFFFF);
+                            context.centeredText(Minecraft.getInstance().font, "Test Title", x, y, 0xFFFFFFFF);
                             context.pose().popMatrix();
 
                             context.pose().pushMatrix();
                             context.pose().scale(scale/2);
-                            context.drawCenteredString(Minecraft.getInstance().font, "Test Subtitle", x * 2, (y + 10) * 2, 0xFFFFFFFF);
+                            context.centeredText(Minecraft.getInstance().font, "Test Subtitle", x * 2, (y + 10) * 2, 0xFFFFFFFF);
                             context.pose().popMatrix();
                         }, 47, 15
                 )

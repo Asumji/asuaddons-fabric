@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
@@ -27,13 +27,13 @@ public class PurplePadTimer {
         HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.fromNamespaceAndPath(AsuAddons.MOD_ID, "purplepadhud"), PurplePadTimer::renderHud);
     }
 
-    private static void renderHud(GuiGraphics drawContext, DeltaTracker renderTickCounter) {
+    private static void renderHud(GuiGraphicsExtractor drawContext, DeltaTracker renderTickCounter) {
         if (Variables.TickTimers.containsKey("PurplePadTimer")) {
             int ticksLeft = Variables.TickTimers.get("PurplePadTimer");
             Matrix3x2fStack matrices = drawContext.pose();
             matrices.pushMatrix();
             matrices.scale(ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudScale,ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudScale);
-            drawContext.drawCenteredString(Minecraft.getInstance().font, Component.literal("§5"+df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudX, ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudY, 0xFFFFFFFF);
+            drawContext.centeredText(Minecraft.getInstance().font, Component.literal("§5"+df.format((float)ticksLeft/20)+"s"), ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudX, ConfigManager.getConfig().dungeonCategory.f7Accordion.purplePadTimerHudY, 0xFFFFFFFF);
             matrices.popMatrix();
             if (ticksLeft == 0 && ticking) timerDone = true;
         }

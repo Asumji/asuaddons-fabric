@@ -3,8 +3,8 @@ package me.asumji.features;
 import io.github.notenoughupdates.moulconfig.ChromaColour;
 import me.asumji.gui.config.ConfigManager;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -18,7 +18,7 @@ public class WitherHitbox {
     public static Entity witherEntity;
 
     public static void init() {
-        WorldRenderEvents.BEFORE_TRANSLUCENT.register(WitherHitbox::extractAndDrawWaypoint);
+        LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(WitherHitbox::extractAndDrawWaypoint);
         ClientTickEvents.START_CLIENT_TICK.register(WitherHitbox::tick);
     }
 
@@ -26,7 +26,7 @@ public class WitherHitbox {
         if (witherEntity != null && !witherEntity.isAlive()) witherEntity = null;
     }
 
-    private static void extractAndDrawWaypoint(WorldRenderContext context) {
+    private static void extractAndDrawWaypoint(LevelRenderContext context) {
         if (witherEntity == null || !ConfigManager.getConfig().dungeonCategory.f7Accordion.witherHitbox) return;
         Color effectiveColor = ChromaColour.forLegacyString(ConfigManager.getConfig().dungeonCategory.f7Accordion.witherHitboxColor).getEffectiveColour();
         renderWaypoint(new AABB(witherEntity.getX()-0.5, witherEntity.getY()-3.5, witherEntity.getZ()-0.5, witherEntity.getX()+0.5, witherEntity.getY(), witherEntity.getZ()+0.5), effectiveColor);

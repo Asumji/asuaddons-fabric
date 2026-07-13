@@ -4,16 +4,16 @@ import me.asumji.AsuAddons;
 import me.asumji.gui.config.ConfigManager;
 import me.asumji.util.Shortcuts;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -47,17 +47,17 @@ public class SimonSays {
 
     public static void init() {
         ClientReceiveMessageEvents.ALLOW_GAME.register(SimonSays::onChatMessage);
-        WorldRenderEvents.BEFORE_TRANSLUCENT.register(SimonSays::extractAndDrawWaypoint);
+        LevelRenderEvents.BEFORE_TRANSLUCENT_TERRAIN.register(SimonSays::extractAndDrawWaypoint);
         ClientTickEvents.END_CLIENT_TICK.register(SimonSays::tick);
         HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.fromNamespaceAndPath(AsuAddons.MOD_ID, "sshud"), SimonSays::renderHud);
     }
 
-    private static void renderHud(GuiGraphics drawContext, DeltaTracker renderTickCouter) {
+    private static void renderHud(GuiGraphicsExtractor drawContext, DeltaTracker renderTickCouter) {
         if (!inP3S1 || !ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHud || displayStage < 0) return;
         Matrix3x2fStack matrices = drawContext.pose();
         matrices.pushMatrix();
         matrices.scale(ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHudScale);
-        drawContext.drawCenteredString(Minecraft.getInstance().font, (displayStage == 0 ? "§c" : "§a")+"SS "+displayStage+"/5", ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHudX, ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHudY, 0xFFFFFFFF);
+        drawContext.centeredText(Minecraft.getInstance().font, (displayStage == 0 ? "§c" : "§a")+"SS "+displayStage+"/5", ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHudX, ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysHudY, 0xFFFFFFFF);
         matrices.popMatrix();
     }
 
@@ -97,7 +97,7 @@ public class SimonSays {
         }
     }
 
-    private static void extractAndDrawWaypoint(WorldRenderContext context) {
+    private static void extractAndDrawWaypoint(LevelRenderContext context) {
         if (!ConfigManager.getConfig().dungeonCategory.f7Accordion.simonSaysSolver || !inP3S1) return;
         for (BlockPos pos : buttonOrder) {
             switch (ArrayUtils.indexOf(buttonOrder, pos)) {
