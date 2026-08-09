@@ -29,7 +29,7 @@ public class AsuAddons implements ModInitializer {
     public static final String MOD_VERSION = "1.8.0";
     public static final String MINECRAFT_VERSION = "26.1";
     public static final String NAMESPACE = "au";
-    public static final String API_PROXY = "http://asumji.duckdns.org/";
+    public static final String API_PROXY = "https://asumji.dev/";
     public static final String MOD_PREFIX = "§6AU > §r";
     public static final ScheduledExecutorService SCHEDULER =
             Executors.newSingleThreadScheduledExecutor();
